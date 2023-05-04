@@ -17,7 +17,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0.root");
+	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0_noTilt.root");
 	// 	TFile *inputfile = new TFile("TRMesmer_ohit.root");
 	//TRMesmer_thin_5k.root");//TRMesmer_100k_box.root");//beamprofile/TRMesmer_1M.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
@@ -54,38 +54,37 @@ TH2D *h_res_muTR=new TH2D("h_res_muTR", "(thmu_rec-thmu_true) VS energy Emu(GeV)
 TH2D *h_res_mu_inTR=new TH2D("h_res_mu_inTR", "(thmu_in_rec-thmu_in_true) VS energy Emu(GeV) PRE-VRTX",10,150,160,22,-0.0006,0.0006);
 
 TH1D *h_res_muTR1x=new TH1D("h_res_muTR1x", "(thmu_rec-thmu_true) proj. X  155<Emu<157(GeV) PRE-VRTX",120,-0.0006,0.0006);
-TH1D *h_res_muTR2x=new TH1D("h_res_muTR2x", "(thmu_rec-thmu_true) proj. X 157<Emu<158(GeV) PRE-VRTX",120,-0.0006,0.0006);
+TH1D *h_res_muTR2x=new TH1D("h_res_muTR2x", "(thmu_rec-thmu_true) proj. X 157<Emu<160(GeV) PRE-VRTX",120,-0.0006,0.0006);
 TH1D *h_res_muTR3x=new TH1D("h_res_muTR3x", "(thmu_rec-thmu_true) proj. X 158<Emu<160(GeV) PRE-VRTX",120,-0.0006,0.0006);
 
 TH1D *h_res_muTR1y=new TH1D("h_res_muTR1y", "(thmu_rec-thmu_true) proj. Y 155<Emu<157(GeV) PRE-VRTX",120,-0.0006,0.0006);
-TH1D *h_res_muTR2y=new TH1D("h_res_muTR2y", "(thmu_rec-thmu_true) proj. Y 157<Emu<158(GeV) PRE-VRTX",120,-0.0006,0.0006);
+TH1D *h_res_muTR2y=new TH1D("h_res_muTR2y", "(thmu_rec-thmu_true) proj. Y 157<Emu<160(GeV) PRE-VRTX",120,-0.0006,0.0006);
 TH1D *h_res_muTR3y=new TH1D("h_res_muTR3y", "(thmu_rec-thmu_true) proj. Y 158<Emu<160(GeV) PRE-VRTX",120,-0.0006,0.0006);
 
-TH1D *h_res_muTR1=new TH1D("h_res_muTR1", "(thmu_rec-thmu_true) VS energy 155<Emu<157(GeV) PRE-VRTX",180,-0.0006,0.0006);
-TH1D *h_res_muTR2=new TH1D("h_res_muTR2", "(thmu_rec-thmu_true) VS energy 157<Emu<158(GeV) PRE-VRTX",180,-0.0006,0.0006);
+TH1D *h_res_muTR1=new TH1D("h_res_muTR1", "(thmu_rec-thmu_true) VS energy 155<Emu<157(GeV) PRE-VRTX",60,-0.0006,0.0006);
+TH1D *h_res_muTR2=new TH1D("h_res_muTR2", "(thmu_rec-thmu_true) VS energy 157<Emu<160(GeV) PRE-VRTX",60,-0.0006,0.0006);
 TH1D *h_res_muTR3=new TH1D("h_res_muTR3", "(thmu_rec-thmu_true) VS energy 158<Emu<160(GeV) PRE-VRTX",180,-0.0006,0.0006);
 TH1D *h_res_mu_inTR1=new TH1D("h_res_mu_inTR1", "(thmu_in_rec-thmu_in_true)  PRE-VRTX",80,-0.0002,0.0002);
 
-TH1D *theta1 =new TH1D("theta1" , "theta muon tail residuum" , 150,0.,0.005);
-TH1D *theta2 =new TH1D("theta2" , "theta muon peak residuum" , 150,0.,0.005);
-TH1D *theta1g =new TH1D("theta1g" , "theta muon tail residuum" , 150,0.,0.005);
-TH1D *theta2g =new TH1D("theta2g" , "theta muon peak residuum" , 150,0.,0.005);
+TH1D *theta1 =new TH1D("theta1" , "theta muon peak residuum" , 150,0.,0.005);
+TH1D *theta2 =new TH1D("theta2" , "theta muon tail residuum" , 150,0.,0.005);
+TH1D *theta1g =new TH1D("theta1g" , "theta muon peak residuum" , 150,0.,0.005);
+TH1D *theta2g =new TH1D("theta2g" , "theta muon tail residuum" , 150,0.,0.005);
 
-TH1D *theta1x =new TH1D("theta1x" , "theta x muon tail residuum" , 150,-0.0025,0.0025);
-TH1D *theta2x =new TH1D("theta2x" , "theta x muon peak residuum" , 150,-0.0025,0.0025);
-TH1D *theta1gx =new TH1D("theta1gx" , "theta x muon tail residuum" , 150,-0.0025,0.0025);
-TH1D *theta2gx =new TH1D("theta2gx" , "theta x muon peak residuum" , 150,-0.0025,0.0025);
+TH1D *theta1x =new TH1D("theta1x" , "theta x muon peak residuum" , 50,-0.0025,0.0025);
+TH1D *theta2x =new TH1D("theta2x" , "theta x muon tail residuum" , 50,-0.0025,0.0025);
+TH1D *theta1gx =new TH1D("theta1gx" , "theta x muon peak residuum" , 50,-0.0025,0.0025);
+TH1D *theta2gx =new TH1D("theta2gx" , "theta x muon tail residuum" , 50,-0.0025,0.0025);
 
-TH1D *theta1y =new TH1D("theta1y" , "theta y muon tail residuum" , 150,-0.0025,0.0025);
-TH1D *theta2y =new TH1D("theta2y" , "theta y muon peak residuum" , 150,-0.0025,0.0025);
-TH1D *theta1gy =new TH1D("theta1gy" , "theta y muon tail residuum" , 150,-0.0025,0.0025);
-TH1D *theta2gy =new TH1D("theta2gy" , "theta y muon peak residuum" , 150,-0.0025,0.0025);
+TH1D *theta1y =new TH1D("theta1y" , "theta y muon peak residuum" , 50,-0.0025,0.0025);
+TH1D *theta2y =new TH1D("theta2y" , "theta y muon tail residuum" , 50,-0.0025,0.0025);
+TH1D *theta1gy =new TH1D("theta1gy" , "theta y muon peak residuum" , 50,-0.0025,0.0025);
+TH1D *theta2gy =new TH1D("theta2gy" , "theta y muon tail residuum" , 50,-0.0025,0.0025);
 
-
-TH1D *theta2x_if =new TH1D("theta2x_if" , "theta x muon residuum if theta y in the tail" , 150,-0.0025,0.0025);
-TH1D *theta2gx_if =new TH1D("theta2gx_if" , "theta x muon residuum if theta y in the tail" , 150,-0.0025,0.0025);
-TH1D *theta2y_if =new TH1D("theta2y_if" , "theta y muon residuum if theta x in the tail" , 150,-0.0025,0.0025);
-TH1D *theta2gy_if =new TH1D("theta2gy_if" , "theta y muon peak residuum if theta x in the tail" , 150,-0.0025,0.0025);
+TH1D *theta2x_if =new TH1D("theta2x_if" , "theta x muon residuum if theta y in the tail" , 50,-0.0025,0.0025);
+TH1D *theta2gx_if =new TH1D("theta2gx_if" , "theta x muon residuum if theta y in the tail" , 50,-0.0025,0.0025);
+TH1D *theta2y_if =new TH1D("theta2y_if" , "theta y muon residuum if theta x in the tail" , 50,-0.0025,0.0025);
+TH1D *theta2gy_if =new TH1D("theta2gy_if" , "theta y muon peak residuum if theta x in the tail" , 50,-0.0025,0.0025);
 
 
 double the_gen=0; double thmu_gen=0; double th_in_gen=0;
@@ -260,8 +259,8 @@ if( Ee<15 and Ee>5) h_res1TR->Fill(resTR,MesmerEvent->wgt_full);
 if( Ee<25 and Ee>15) h_res2TR->Fill(resTR,MesmerEvent->wgt_full);
 if( Ee>25) h_res3TR->Fill(resTR,MesmerEvent->wgt_full);
 
-if(thmu_gen>0 and thmu_gen<=0.0007) {h_res_muTR1->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR1x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR1y->Fill(resy,MesmerEvent->wgt_full);}
-if(thmu_gen>0.0007) {h_res_muTR2->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR2x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR2y->Fill(resy,MesmerEvent->wgt_full);}
+if(Emu>155 and Emu<=157) {h_res_muTR1->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR1x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR1y->Fill(resy,MesmerEvent->wgt_full);}
+if(Emu>157 and Emu<=160) {h_res_muTR2->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR2x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR2y->Fill(resy,MesmerEvent->wgt_full);}
 //if(Emu>158 and Emu<=160) {h_res_muTR3->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR3x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR3y->Fill(resy,MesmerEvent->wgt_full);}
 h_res_muTR->Fill(Emu,res_muTR,MesmerEvent->wgt_full);
 h_res_mu_inTR->Fill(Emu_in,res_muinTR,MesmerEvent->wgt_full);
