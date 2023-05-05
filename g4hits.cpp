@@ -69,20 +69,20 @@ TH1D *h_res_muTR1r=new TH1D("h_res_muTR1r", "(thmu_rec-thmu_true) VS energy 155<
 TH1D *h_res_muTR2r=new TH1D("h_res_muTR2r", "(thmu_rec-thmu_true) VS energy 157<Emu<160(GeV) PRE-VRTX",180,-0.0006,0.0006);
 
 
-TH1D *theta1 =new TH1D("theta1" , "theta muon peak residuum" , 150,0.,0.005);
-TH1D *theta2 =new TH1D("theta2" , "theta muon tail residuum" , 150,0.,0.005);
-TH1D *theta1g =new TH1D("theta1g" , "theta muon peak residuum" , 150,0.,0.005);
-TH1D *theta2g =new TH1D("theta2g" , "theta muon tail residuum" , 150,0.,0.005);
+TH1D *theta1 =new TH1D("theta1" , "theta of the muon for events in the peak of angular residuum" , 150,0.,0.005);
+TH1D *theta2 =new TH1D("theta2" , "theta of the muon for events in the tail of angular residuum" , 150,0.,0.005);
+TH1D *theta1g =new TH1D("theta1g" , "theta of the muon for events in the peak of angular residuum" , 150,0.,0.005);
+TH1D *theta2g =new TH1D("theta2g" , "theta of the muon for events in the tail of angular residuum" , 150,0.,0.005);
 
-TH1D *theta1x =new TH1D("theta1x" , "theta x muon peak residuum" , 150,-0.0025,0.0025);
-TH1D *theta2x =new TH1D("theta2x" , "theta x muon tail residuum" , 150,-0.0025,0.0025);
-TH1D *theta1gx =new TH1D("theta1gx" , "theta x muon peak residuum" , 150,-0.0025,0.0025);
-TH1D *theta2gx =new TH1D("theta2gx" , "theta x muon tail residuum" , 150,-0.0025,0.0025);
+TH1D *theta1x =new TH1D("theta1x" , "theta x of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta2x =new TH1D("theta2x" , "theta x of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta1gx =new TH1D("theta1gx" , "theta x of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta2gx =new TH1D("theta2gx" , "theta x of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
 
-TH1D *theta1y =new TH1D("theta1y" , "theta y muon peak residuum" , 150,-0.0025,0.0025);
-TH1D *theta2y =new TH1D("theta2y" , "theta y muon tail residuum" , 150,-0.0025,0.0025);
-TH1D *theta1gy =new TH1D("theta1gy" , "theta y muon peak residuum" , 150,-0.0025,0.0025);
-TH1D *theta2gy =new TH1D("theta2gy" , "theta y muon tail residuum" , 150,-0.0025,0.0025);
+TH1D *theta1y =new TH1D("theta1y" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta2y =new TH1D("theta2y" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta1gy =new TH1D("theta1gy" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta2gy =new TH1D("theta2gy" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
 
 TH1D *theta2x_if =new TH1D("theta2x_if" , "theta x muon residuum if theta y in the tail" , 150,-0.0025,0.0025);
 TH1D *theta2gx_if =new TH1D("theta2gx_if" , "theta x muon residuum if theta y in the tail" , 150,-0.0025,0.0025);
@@ -459,15 +459,15 @@ d3a.cd(3);
 theta2gx->SetLineColor(kOrange);
 theta2gx->Draw("hist");
 theta2x->Draw("hist same");
-d3a.cd(4);
+/*d3a.cd(4);
 theta2gy_if->SetLineColor(kOrange);
 theta2gy_if->Draw("hist");
 theta2y_if->Draw("hist same");
 d3a.cd(5);
 theta2gx_if->SetLineColor(kOrange);
 theta2gx_if->Draw("hist");
-theta2x_if->Draw("hist same");
-d3a.cd(6);
+theta2x_if->Draw("hist same");*/
+d3a.cd(4);
 theta2gy->SetLineColor(kRed);
 theta2gy->Draw("hist");
 theta2y->Draw("hist same");

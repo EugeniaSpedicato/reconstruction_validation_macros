@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0.root");
+	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0_noTilt.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
@@ -151,14 +151,17 @@ vector<double> Zmu; Zmu.reserve(8);
 
 int ok=0;
 double X1,X2, Y1,Y2, Z1,Z2,Z3,Z4;
+double dX1=-99; double dX2=-99; double dY1=-99; double dY2=-99;
 
 	for(int s=0; s<TrackerPoints->GetEntries(); s++)
                          {const MUonETrackerPoint *TrackerPt = static_cast<const MUonETrackerPoint*>(TrackerPoints->At(s));
 
-			  if(TrackerPt->trackPDGCode()==-13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1)//ackerPt->trackPDGCode()==-13 and TrackerPt->trackID()==0 and TrackerPt->stationID()==0)
+if(TrackerPt->trackPDGCode()==-13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1)
+//if(TrackerPt->trackPDGCode()==-13 and TrackerPt->trackID()==0 and TrackerPt->stationID()==0)
+//if(TrackerPt->trackPDGCode()==-13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1)
 				{ ok=1;
-				  TVector3 entering=TrackerPt->enteringPositionGlobalCoordinates();
-				  TVector3 exiting=TrackerPt->exitingPositionGlobalCoordinates();
+				  TVector3 entering=TrackerPt->enteringPositionLocalCoordinates();
+				  TVector3 exiting=TrackerPt->exitingPositionLocalCoordinates();
 
 				  if(TrackerPt->moduleID()==0 or TrackerPt->moduleID()==4) Xmu.push_back(exiting.X());
 				  if(TrackerPt->moduleID()==1 or TrackerPt->moduleID()==5) Ymu.push_back(exiting.Y());
@@ -179,16 +182,18 @@ if(ok==1){
         Z4=(Zmu.at(6)+Zmu.at(7))/2;
         }
 
-vector<double> digiXmu; digiXmu.reserve(4);
-vector<double> digiYmu; digiYmu.reserve(4);
-
+vector<double> digiXmu1; digiXmu1.reserve(4);
+vector<double> digiYmu1; digiYmu1.reserve(4);
+vector<double> digiXmu2; digiXmu2.reserve(4);
+vector<double> digiYmu2; digiYmu2.reserve(4);
 vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks();
 
+/*
 for(int j=0; j<tracks.size();j++)
 {
  if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()==3 and tracks.at(j).sector()==1 and tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=100)
         {
-std::vector<MUonERecoOutputTrackHit> hits_=tracks.at(j).hits();
+vector<MUonERecoOutputTrackHit> hits_=tracks.at(j).hits();
 if(code_mu==tracks.at(j).linkedTrackID()){yes2++;
 for(int h=0;h<hits_.size();h++){
 if(hits_.at(h).moduleID()==0 or hits_.at(h).moduleID()==4) {digiXmu.push_back(hits_.at(h).positionPerpendicular());}
@@ -197,16 +202,56 @@ if(hits_.at(h).moduleID()==1 or hits_.at(h).moduleID()==5) {digiYmu.push_back(hi
         }
    }
 }
+*/
 
 
-
-/*
+if(tracks.size()==3){
         for(int t=0; t<TrackerStubs->GetEntries(); t++)
                          {const MUonETrackerStub *stubs = static_cast<const MUonETrackerStub*>(TrackerStubs->At(t));
-			  if(stubs->moduleID()==0 or stubs->moduleID()==4) digiXmu.push_back( (stubs->seedClusterCenterStrip() + 0.5 + 0.5 * stubs->bend()) * 9.144 / 1016 - 0.5 * 9.144 );
-                          if(stubs->moduleID()==1 or stubs->moduleID()==5) digiYmu.push_back( (stubs->seedClusterCenterStrip() + 0.5 + 0.5 * stubs->bend()) * 9.144 / 1016 - 0.5 * 9.144 );
-		}*/
+	if(stubs->stationID()==1){ double stub=(stubs->seedClusterCenterStrip() + 0.5 + 0.5 * stubs->bend()) * 9.144 / 1016 - 0.5 * 9.144;
+			  if(stubs->moduleID()==0) {digiXmu1.push_back(stub);}
+                          if( stubs->moduleID()==4) {digiXmu2.push_back(stub);}
+                          if(stubs->moduleID()==1) {digiYmu1.push_back(stub*sin(90));}
+			  if(stubs->moduleID()==5) {digiYmu2.push_back(stub*sin(90));}
+			}
+		}
+}
 
+vector<double> diff1,diff2;
+for(int d=0; d<digiXmu1.size(); d++){
+diff1.push_back(abs(digiXmu1.at(d)-X1));
+}
+
+for(int d=0; d<digiXmu2.size(); d++){
+diff2.push_back(abs(digiXmu2.at(d)-X2));
+}
+
+if(digiXmu1.size()!=0 and digiXmu2.size()!=0){
+auto it = min_element(begin(diff1),end(diff1));
+auto it2 = min_element(begin(diff2),end(diff2));
+
+dX1=digiXmu1.at( distance(begin(diff1), it) );
+dX2=digiXmu2.at( distance(begin(diff2), it2) );
+
+ }
+
+vector<double> diff1Y,diff2Y;
+for(int d=0; d<digiYmu1.size(); d++){
+diff1Y.push_back(abs(digiYmu1.at(d)-Y1));
+}
+
+for(int d=0; d<digiYmu2.size(); d++){
+diff2Y.push_back(abs(digiYmu2.at(d)-Y2));
+}
+
+if(digiYmu1.size()!=0 and digiYmu2.size()!=0){
+auto itY = min_element(begin(diff1Y),end(diff1Y));
+auto it2Y = min_element(begin(diff2Y),end(diff2Y));
+
+dY1=digiYmu1.at( distance(begin(diff1Y), itY) );
+dY2=digiYmu2.at( distance(begin(diff2Y), it2Y) );
+
+ }
 
 int ok_mu=0;
 int ok_e=0;
@@ -245,20 +290,20 @@ if(ok_mu==1 and ok_e==1 ){
  res_muTR2 = thmu_rec_tracks2-thmu_gen;
 }
 
-if(ok==1 and ok_mu==1 and digiXmu.size()==2 and digiYmu.size()==2 and abs(res_muTR2)<0.1e-03){
+if(ok==1 and ok_mu==1 and dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99 and abs(res_muTR2)<0.1e-03){
 
-h_x1->Fill(X1-digiXmu.at(0),MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
-h_x2->Fill(X2-digiXmu.at(1),MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
-h_y1->Fill(Y1-digiYmu.at(0),MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
-h_y2->Fill(Y2-digiYmu.at(1),MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
+h_x1->Fill(X1-dX1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
+h_x2->Fill(X2-dX2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
+h_y1->Fill(Y1-dY1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
+h_y2->Fill(Y2-dY2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
 }
 
-if(ok==1 and ok_mu==1 and digiXmu.size()==2 and digiYmu.size()==2 and abs(res_muTR2)>0.1e-03){
+if(ok==1 and ok_mu==1 and dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99 and abs(res_muTR2)>0.1e-03){
 
-h_x1_g->Fill(X1-digiXmu.at(0),MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
-h_x2_g->Fill(X2-digiXmu.at(1),MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
-h_y1_g->Fill(Y1-digiYmu.at(0),MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
-h_y2_g->Fill(Y2-digiYmu.at(1),MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
+h_x1_g->Fill(X1-dX1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
+h_x2_g->Fill(X2-dX2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
+h_y1_g->Fill(Y1-dY1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
+h_y2_g->Fill(Y2-dY2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
 }
 
 ok=0;
@@ -278,20 +323,27 @@ d3a.cd(1);
 h_x1->Draw("hist");
 h_x1_g->SetLineColor(kRed);
 h_x1_g->Draw("hist same");
+
 d3a.cd(2);
 h_x2->Draw("hist");
 h_x2_g->SetLineColor(kRed);
 h_x2_g->Draw("hist same");
+
 d3a.cd(3);
 h_y1->Draw("hist");
 h_y1_g->SetLineColor(kRed);
 h_y1_g->Draw("hist same");
+
+
 d3a.cd(4);
 h_y2->Draw("hist");
 h_y2_g->SetLineColor(kRed);
 h_y2_g->Draw("hist same");
+
+
 d3a.SaveAs("h_digi.pdf");
 
 }
+
 
 
