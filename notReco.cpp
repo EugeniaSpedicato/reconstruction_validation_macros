@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
- 	TFile *inputfile = new TFile("TRMesmer_box_100k.root");
+ 	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
@@ -181,18 +181,24 @@ yes_v++;
 
 
 int sig=0;
+int yes_mu=0;
+int yes_e=0;
+
 for(int j=0; j<tracks.size();j++)
-{ 
+{
 
 if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.at(j).sector()==1) TrackIdreco=tracks.at(j).linkedTrackID();
-if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1 and  tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=60) //and tracks.at(0).processIDofLinkedTrack()==45 and tracks.at(0).linkedTrackID()!=tracks.at(1).linkedTrackID()){
+if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1 and  tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=0) //and tracks.at(0).processIDofLinkedTrack()==45 and tracks.at(0).linkedTrackID()!=tracks.at(1).linkedTrackID()){
 {yes2++; cout << "tracks.size " << tracks.size() << endl;
 
  int sum = tracks.at(j).numberOfXProjectionHits() + tracks.at(j).numberOfYProjectionHits() + tracks.at(j).numberOfStereoHits();
- cout << "TrackerStubs " << TrackerStubs->GetEntries() << endl;
- cout << "TrackID " << tracks.at(j).linkedTrackID() << endl;
- cout << "#%hitsshared " <<tracks.at(j).percentageOfHitsSharedWithLinkedTrack() << " and sum of hits " << sum << endl;
- cout << "chi2perDegreeOfFreedom " << tracks.at(j).chi2perDegreeOfFreedom() << endl;
+
+                 if(code_e==tracks.at(j).linkedTrackID()) { yes_e++;
+                                        }
+
+                 if(code_mu==tracks.at(j).linkedTrackID()) { yes_mu++;
+                                        }
+
 
 
 std::vector<MUonERecoOutputTrackHit> hits_=tracks.at(j).hits();
@@ -204,7 +210,7 @@ position.at(hits_.at(h).moduleID()).push_back(hits_.at(h).position());
 }
 
 
-if(yes2>=2){reco+=MesmerEvent->wgt_full;
+if(yes_e>=1 and yes_mu>=1){reco+=MesmerEvent->wgt_full;
 //        h_angen_el->Fill(the_sdr,Ee,MesmerEvent->wgt_full);
 
 int sig=0;
@@ -231,13 +237,13 @@ for(int s=0;s<6;s++)
         for(int j=0; j<tracks.size();j++)
         {inter->Fill(tracks.at(j).processIDofLinkedTrack(),MesmerEvent->wgt_full);}}
 
-if(yes2==2){
+if(yes_e==1 and yes_mu==1){
 
         for(int j=0; j<tracks.size();j++)
         {if(tracks.at(j).processIDofLinkedTrack()==45) h_chidof2->Fill(tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);}
 	}
 
-if(yes2>2){more_reco+=MesmerEvent->wgt_full;
+if(yes_e>1 or yes_mu>1){more_reco+=MesmerEvent->wgt_full;
 h_vrtx->Fill(vrtx.size(),MesmerEvent->wgt_full);
 cout << "event " << i << endl;
 int sig=0;
@@ -333,7 +339,6 @@ cout << "Su " << signal << " eventi di segnale, " << reco_v << " sono ricostruit
 cout << "Su " << signal << " eventi di segnale, " << more_reco_v << " sono ricostruiti con piu' di unun vertice, con un rapporto del " << ratioM_v*100 << "%"<< endl;
 cout << "Su " << signal << " eventi di segnale, " << reco0_v << " hanno 0 vertici, con un rapporto del " << ratio0_v*100 << "%"<< endl;
 
-/*
 TCanvas o("o","o",700,700);
 h_op->Draw("hist");
 o.SaveAs("op.pdf");
@@ -405,7 +410,6 @@ for (Int_t i=1; i<nxTh1+1; i++) {
 for (Int_t j=1; j<nyTh1+1; j++) {
 if (h_angle1->GetBinContent(i,j)<1) h_angle1->SetBinContent(i,j,0);}}
 
-
 TCanvas a2("a2","a2",1400,1400);
 a2.Divide(2,4);
 a2.cd(1);
@@ -430,7 +434,7 @@ TCanvas m("m","m",1400,1400);
 h_vrtx->Draw("hist");
 m.SaveAs("vrtx.pdf");
 
-
+/*
 Int_t nxTh = h_angle->GetNbinsX();
 Int_t nyTh = h_angle->GetNbinsY();
 for (Int_t i=1; i<nxTh+1; i++) {
@@ -466,7 +470,6 @@ Int_t nyTh5 = h_angle_noreco1->GetNbinsY();
 for (Int_t i=1; i<nxTh5+1; i++) {
 for (Int_t j=1; j<nyTh5+1; j++) {
 if (h_angle_noreco1->GetBinContent(i,j)<1) h_angle_noreco1->SetBinContent(i,j,0);}}
-
 h_anglee->Sumw2();
 h_anglee_noreco->Sumw2();
 h_anglemu->Sumw2();

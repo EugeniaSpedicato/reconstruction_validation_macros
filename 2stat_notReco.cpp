@@ -213,7 +213,7 @@ for(int j=0; j<tracks.size();j++)
 { 
 
 if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.at(j).sector()==1) TrackIdreco=tracks.at(j).linkedTrackID();
-if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1 and tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=60) //and tracks.at(0).processIDofLinkedTrack()==45 and tracks.at(0).linkedTrackID()!=tracks.at(1).linkedTrackID()){
+if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1 and tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=100) //and tracks.at(0).processIDofLinkedTrack()==45 and tracks.at(0).linkedTrackID()!=tracks.at(1).linkedTrackID()){
 {cout << "tracks.size " << tracks.size() << endl;
 
 if(code_e==tracks.at(j).linkedTrackID()) {x_e.push_back(trackatZ(tracks.at(j).x0(),tracks.at(j).xSlope(),1031.7)); y_e.push_back(trackatZ(tracks.at(j).y0(),tracks.at(j).ySlope(),1031.7));}
@@ -386,8 +386,7 @@ a2.cd(8);
 h_op1->Draw("hist");
 a2.SaveAs("angle.pdf");
 
-
------------------
+//-----------------
 Int_t nxTh = h_angle->GetNbinsX();
 Int_t nyTh = h_angle->GetNbinsY();
 for (Int_t i=1; i<nxTh+1; i++) {

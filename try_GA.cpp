@@ -17,7 +17,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0.root");
+	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV.root");
 	// 	TFile *inputfile = new TFile("TRMesmer_ohit.root");
 	//TRMesmer_thin_5k.root");//TRMesmer_100k_box.root");//beamprofile/TRMesmer_1M.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
@@ -86,6 +86,21 @@ TH1D *theta2gx_if =new TH1D("theta2gx_if" , "theta x of the muon for events in t
 TH1D *theta2y_if =new TH1D("theta2y_if" , "theta y of the muon for events in the residuum if theta x in the tail" , 150,-0.0025,0.0025);
 TH1D *theta2gy_if =new TH1D("theta2gy_if" , "theta y of the muon for events in the peak of angular residuum if theta x in the tail" , 150,-0.0025,0.0025);
 
+TH1D *h_phiin =new TH1D("h_phiin"," entering muon phi angle",180,-180,180);
+
+TH1D *h_phi =new TH1D("h_phi"," outgoing muon phi angle for events in the tails of the angular residuum",180,-180,180);
+TH1D *h_phiP =new TH1D("h_phip"," outgoing muon phi angle for events in the peaks of the angular residuum",180,-180,180);
+
+TH1D *h_phie =new TH1D("h_phie"," outgoing electron phi angle for events in the tails of the angular residuum",180,-180,180);
+TH1D *h_phiPe =new TH1D("h_phipe"," outgoing electron phi angle for events in the peaks of the angular residuum",180,-180,180);
+
+TH1D *h_phitot =new TH1D("h_phitot"," outgoing muon phi angle",180,-180,180);
+TH1D *h_phietot =new TH1D("h_phietot"," outgoing muon phi angle",180,-180,180);
+
+TH1D* nstubs=new TH1D("nstubs","nstubs for well reconstructed events",25,5,30);
+TH1D* nstubs90=new TH1D("nstubs90","nstubs when 88<phi_mu<93",25,5,30);
+TH1D* nstubs180=new TH1D("nstubs180","nnstubs when 178<phi_mu<183",25,5,30);
+
 
 double the_gen=0; double thmu_gen=0; double th_in_gen=0;
 double the_rec_vrtx=0; double thmu_rec_vrtx=0; double th_in_rec_vrtx=0;
@@ -97,12 +112,17 @@ double thmu_rec_x=0; double thmu_rec_y=0;
 double signal=0.; double reco=0.; double reco1=0.; double more_reco=0.; double reco0=0.;
 double reco_v=0.; double more_reco_v=0.; double reco0_v=0.; double one=0;
 double e=0.; double mu=0.;
+double tailx=0; double peakx=0;
+double taily=0; double peaky=0;
 
 int yes_e=0;int yes_mu=0; int yes2=0; int yes_v=0;
 int point_mu=0; int point_el=0;
 int code_mu=-99; int code_e=-99;
 int TrackIdreco=-99;
 
+double phi=0;
+double phie=0;
+double phi_in=0.;
 
 TH1D *th_mu44g = new TH1D("th_mu44g"," angle mu 44 wrt incoming muon (generated)",200,0,0.005);
 TH1D *th_mu44 = new TH1D("th_mu44"," angle mu 44 wrt incoming muon (reconstructed)",200,0,0.005);
@@ -137,6 +157,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
          double mx=MCTr->ax();
          double my=MCTr->ay();
          muin.SetXYZ(mx,my,1.0);
+         phi_in=pmuin.Phi()*(180/M_PI);
 	 }
 
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) {code_e=n;}
@@ -155,12 +176,14 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
                          {const MUonETrackerPoint *TrackerPt = static_cast<const MUonETrackerPoint*>(TrackerPoints->At(s));
                           if(TrackerPt->trackPDGCode()==11 and SigTracks->pdgCode()==11 and TrackerPt->trackID()==code_e and TrackerPt->stationID()==1){ point_el++;
                                                                                                  if(TrackerPt->moduleID()==4) last_modXe++;
-                                                                                                 if(TrackerPt->moduleID()==5) last_modYe++;
-												 if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_e++;}
+                                                                                                 if(TrackerPt->moduleID()==5)last_modYe++;
+												 if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_e++;
+												}
                           if(TrackerPt->trackPDGCode()==-13 and SigTracks->pdgCode()==-13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1){ point_mu++;
 												 if(TrackerPt->moduleID()==4) last_modXmu++;
                                                                                                  if(TrackerPt->moduleID()==5) last_modYmu++;
-												 if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_mu++;}
+												 if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_mu++;
+												}
                          }
 
            if(SigTracks->pdgCode()==11 and last_modXe==2 and last_modYe==2 and stereo_e>1){
@@ -170,8 +193,9 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 		TVector3 z(0.,0.,1.);
                 //the_gen=pe.Theta();
 		//the_gen=acos(pe.Dot(z));
+                phie=pe.Phi()*(180/M_PI);
 		yes_e=1;}
- 	   if(SigTracks->pdgCode()==-13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){
+           if(SigTracks->pdgCode()==-13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){
 		Emu=SigTracks->energy();
 		pmu.SetXYZ(SigTracks->px(),SigTracks->py(),SigTracks->pz());
 	        TVector3 z(0.,0.,1.);
@@ -182,6 +206,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
                 thmu_gen_x=mx;
 		thmu_gen_y=my;
 		yes_mu=1;
+                phi=pmu.Phi()*(180/M_PI);;
 			}
 	 }
 	}
@@ -208,6 +233,9 @@ th_in_rec_tracks=in.Theta();
 	}
 }
 
+if( (phi<92 and phi>88) or (phi>-92 and phi<-88) ) nstubs90->Fill(TrackerStubs->GetEntries(),MesmerEvent->wgt_full);
+if( (phi<182 and phi>178) or (phi>-182 and phi<-178) ) nstubs180->Fill(TrackerStubs->GetEntries(),MesmerEvent->wgt_full);
+
 int yes_mu=0;
 int yes_e=0;
 
@@ -221,6 +249,7 @@ for(int j=0; j<tracks.size();j++)
 		TVector3 z(0.,0.,1.);
 		e_outv=e_outv.Unit();
         	 the_rec_tracks=e_outv.Theta();
+
 					}
 
 		 if(code_mu==tracks.at(j).linkedTrackID()) { yes_mu=1;
@@ -230,14 +259,20 @@ for(int j=0; j<tracks.size();j++)
                 //thmu_rec_tracks=acos(mu_outv.Dot(z));
 		thmu_rec_x=tracks.at(j).xSlope();
                 thmu_rec_y=tracks.at(j).ySlope();
-                 thmu_rec_tracks=sqrt(thmu_rec_x*thmu_rec_x+thmu_rec_y*thmu_rec_y);
-		 //thmu_rec_tracks=mu_outv.Theta();
+                 //thmu_rec_tracks=sqrt(thmu_rec_x*thmu_rec_x+thmu_rec_y*thmu_rec_y);
+		 thmu_rec_tracks=mu_outv.Theta();
 					}
 	}
 }
 
 
 if(yes_mu==1 and yes_e==1 ){reco+=MesmerEvent->wgt_full;
+
+h_phitot->Fill(phi,MesmerEvent->wgt_full);h_phietot->Fill(phie,MesmerEvent->wgt_full);
+
+h_phiin->Fill(phi_in,MesmerEvent->wgt_full);
+
+nstubs->Fill(TrackerStubs->GetEntries(),MesmerEvent->wgt_full);
 
  th_mu44->Fill(thmu_rec_tracks);
  th_e44->Fill(the_rec_tracks);
@@ -250,14 +285,14 @@ double res_muinTR = th_in_rec_tracks-th_in_gen;
 double resx=thmu_rec_x-thmu_gen_x;
 double resy=thmu_rec_y-thmu_gen_y;
 
-cout << "th_in_rec_tracks " << th_in_rec_tracks << endl;
-cout << "th_in_gen " << th_in_gen << endl;
-cout << "res_muinTR " << res_muinTR << endl;
 
-if( Ee<5) h_resTR->Fill(resTR,MesmerEvent->wgt_full);
+/*if( Ee<5) h_resTR->Fill(resTR,MesmerEvent->wgt_full);
 if( Ee<15 and Ee>5) h_res1TR->Fill(resTR,MesmerEvent->wgt_full);
 if( Ee<25 and Ee>15) h_res2TR->Fill(resTR,MesmerEvent->wgt_full);
-if( Ee>25) h_res3TR->Fill(resTR,MesmerEvent->wgt_full);
+if( Ee>25) h_res3TR->Fill(resTR,MesmerEvent->wgt_full);*/
+
+//h_phitot->Fill(phi,MesmerEvent->wgt_full);h_phietot->Fill(phie,MesmerEvent->wgt_full);
+
 
 if(Emu>155 and Emu<=157) {h_res_muTR1->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR1x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR1y->Fill(resy,MesmerEvent->wgt_full);}
 if(Emu>157 and Emu<=160) {h_res_muTR2->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR2x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR2y->Fill(resy,MesmerEvent->wgt_full);}
@@ -269,15 +304,27 @@ h_res_mu_inTR1->Fill(res_muinTR,MesmerEvent->wgt_full);
 if(res_muTR>0.1e-03){theta1->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta1g->Fill(thmu_gen,MesmerEvent->wgt_full);}
 if(res_muTR<0.1e-03 and res_muTR>-0.1e-03){theta2->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta2g->Fill(thmu_gen,MesmerEvent->wgt_full);}
 
+if(abs(resx)<0.1e-03) peakx+=MesmerEvent->wgt_full;
+if(abs(resy)<0.1e-03) peaky+=MesmerEvent->wgt_full;
 
 if(abs(resx)<0.1e-03 and abs(resy)<0.1e-03) {theta1x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta1gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
 						theta1y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta1gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);}
 
-if(abs(resx)>0.1e-03){theta2x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
+if(abs(resx)>0.1e-03){tailx+=MesmerEvent->wgt_full;
+                                   theta2x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
 				   theta2y_if->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy_if->Fill(thmu_gen_y,MesmerEvent->wgt_full);}
-if(abs(resy)>0.1e-03){theta2y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);
+if(abs(resy)>0.1e-03){taily+=MesmerEvent->wgt_full;
+                                   theta2y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);
 				   theta2x_if->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx_if->Fill(thmu_gen_x,MesmerEvent->wgt_full);}
 
+     if(abs(resx)>0.1e-03 or abs(resy)>0.1e-03) {h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
+if( Ee<5) h_resTR->Fill(resTR,MesmerEvent->wgt_full);
+if( Ee<15 and Ee>5) h_res1TR->Fill(resTR,MesmerEvent->wgt_full);
+if( Ee<25 and Ee>15) h_res2TR->Fill(resTR,MesmerEvent->wgt_full);
+if( Ee>25) h_res3TR->Fill(resTR,MesmerEvent->wgt_full);
+
+}
+     else{h_phiP->Fill(phi,MesmerEvent->wgt_full); h_phiPe->Fill(phie,MesmerEvent->wgt_full);}
 
 }
 
@@ -296,85 +343,48 @@ double ratio0 =reco0/signal;
 double ratioM =more_reco/signal;
 
 cout << "Su " << signal << " eventi di segnale, " << reco << " sono ricostruiti, con un rapporto del " << ratio*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di segnale con piu tracce (stesso id), " << more_reco << " sono ricostruiti, con un rapporto del " << ratioM*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di segnale con 0 tracce di segnale reco, " << reco0 << ", con un rapporto del " << ratio0*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di con 1 sola traccia di segnale reco, " << reco1 << ", con un rapporto del " << ratio1*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, eventi di con proiezione x nella coda " << (tailx/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, eventi di con proiezione y nella coda " << (taily/reco)*100 << "%"<< endl;
 
-double ratio_v =reco_v/signal;
-double ratio0_v =reco0_v/signal;
-double ratioM_v =more_reco_v/signal;
+cout << "Su " << signal << " eventi di segnale, eventi di con proiezione x nella coda " << (peakx/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, eventi di con proiezione y nella coda " << (peaky/reco)*100 << "%"<< endl;
 
-cout << "Su " << signal << " eventi di segnale, " << reco_v << " sono ricostruiti con almeno 1 vertice, con un rapporto del " << ratio_v*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di segnale, " << more_reco_v << " sono ricostruiti con piu' di unun vertice, con un rapporto del " << ratioM_v*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di segnale, " << reco0_v << " hanno 0 vertici, con un rapporto del " << ratio0_v*100 << "%"<< endl;
 
-cout << "Su " << reco_v << " eventi di segnale ricostruiti, " << e << " hanno vrtxID vs linkID sbagliate per elettrone: " << (e*100)/reco_v << "%" << endl;
-cout << "Su " << reco_v << " eventi di segnale ricostruiti, " << mu << " hanno vrtxID vs linkID sbagliate per muone: " << (mu*100)/reco_v << "%" << endl; 
-cout << "Su " << reco_v << " eventi di segnale ricostruiti, " << one << " hanno entrambi i link sbagliati: " << (one*100)/reco_v << "%" << endl;
+
+TCanvas b1("b1","b1",700,700);
+b1.Divide(1,4);
+b1.cd(1);
+h_phiP->Draw("hist");
+h_phiPe->SetLineColor(kRed);
+h_phiPe->Draw("hist same");
+b1.cd(2);
+h_phie->SetLineColor(kRed);
+h_phie->Draw("hist");
+h_phi->Draw("hist same");
+b1.cd(3);
+h_phietot->SetLineColor(kRed);
+h_phietot->Draw("hist");
+h_phitot->Draw("hist same");
+b1.cd(4);
+h_phiin->Draw("hist");
+b1.SaveAs("phi.pdf");
+
+TCanvas b2("b1","b1",700,700);
+b2.Divide(1,2);
+b2.cd(1);
+nstubs->Draw("hist");
+nstubs90->SetLineColor(kRed);
+nstubs90->Draw("hist same");
+gPad->SetLogy();
+b2.cd(2);
+nstubs->Draw("hist");
+nstubs180->SetLineColor(kRed);
+nstubs180->Draw("hist same");
+gPad->SetLogy();
+b2.SaveAs("nstubs_phi.pdf");
 
 
 /*
-Int_t nxTh7TR = h_resTR->GetNbinsX();
-Int_t nyTh7TR = h_resTR->GetNbinsY();
-for (Int_t i=1; i<nxTh7TR+1; i++) {
-for (Int_t j=1; j<nyTh7TR+1; j++) {
-if (h_resTR->GetBinContent(i,j)<1) h_resTR->SetBinContent(i,j,0);}}
-
-Int_t nxTh8TR = h_res1TR->GetNbinsX();
-Int_t nyTh8TR = h_res1TR->GetNbinsY();
-for (Int_t i=1; i<nxTh8TR+1; i++) {
-for (Int_t j=1; j<nyTh8TR+1; j++) {
-if (h_res1TR->GetBinContent(i,j)<1) h_res1TR->SetBinContent(i,j,0);}}
-
-Int_t nxTh9TR = h_res2TR->GetNbinsX();
-Int_t nyTh9TR = h_res2TR->GetNbinsY();
-for (Int_t i=1; i<nxTh9TR+1; i++) {
-for (Int_t j=1; j<nyTh9TR+1; j++) {
-if (h_res2TR->GetBinContent(i,j)<1) h_res2TR->SetBinContent(i,j,0);}}
-
-Int_t nxTh10TR = h_res3TR->GetNbinsX();
-Int_t nyTh10TR = h_res3TR->GetNbinsY();
-for (Int_t i=1; i<nxTh10TR+1; i++) {
-for (Int_t j=1; j<nyTh10TR+1; j++) {
-if (h_res3TR->GetBinContent(i,j)<1) h_res3TR->SetBinContent(i,j,0);}}
-
-Int_t nxTh11TR = h_res_muTR->GetNbinsX();
-Int_t nyTh11TR = h_res_muTR->GetNbinsY();
-for (Int_t i=1; i<nxTh11TR+1; i++) {
-for (Int_t j=1; j<nyTh11TR+1; j++) {
-if (h_res_muTR->GetBinContent(i,j)<1) h_res_muTR->SetBinContent(i,j,0);}}
-
-Int_t nxTh12TR = h_res_mu_inTR->GetNbinsX();
-Int_t nyTh12TR = h_res_mu_inTR->GetNbinsY();
-for (Int_t i=1; i<nxTh12TR+1; i++) {
-for (Int_t j=1; j<nyTh12TR+1; j++) {
-if (h_res_mu_inTR->GetBinContent(i,j)<1) h_res_mu_inTR->SetBinContent(i,j,0);}}
-
-
-TCanvas d1("d1","d1",700,700);
-d1.Divide(2,3);
-d1.cd(1);
-h_res_muTR->Draw("COLZ");
-d1.cd(2);
-TObjArray aSlices_muTR;
-auto m1TR = h_res_muTR->ProfileX();
-h_res_muTR->FitSlicesY(0,0,-1,0,"QLW", &aSlices_muTR);
-m1TR->SetLineColor(30);
-m1TR->Draw();
-d1.cd(3);
-aSlices_muTR[0]->Draw();
-d1.cd(4);
-aSlices_muTR[1]->Draw();
-d1.cd(5);
-aSlices_muTR[2]->Draw();
-d1.cd(6);
-aSlices_muTR[3]->Draw();
-gPad->SetLogy();
-d1.SaveAs("res_mu_PREvrtx.pdf");
-*/
-
-
-
 TF1 *a1 = new TF1("a1", "[2]*TMath::Gaus(x,[0],[1])");
 a1->SetParameters(5.3e-05,110e-05,1);
 
@@ -388,20 +398,23 @@ d1.cd(1);
 h_resTR->Fit("a1","R","",-0.006,+0.006);
 h_resTR->Draw("hist same");
 gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d1.cd(2);
 h_res1TR->Fit("a2","R","",-0.002,+0.002);
 h_res1TR->Draw("hist same");
 gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d1.cd(3);
 h_res2TR->Fit("a2","R","",-0.001,+0.001);
 h_res2TR->Draw("hist same");
 gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d1.cd(4);
 h_res3TR->Fit("a2","R","",-0.001,+0.001);
 h_res3TR->Draw("hist same");
 gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d1.SaveAs("electron_res.pdf");
-
 
 TF1 *f1 = new TF1("f1", "[2]*TMath::Gaus(x,[0],[1])");
 f1->SetParameters(7.7e-06,30e-06,1);
@@ -420,25 +433,30 @@ h_res_muTR1->Draw("hist same");
 h_res_muTR1->Fit("f1","R","",-0.0001,+0.0001);
 //h_res_muTR1->Fit("gaus","R","",-0.0001,+0.0001);
  gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d2.cd(2);
 h_res_muTR2->Draw();
 h_res_muTR2->Draw("hist same");
 h_res_muTR2->Fit("f2","R","",-0.0001,+0.0001);
 //h_res_muTR2->Fit("gaus","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d2.cd(3);
 theta1g->SetLineColor(kOrange);
 theta1g->Draw("hist");
 theta1->Draw("hist same");
+gPad->SetLogy();
 d2.cd(4);
 theta2g->SetLineColor(kOrange);
 theta2g->Draw("hist");
 theta2->Draw("hist same");
+gPad->SetLogy();
 d2.cd(5);
 h_res_mu_inTR1->Draw();
 h_res_mu_inTR1->Fit("f1","R","",-0.0001,+0.0001);
 h_res_mu_inTR1->Draw("hist same");
 gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d2.SaveAs("mu_out_peren_GA.pdf");
 
 
@@ -458,21 +476,25 @@ h_res_muTR1x->Draw();
 h_res_muTR1x->Draw("hist same");
 h_res_muTR1x->Fit("f4","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d3.cd(3);
 h_res_muTR2x->Draw();
 h_res_muTR2x->Draw("hist same");
 h_res_muTR2x->Fit("f5","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d3.cd(2);
 h_res_muTR1y->Draw();
 h_res_muTR1y->Draw("hist same");
 h_res_muTR1y->Fit("f5","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d3.cd(4);
 h_res_muTR2y->Draw();
 h_res_muTR2y->Draw("hist same");
 h_res_muTR2y->Fit("f6","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
+gPad->SetLogy();
 d3.SaveAs("proj_mu_GA.pdf");
 
 TCanvas d3a("d3a","d3a",700,700);
@@ -481,40 +503,23 @@ d3a.cd(1);
 theta1gx->SetLineColor(kOrange);
 theta1gx->Draw("hist");
 theta1x->Draw("hist same");
+gPad->SetLogy();
 d3a.cd(2);
 theta1gy->SetLineColor(kOrange);
 theta1gy->Draw("hist");
 theta1y->Draw("hist same");
+gPad->SetLogy();
 d3a.cd(3);
 theta2gx->SetLineColor(kOrange);
 theta2gx->Draw("hist");
 theta2x->Draw("hist same");
-/*d3a.cd(4);
-theta2gy_if->SetLineColor(kOrange);
-theta2gy_if->Draw("hist");
-theta2y_if->Draw("hist same");
-d3a.cd(5);
-theta2gx_if->SetLineColor(kOrange);
-theta2gx_if->Draw("hist");
-theta2x_if->Draw("hist same");*/
+gPad->SetLogy();
 d3a.cd(4);
 theta2gy->SetLineColor(kRed);
 theta2gy->Draw("hist");
 theta2y->Draw("hist same");
-d3a.SaveAs("th_proj_mu_GA.pdf");
-/*
-TCanvas b1("b1","b1",700,700);
-b1.Divide(1,2);
-b1.cd(1);
-th_mu44g->Draw("hist");
-th_mu44->SetLineColor(kViolet);
-th_mu44->Draw("hist same");
 gPad->SetLogy();
-b1.cd(2);
-th_e44g->Draw("hist");
-th_e44->SetLineColor(kViolet);
-th_e44->Draw("hist same");
-b1.SaveAs("angles.pdf");
+d3a.SaveAs("th_proj_mu_GA.pdf");
 */
 
 }
