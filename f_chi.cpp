@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
- 	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV.root");
+ 	TFile *inputfile = new TFile("TRMesmer_box_100k.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
@@ -369,7 +369,7 @@ cout << "Numero elettroni " << yes_er << ", numero muoni " << yes_mur << endl;
 if(yes_er==1 and yes_mur==1 and tracks.size()==3) {reco3+=MesmerEvent->wgt_full; cout << "reco3" << endl;}
 //and tracks.size()==3){reco3+=MesmerEvent->wgt_full; cout << "reco3" << endl;}
 
-if(yes2>=2){reco+=MesmerEvent->wgt_full;
+if(yes_er>=1 and yes_mur>=1){reco+=MesmerEvent->wgt_full;
  cout << "reco" << endl;
 if(yes_v>=1){
 double res = the_rec_vrtx-the_gen;

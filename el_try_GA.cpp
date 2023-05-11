@@ -39,52 +39,46 @@ void RealDataAnalyzer(){
 
 
 
-/*TH2D *h_resTR=new TH2D("resTR", "(the_rec-the_true) VS energy Ee<5 GeV PRE-VRTX",25,0,5,400,-0.04,0.04);
-TH2D *h_res1TR=new TH2D("res1TR", "(the_rec-the_true) VS energy 5<E<15 GeV PRE-VRTX",20,5,15,80,-0.004,0.004);
-TH2D *h_res2TR=new TH2D("res2TR", "(the_rec-the_true) VS energy 15<E<25 GeV PRE-VRTX",10,15,20,20,-0.001,0.001);
-TH2D *h_res3TR=new TH2D("res3TR", "(the_rec-the_true) VS energy Ee>25 GeV PRE-VRTX",6,25,65,20,-0.001,0.001);*/
-
 TH1D *h_resTR=new TH1D("resTR", "(the_rec-the_true) Ee<5 GeV PRE-VRTX",100,-0.01,0.01);
 TH1D *h_res1TR=new TH1D("res1TR", "(the_rec-the_true) 5<E<15 GeV PRE-VRTX",50,-0.0025,0.0025);
 TH1D *h_res2TR=new TH1D("res2TR", "(the_rec-the_true) 15<E<25 GeV PRE-VRTX",40,-0.001,0.001);
-TH1D *h_res3TR=new TH1D("res3TR", "(the_rec-the_true) Ee>25 GeV PRE-VRTX",40,-0.001,0.001);
+TH1D *h_res3TR=new TH1D("res3TR", "(the_rec-the_true) Ee>10 GeV PRE-VRTX",40,-0.001,0.001);
 
-TH2D *h_res_muTR=new TH2D("h_res_muTR", "(thmu_rec-thmu_true) VS energy Emu(GeV) PRE-VRTX",30,155,160,120,-0.0006,0.0006);//30,140,170,120,-0.0006,0.0006);
+TH2D *h_res_TR=new TH2D("h_res_TR", "(thmu_rec-thmu_true) VS energy Emu(GeV) PRE-VRTX",30,155,160,100,-0.01,0.01);//30,140,170,100,-0.01,0.01);
 TH2D *h_res_mu_inTR=new TH2D("h_res_mu_inTR", "(thmu_in_rec-thmu_in_true) VS energy Emu(GeV) PRE-VRTX",10,150,160,22,-0.0006,0.0006);
 
-TH1D *h_res_muTR1x=new TH1D("h_res_muTR1x", "(thmu_rec-thmu_true) proj. X  155<Emu<157(GeV) PRE-VRTX",120,-0.0006,0.0006);
-TH1D *h_res_muTR2x=new TH1D("h_res_muTR2x", "(thmu_rec-thmu_true) proj. X 157<Emu<160(GeV) PRE-VRTX",120,-0.0006,0.0006);
-TH1D *h_res_muTR3x=new TH1D("h_res_muTR3x", "(thmu_rec-thmu_true) proj. X 158<Emu<160(GeV) PRE-VRTX",120,-0.0006,0.0006);
+TH1D *h_res_TR1x=new TH1D("h_res_TR1x", "(thmu_rec-thmu_true) proj. X  155<Emu<157(GeV) PRE-VRTX",100,-0.01,0.01);
+TH1D *h_res_TR2x=new TH1D("h_res_TR2x", "(thmu_rec-thmu_true) proj. X 157<Emu<160(GeV) PRE-VRTX",100,-0.01,0.01);
+TH1D *h_res_TR3x=new TH1D("h_res_TR3x", "(thmu_rec-thmu_true) proj. X 158<Emu<160(GeV) PRE-VRTX",100,-0.01,0.01);
 
-TH1D *h_res_muTR1y=new TH1D("h_res_muTR1y", "(thmu_rec-thmu_true) proj. Y 155<Emu<157(GeV) PRE-VRTX",120,-0.0006,0.0006);
-TH1D *h_res_muTR2y=new TH1D("h_res_muTR2y", "(thmu_rec-thmu_true) proj. Y 157<Emu<160(GeV) PRE-VRTX",120,-0.0006,0.0006);
-TH1D *h_res_muTR3y=new TH1D("h_res_muTR3y", "(thmu_rec-thmu_true) proj. Y 158<Emu<160(GeV) PRE-VRTX",120,-0.0006,0.0006);
+TH1D *h_res_TR1y=new TH1D("h_res_TR1y", "(thmu_rec-thmu_true) proj. Y 155<Emu<157(GeV) PRE-VRTX",100,-0.01,0.01);
+TH1D *h_res_TR2y=new TH1D("h_res_TR2y", "(thmu_rec-thmu_true) proj. Y 157<Emu<160(GeV) PRE-VRTX",100,-0.01,0.01);
+TH1D *h_res_TR3y=new TH1D("h_res_TR3y", "(thmu_rec-thmu_true) proj. Y 158<Emu<160(GeV) PRE-VRTX",100,-0.01,0.01);
 
-TH1D *h_res_muTR1=new TH1D("h_res_muTR1", "(thmu_rec-thmu_true) VS energy 155<Emu<157(GeV) PRE-VRTX",180,-0.0006,0.0006);
-TH1D *h_res_muTR2=new TH1D("h_res_muTR2", "(thmu_rec-thmu_true) VS energy 157<Emu<160(GeV) PRE-VRTX",180,-0.0006,0.0006);
-TH1D *h_res_muTR3=new TH1D("h_res_muTR3", "(thmu_rec-thmu_true) VS energy 158<Emu<160(GeV) PRE-VRTX",180,-0.0006,0.0006);
+TH1D *h_res_TR1=new TH1D("h_res_TR1", "(thmu_rec-thmu_true) VS energy 155<Emu<157(GeV) PRE-VRTX",100,-0.01,0.01);
+TH1D *h_res_TR2=new TH1D("h_res_TR2", "(thmu_rec-thmu_true) VS energy 157<Emu<160(GeV) PRE-VRTX",100,-0.01,0.01);
+TH1D *h_res_TR3=new TH1D("h_res_TR3", "(thmu_rec-thmu_true) VS energy 158<Emu<160(GeV) PRE-VRTX",100,-0.01,0.01);
 TH1D *h_res_mu_inTR1=new TH1D("h_res_mu_inTR1", "(thmu_in_rec-thmu_in_true)  PRE-VRTX",80,-0.0002,0.0002);
 
-TH1D *theta1 =new TH1D("theta1" , "theta of the muon for events in the peak of angular residuum" , 150,0.,0.005);
-TH1D *theta2 =new TH1D("theta2" , "theta of the muon for events in the tail of angular residuum" , 150,0.,0.005);
-TH1D *theta1g =new TH1D("theta1g" , "theta of the muon for events in the peak of angular residuum" , 150,0.,0.005);
-TH1D *theta2g =new TH1D("theta2g" , "theta of the muon for events in the tail of angular residuum" , 150,0.,0.005);
+TH1D *theta1 =new TH1D("theta1" , "theta of the muon for events in the peak of angular residuum" , 150,0.,0.01);
+TH1D *theta2 =new TH1D("theta2" , "theta of the muon for events in the tail of angular residuum" , 150,0.,0.01);
+TH1D *theta1g =new TH1D("theta1g" , "theta of the muon for events in the peak of angular residuum" , 150,0.,0.01);
+TH1D *theta2g =new TH1D("theta2g" , "theta of the muon for events in the tail of angular residuum" , 150,0.,0.01);
 
-TH1D *theta1x =new TH1D("theta1x" , "theta x of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta2x =new TH1D("theta2x" , "theta x of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta1gx =new TH1D("theta1gx" , "theta x of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta2gx =new TH1D("theta2gx" , "theta x of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta1x =new TH1D("theta1x" , "theta x of the muon for events in the peak of angular residuum" , 150,-0.005,0.005);
+TH1D *theta2x =new TH1D("theta2x" , "theta x of the muon for events in the tail of angular residuum" , 150,-0.005,0.005);
+TH1D *theta1gx =new TH1D("theta1gx" , "theta x of the muon for events in the peak of angular residuum" , 150,-0.005,0.005);
+TH1D *theta2gx =new TH1D("theta2gx" , "theta x of the muon for events in the tail of angular residuum" , 150,-0.005,0.005);
 
-TH1D *theta1y =new TH1D("theta1y" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta2y =new TH1D("theta2y" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta1gy =new TH1D("theta1gy" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta2gy =new TH1D("theta2gy" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta1y =new TH1D("theta1y" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.005,0.005);
+TH1D *theta2y =new TH1D("theta2y" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.005,0.005);
+TH1D *theta1gy =new TH1D("theta1gy" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.005,0.005);
+TH1D *theta2gy =new TH1D("theta2gy" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.005,0.005);
 
-TH1D *theta2x_if =new TH1D("theta2x_if" , "theta x of the muon for events in the residuum if theta y in the tail" , 150,-0.0025,0.0025);
-TH1D *theta2gx_if =new TH1D("theta2gx_if" , "theta x of the muon for events in the residuum if theta y in the tail" , 150,-0.0025,0.0025);
-TH1D *theta2y_if =new TH1D("theta2y_if" , "theta y of the muon for events in the residuum if theta x in the tail" , 150,-0.0025,0.0025);
-TH1D *theta2gy_if =new TH1D("theta2gy_if" , "theta y of the muon for events in the peak of angular residuum if theta x in the tail" , 150,-0.0025,0.0025);
-
+TH1D *theta2x_if =new TH1D("theta2x_if" , "theta x of the muon for events in the residuum if theta y in the tail" , 150,-0.005,0.005);
+TH1D *theta2gx_if =new TH1D("theta2gx_if" , "theta x of the muon for events in the residuum if theta y in the tail" , 150,-0.005,0.005);
+TH1D *theta2y_if =new TH1D("theta2y_if" , "theta y of the muon for events in the residuum if theta x in the tail" , 150,-0.005,0.005);
+TH1D *theta2gy_if =new TH1D("theta2gy_if" , "theta y of the muon for events in the peak of angular residuum if theta x in the tail" , 150,-0.005,0.005);
 
 TH1D *h_phiin =new TH1D("h_phiin"," entering muon phi angle",180,-180,180);
 
@@ -101,7 +95,7 @@ TH1D* nstubs=new TH1D("nstubs","nstubs for well reconstructed events",25,5,30);
 TH1D* nstubs90=new TH1D("nstubs90","nstubs when 88<phi_mu<93",25,5,30);
 TH1D* nstubs180=new TH1D("nstubs180","nnstubs when 178<phi_mu<183",25,5,30);
 
-TH2D *h_thphi=new TH2D("resTR", "theta-phi for events in the tail of angular residuum",180,-180,180,150,-0.0025,0.0025);
+TH2D *h_thphi=new TH2D("resTR", "theta-phi for events in the tail of angular residuum",180,-180,180,150,-0.005,0.005);
 
 TH1D *h_op0 = new TH1D("op0","opening angle for events in the tail of angular residuum",400,0,0.04);
 
@@ -112,8 +106,8 @@ double the_rec_tracks=0; double thmu_rec_tracks=0; double th_in_rec_tracks=0;
 
 double thmu_gen_x=0; double thmu_gen_y=0;
 double thmu_rec_x=0; double thmu_rec_y=0;
-
 double the_gen_x=0; double the_gen_y=0;
+double the_rec_x=0; double the_rec_y=0;
 
 double signal=0.; double reco=0.; double reco1=0.; double more_reco=0.; double reco0=0.;
 double reco_v=0.; double more_reco_v=0.; double reco0_v=0.; double one=0;
@@ -129,13 +123,6 @@ int TrackIdreco=-99;
 double phi=0;
 double phie=0;
 double phi_in=0.;
-
-TH1D *th_mu44g = new TH1D("th_mu44g"," angle mu 44 wrt incoming muon (generated)",200,0,0.005);
-TH1D *th_mu44 = new TH1D("th_mu44"," angle mu 44 wrt incoming muon (reconstructed)",200,0,0.005);
-TH1D *th_e44g = new TH1D("th_e44e"," angle e 44 wrt incoming muon (generated)",200,0,0.05);
-TH1D *th_e44 = new TH1D("th_mu44_r"," angle e 44 wrt incoming muon (reconstructed)",200,0,0.05);
-
-
 
 
 for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
@@ -199,11 +186,11 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 		TVector3 z(0.,0.,1.);
                 //the_gen=pe.Theta();
 		//the_gen=acos(pe.Dot(z));
+                phie=pe.Phi()*(180/M_PI);
          double mx=SigTracks->ax();
          double my=SigTracks->ay();
                 the_gen_x=mx;
                 the_gen_y=my;
-                phie=pe.Phi()*(180/M_PI);
 		yes_e=1;}
            if(SigTracks->pdgCode()==-13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){
 		Emu=SigTracks->energy();
@@ -259,6 +246,8 @@ for(int j=0; j<tracks.size();j++)
 		TVector3 z(0.,0.,1.);
 		e_outv=e_outv.Unit();
         	 the_rec_tracks=e_outv.Theta();
+                the_rec_x=tracks.at(j).xSlope();
+                the_rec_y=tracks.at(j).ySlope();
 
 					}
 
@@ -284,53 +273,35 @@ h_phiin->Fill(phi_in,MesmerEvent->wgt_full);
 
 nstubs->Fill(TrackerStubs->GetEntries()-6,MesmerEvent->wgt_full);
 
- th_mu44->Fill(thmu_rec_tracks);
- th_e44->Fill(the_rec_tracks);
- th_mu44g->Fill(thmu_gen);
- th_e44g->Fill(the_gen);
-
 double resTR = the_rec_tracks-the_gen;
-double res_muTR = thmu_rec_tracks-thmu_gen;
-double res_muinTR = th_in_rec_tracks-th_in_gen;
-double resx=thmu_rec_x-thmu_gen_x;
-double resy=thmu_rec_y-thmu_gen_y;
+double resx=the_rec_x-the_gen_x;
+double resy=the_rec_y-the_gen_y;
 
 
-/*if( Ee<5) h_resTR->Fill(resTR,MesmerEvent->wgt_full);
-if( Ee<15 and Ee>5) h_res1TR->Fill(resTR,MesmerEvent->wgt_full);
-if( Ee<25 and Ee>15) h_res2TR->Fill(resTR,MesmerEvent->wgt_full);
-if( Ee>25) h_res3TR->Fill(resTR,MesmerEvent->wgt_full);*/
+if( Ee>10) {h_res_TR1->Fill(resTR,MesmerEvent->wgt_full);h_res_TR1x->Fill(resx,MesmerEvent->wgt_full); h_res_TR1y->Fill(resy,MesmerEvent->wgt_full);}
+if( Ee<10) {h_res_TR2->Fill(resTR,MesmerEvent->wgt_full);h_res_TR2x->Fill(resx,MesmerEvent->wgt_full); h_res_TR2y->Fill(resy,MesmerEvent->wgt_full);}
 
-//h_phitot->Fill(phi,MesmerEvent->wgt_full);h_phietot->Fill(phie,MesmerEvent->wgt_full);
+if(abs(resTR)<0.0003 and Ee>10){theta1->Fill(the_rec_tracks,MesmerEvent->wgt_full);theta1g->Fill(the_gen,MesmerEvent->wgt_full);}
+if(abs(resTR)>0.0003 and Ee>10){theta2->Fill(the_rec_tracks,MesmerEvent->wgt_full);theta2g->Fill(the_gen,MesmerEvent->wgt_full);}
 
+if(abs(resx)<0.0003 and Ee>10) peakx+=MesmerEvent->wgt_full;
+if(abs(resy)<0.0003 and Ee>10) peaky+=MesmerEvent->wgt_full;
 
-if(Emu>155 and Emu<=157) {h_res_muTR1->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR1x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR1y->Fill(resy,MesmerEvent->wgt_full);}
-if(Emu>157 and Emu<=160) {h_res_muTR2->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR2x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR2y->Fill(resy,MesmerEvent->wgt_full);}
-//if(Emu>158 and Emu<=160) {h_res_muTR3->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR3x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR3y->Fill(resy,MesmerEvent->wgt_full);}
-h_res_muTR->Fill(Emu,res_muTR,MesmerEvent->wgt_full);
-h_res_mu_inTR->Fill(Emu_in,res_muinTR,MesmerEvent->wgt_full);
-h_res_mu_inTR1->Fill(res_muinTR,MesmerEvent->wgt_full);
+if(abs(resx)<0.0003 and abs(resy)<0.0003 and Ee>10) {theta1x->Fill(the_rec_x,MesmerEvent->wgt_full);theta1gx->Fill(the_gen_x,MesmerEvent->wgt_full);
+						theta1y->Fill(the_rec_y,MesmerEvent->wgt_full);theta1gy->Fill(the_gen_y,MesmerEvent->wgt_full);}
 
-if(res_muTR>0.1e-03){theta1->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta1g->Fill(thmu_gen,MesmerEvent->wgt_full);}
-if(res_muTR<0.1e-03 and res_muTR>-0.1e-03){theta2->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta2g->Fill(thmu_gen,MesmerEvent->wgt_full);}
+if(abs(resx)>0.0003 and Ee>10){tailx+=MesmerEvent->wgt_full; 
 
-if(abs(resx)<0.1e-03) peakx+=MesmerEvent->wgt_full;
-if(abs(resy)<0.1e-03) peaky+=MesmerEvent->wgt_full;
+//h_thphi->Fill(phi,thmu_gen_x,MesmerEvent->wgt_full);h_op0->Fill(opening,MesmerEvent->wgt_full);
+h_thphi->Fill(phie,the_gen_x,MesmerEvent->wgt_full);h_op0->Fill(opening,MesmerEvent->wgt_full);
+                                   theta2x->Fill(the_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(the_gen_x,MesmerEvent->wgt_full);}
 
-if(abs(resx)<0.1e-03 and abs(resy)<0.1e-03) {theta1x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta1gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
-						theta1y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta1gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);}
+if(abs(resy)>0.0003 and Ee>10){taily+=MesmerEvent->wgt_full;
+                                   theta2y->Fill(the_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(the_gen_y,MesmerEvent->wgt_full);}
 
-if(abs(resx)>0.1e-03){tailx+=MesmerEvent->wgt_full; 
+if((abs(resy)>0.0003 or abs(resy)>0.0003) and Ee>10) {
 
-h_thphi->Fill(phi,thmu_gen_x,MesmerEvent->wgt_full);h_op0->Fill(opening,MesmerEvent->wgt_full);
-
-                                   theta2x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
-				   theta2y_if->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy_if->Fill(thmu_gen_y,MesmerEvent->wgt_full);}
-if(abs(resy)>0.1e-03){taily+=MesmerEvent->wgt_full;
-                                   theta2y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);
-				   theta2x_if->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx_if->Fill(thmu_gen_x,MesmerEvent->wgt_full);}
-
-     if(abs(resx)>0.1e-03 or abs(resy)>0.1e-03) {h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
+h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
 if( Ee<5) h_resTR->Fill(resTR,MesmerEvent->wgt_full);
 if( Ee<15 and Ee>5) h_res1TR->Fill(resTR,MesmerEvent->wgt_full);
 if( Ee<25 and Ee>15) h_res2TR->Fill(resTR,MesmerEvent->wgt_full);
@@ -394,19 +365,19 @@ b2.cd(1);
 /*nstubs->Draw("hist");
 nstubs90->SetLineColor(kRed);
 nstubs90->Draw("hist same");
-gPad->SetLogy();
+//gPad->SetLogy();
 b2.cd(2);
 nstubs->Draw("hist");
 nstubs180->SetLineColor(kRed);
 nstubs180->Draw("hist same");
-gPad->SetLogy();
+//gPad->SetLogy();
 b2.cd(2);*/
 h_thphi->Draw("COLZ");
 b2.cd(2);
 h_op0->Draw("hist");
 b2.SaveAs("2Dth_phi.pdf");
 
-
+/*
 TF1 *a1 = new TF1("a1", "[2]*TMath::Gaus(x,[0],[1])");
 a1->SetParameters(5.3e-05,110e-05,1);
 
@@ -420,24 +391,24 @@ d1.cd(1);
 h_resTR->Fit("a1","R","",-0.006,+0.006);
 h_resTR->Draw("hist same");
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d1.cd(2);
 h_res1TR->Fit("a2","R","",-0.002,+0.002);
 h_res1TR->Draw("hist same");
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d1.cd(3);
 h_res2TR->Fit("a2","R","",-0.001,+0.001);
 h_res2TR->Draw("hist same");
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d1.cd(4);
 h_res3TR->Fit("a2","R","",-0.001,+0.001);
 h_res3TR->Draw("hist same");
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d1.SaveAs("electron_res.pdf");
-/*
+
 TF1 *f1 = new TF1("f1", "[2]*TMath::Gaus(x,[0],[1])");
 f1->SetParameters(7.7e-06,30e-06,1);
 
@@ -446,39 +417,39 @@ f2->SetParameters(3.8e-05,25e-06,1);
 
 TF1 *f3 = new TF1("f3", "[2]*TMath::Gaus(x,[0],[1])");
 f3->SetParameters(2e-05,25e-06,1);
-
+*/
 TCanvas d2("d2","d2",700,700);
 d2.Divide(2,3);
 d2.cd(1);
-h_res_muTR1->Draw();
-h_res_muTR1->Draw("hist same");
-h_res_muTR1->Fit("f1","R","",-0.0001,+0.0001);
-//h_res_muTR1->Fit("gaus","R","",-0.0001,+0.0001);
+h_res_TR1->Draw();
+h_res_TR1->Draw("hist same");
+h_res_TR1->Fit("f1","R","",-0.0001,+0.0001);
+//h_res_TR1->Fit("gaus","R","",-0.0001,+0.0001);
  gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d2.cd(2);
-h_res_muTR2->Draw();
-h_res_muTR2->Draw("hist same");
-h_res_muTR2->Fit("f2","R","",-0.0001,+0.0001);
-//h_res_muTR2->Fit("gaus","R","",-0.0001,+0.0001);
+h_res_TR2->Draw();
+h_res_TR2->Draw("hist same");
+h_res_TR2->Fit("f2","R","",-0.0001,+0.0001);
+//h_res_TR2->Fit("gaus","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d2.cd(3);
 theta1g->SetLineColor(kOrange);
 theta1g->Draw("hist");
 theta1->Draw("hist same");
-gPad->SetLogy();
+//gPad->SetLogy();
 d2.cd(4);
 theta2g->SetLineColor(kOrange);
 theta2g->Draw("hist");
 theta2->Draw("hist same");
-gPad->SetLogy();
+//gPad->SetLogy();
 d2.cd(5);
 h_res_mu_inTR1->Draw();
 h_res_mu_inTR1->Fit("f1","R","",-0.0001,+0.0001);
 h_res_mu_inTR1->Draw("hist same");
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d2.SaveAs("mu_out_peren_GA.pdf");
 
 
@@ -494,29 +465,29 @@ f6->SetParameters(-7e-05,28e-06,1);
 TCanvas d3("d3","d3",700,700);
 d3.Divide(2,2);
 d3.cd(1);
-h_res_muTR1x->Draw();
-h_res_muTR1x->Draw("hist same");
-h_res_muTR1x->Fit("f4","R","",-0.0001,+0.0001);
+h_res_TR1x->Draw();
+h_res_TR1x->Draw("hist same");
+h_res_TR1x->Fit("f4","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d3.cd(3);
-h_res_muTR2x->Draw();
-h_res_muTR2x->Draw("hist same");
-h_res_muTR2x->Fit("f5","R","",-0.0001,+0.0001);
+h_res_TR2x->Draw();
+h_res_TR2x->Draw("hist same");
+h_res_TR2x->Fit("f5","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d3.cd(2);
-h_res_muTR1y->Draw();
-h_res_muTR1y->Draw("hist same");
-h_res_muTR1y->Fit("f5","R","",-0.0001,+0.0001);
+h_res_TR1y->Draw();
+h_res_TR1y->Draw("hist same");
+h_res_TR1y->Fit("f5","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d3.cd(4);
-h_res_muTR2y->Draw();
-h_res_muTR2y->Draw("hist same");
-h_res_muTR2y->Fit("f6","R","",-0.0001,+0.0001);
+h_res_TR2y->Draw();
+h_res_TR2y->Draw("hist same");
+h_res_TR2y->Fit("f6","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
 d3.SaveAs("proj_mu_GA.pdf");
 
 TCanvas d3a("d3a","d3a",700,700);
@@ -538,7 +509,7 @@ theta2gy->SetLineColor(kRed);
 theta2gy->Draw("hist");
 theta2y->Draw("hist same");
 d3a.SaveAs("th_proj_mu_GA.pdf");
-*/
+
 
 }
 

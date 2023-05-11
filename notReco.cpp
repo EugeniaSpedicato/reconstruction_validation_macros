@@ -68,17 +68,20 @@ TH2D *h_res1=new TH2D("res1", "(the_rec-the_true) VS energy 5<E<15 GeV",20,5,15,
 TH2D *h_res2=new TH2D("res2", "(the_rec-the_true) VS energy 15<E<25 GeV",20,15,25,400,-0.2,0.2);
 TH2D *h_res3=new TH2D("res3", "(the_rec-the_true) VS energy Ee>25 GeV",6,25,65,400,-0.2,0.2);
 
-TH1D *h_chidofM=new TH1D("h_chidofM", "chi2 per dof when I have MORE THAN 2 signal tracks",100,0,100);
-TH1D *h_chidof2=new TH1D("h_chidof2", "chi2 per dof when I have only 2 signal tracks",100,0,100);
+TH1D *h_chidofM=new TH1D("h_chidofM", "chi2 per dof when I have MORE THAN 2 signal tracks",101,0,101);
+TH1D *h_chidof2=new TH1D("h_chidof2", "chi2 per dof when I have only 2 signal tracks",101,0,101);
 
-TH1D *h_shared=new TH1D("h_shared","moduels where shared hits are",6,0,6);
+TH1D *h_shared=new TH1D("h_shared","multiplicity for well reconstructed elastic events",20,0,20);
 TH1D *h_op = new TH1D("op","opening angle when reco",400,0,0.04);
 
 TH1D *h_vrtx=new TH1D("vrt","number of vertices when ghosts tracks",12,0,12);
 
+TH1D *h_quality=new TH1D("q","Quality of the well reconstructed events",101,0,101);
+TH1D *h_quality_more=new TH1D("qmore","Quality of the well reconstructed events with ghosts",101,0,101);
+
 double the_gen=0; double thmu_gen=0; double thmu=0; double the=0;
 double the_rec=0;
-double signal=0.; double reco=0.; double reco1=0.; double more_reco=0.; double reco0=0.;
+double signal=0.; double reco=0.; double reco1=0.; double more_reco=0.; double reco0=0.;double reco3=0.;
 double reco_v=0.; double more_reco_v=0.; double reco0_v=0.;
 int link0; int link1=0;
 vector<int> link;
@@ -213,6 +216,9 @@ position.at(hits_.at(h).moduleID()).push_back(hits_.at(h).position());
 if(yes_e>=1 and yes_mu>=1){reco+=MesmerEvent->wgt_full;
 //        h_angen_el->Fill(the_sdr,Ee,MesmerEvent->wgt_full);
 
+//h_shared->Fill(tracks.size(),MesmerEvent->wgt_full);
+
+
 int sig=0;
 int sig_1=0;
 int sig_2=0;
@@ -237,13 +243,27 @@ for(int s=0;s<6;s++)
         for(int j=0; j<tracks.size();j++)
         {inter->Fill(tracks.at(j).processIDofLinkedTrack(),MesmerEvent->wgt_full);}}
 
-if(yes_e==1 and yes_mu==1){
+if(yes_e==1 and yes_mu==1 and tracks.size()==3) {reco3+=MesmerEvent->wgt_full;}
+
+if(yes_e==1 and yes_mu==1){ 
+h_shared->Fill(tracks.size(),MesmerEvent->wgt_full);
 
         for(int j=0; j<tracks.size();j++)
-        {if(tracks.at(j).processIDofLinkedTrack()==45) h_chidof2->Fill(tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);}
+        {
+	if(tracks.at(j).processIDofLinkedTrack()==45) h_chidof2->Fill(tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
+if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1 and  tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=0) 
+	{h_quality->Fill(tracks.at(j).percentageOfHitsSharedWithLinkedTrack(),MesmerEvent->wgt_full);}
 	}
+}
 
-if(yes_e>1 or yes_mu>1){more_reco+=MesmerEvent->wgt_full;
+if((yes_e>1 or yes_mu>1) and yes_e!=0 and yes_mu!=0){more_reco+=MesmerEvent->wgt_full;
+
+        for(int j=0; j<tracks.size();j++)
+        {
+if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1 and  tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=0) 
+        {h_quality_more->Fill(tracks.at(j).percentageOfHitsSharedWithLinkedTrack(),MesmerEvent->wgt_full);}
+        }
+
 h_vrtx->Fill(vrtx.size(),MesmerEvent->wgt_full);
 cout << "event " << i << endl;
 int sig=0;
@@ -299,13 +319,13 @@ cout <<"NOT RECONSTRUCTED"<<endl;
         {inter1->Fill(tracks.at(j).processIDofLinkedTrack(),MesmerEvent->wgt_full);}
 	}
 
-if(yes_v>=1){reco_v+=MesmerEvent->wgt_full;
+if(yes_v>=1 and yes_e>=1 and yes_mu>=1){reco_v+=MesmerEvent->wgt_full;
         }
 
-if(yes_v>1){more_reco_v+=MesmerEvent->wgt_full;
+if(yes_v>1 and yes_e>=1 and yes_mu>=1){more_reco_v+=MesmerEvent->wgt_full;
         }
 
-if(yes_v<1){reco0_v+=MesmerEvent->wgt_full;
+if(yes_v<1 and yes_e>=1 and yes_mu>=1){reco0_v+=MesmerEvent->wgt_full;
 cout <<"NOT RECONSTRUCTED vertex"<<endl;
         }
 
@@ -327,32 +347,42 @@ double ratio0 =reco0/signal;
 double ratioM =more_reco/signal;
 
 cout << "Su " << signal << " eventi di segnale, " << reco << " sono ricostruiti, con un rapporto del " << ratio*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, " << reco3 << " sono ricostruiti con 3 tracce, con un rapporto del " << (reco3/signal)*100 << "%"<< endl;
 cout << "Su " << signal << " eventi di segnale con piu tracce (stesso id), " << more_reco << " sono ricostruiti, con un rapporto del " << ratioM*100 << "%"<< endl;
 cout << "Su " << signal << " eventi di segnale con 0 tracce di segnale reco, " << reco0 << ", con un rapporto del " << ratio0*100 << "%"<< endl;
 cout << "Su " << signal << " eventi di con 1 sola traccia di segnale reco, " << reco1 << ", con un rapporto del " << ratio1*100 << "%"<< endl;
 
-double ratio_v =reco_v/signal;
-double ratio0_v =reco0_v/signal;
-double ratioM_v =more_reco_v/signal;
+double ratio_v =reco_v/reco;
+double ratio0_v =reco0_v/reco;
+double ratioM_v =more_reco_v/reco;
 
 cout << "Su " << signal << " eventi di segnale, " << reco_v << " sono ricostruiti con almeno 1 vertice, con un rapporto del " << ratio_v*100 << "%"<< endl;
 cout << "Su " << signal << " eventi di segnale, " << more_reco_v << " sono ricostruiti con piu' di unun vertice, con un rapporto del " << ratioM_v*100 << "%"<< endl;
 cout << "Su " << signal << " eventi di segnale, " << reco0_v << " hanno 0 vertici, con un rapporto del " << ratio0_v*100 << "%"<< endl;
 
-TCanvas o("o","o",700,700);
+TCanvas o1("o1","o1",700,700);
+h_quality->SetLineWidth(5);
+h_quality->Draw("hist");
+h_quality_more->SetLineWidth(5);
+h_quality_more->SetLineColor(kOrange);
+h_quality_more->Draw("hist same");
+o1.SaveAs("pdf_notReco/quality.pdf");
+/*TCanvas o("o","o",700,700);
 h_op->Draw("hist");
-o.SaveAs("op.pdf");
+o.SaveAs("pdf_notReco/op.pdf");
 
 TCanvas b("b","b",700,700);
 h_shared->Draw("hist");
-b.SaveAs("shared.pdf");
+gPad->SetLogy();
+b.SaveAs("pdf_notReco/shared.pdf");
+
 
 TCanvas a("pa","p",700,700);
 gPad->SetLogy();
 h_chidof2->Draw("hist");
 h_chidofM->SetLineColor(kRed);
 h_chidofM->Draw("hist same");
-a.SaveAs("chi.pdf");
+a.SaveAs("pdf_notReco/chi.pdf");
 
 TCanvas a3("p3","p3",700,700);
 a3.Divide(2,2);
@@ -372,7 +402,7 @@ h_trackerStubs0->Draw("hist");
 a3.cd(4);
 gPad->SetLogy();
 h_trackerStubs1->Draw("hist");
-a3.SaveAs("detector_pt.pdf");
+a3.SaveAs("pdf_notReco/detector_pt.pdf");
 
 TCanvas a4("size","size",700,700);
 a4.Divide(2,4);
@@ -392,11 +422,11 @@ a4.cd(7);
 tracksize1->Draw("hist");
 a4.cd(8);
 inter1->Draw("hist");
-a4.SaveAs("trackint.pdf");
+a4.SaveAs("pdf_notReco/trackint.pdf");
 
 TCanvas a1("p","p",700,700);
 h_part->Draw("hist");
-a1.SaveAs("hpart.pdf");
+a1.SaveAs("pdf_notReco/hpart.pdf");
 
 Int_t nxTh = h_angen_el->GetNbinsX();
 Int_t nyTh = h_angen_el->GetNbinsY();
@@ -428,13 +458,14 @@ a2.cd(7);
 h_op0->Draw("hist");
 a2.cd(8);
 h_op1->Draw("hist");
-a2.SaveAs("angle.pdf");
+a2.SaveAs("pdf_notReco/angle.pdf");
 
 TCanvas m("m","m",1400,1400);
 h_vrtx->Draw("hist");
-m.SaveAs("vrtx.pdf");
+m.SaveAs("pdf_notReco/vrtx.pdf");
 
-/*
+
+------------------------cut giu
 Int_t nxTh = h_angle->GetNbinsX();
 Int_t nyTh = h_angle->GetNbinsY();
 for (Int_t i=1; i<nxTh+1; i++) {
@@ -506,7 +537,7 @@ gStyle->SetOptFit(1011);
 a1.cd(6);
 h_xy->Draw("COLZ");
 
-a1.SaveAs("propr_narrow.pdf");
+a1.SaveAs("pdf_notReco/propr_narrow.pdf");
 
 TCanvas a2("a2","a2",1400,1400);
 a2.Divide(2,3);
@@ -528,7 +559,7 @@ a2.cd(3);
 h_ratio_e->Draw();
 a2.cd(4);
 h_ratio_mu->Draw();
-a2.SaveAs("angles.pdf");
+a2.SaveAs("pdf_notReco/angles.pdf");
 
 TCanvas a3("p3","p3",700,700);
 a3.Divide(1,2);
@@ -542,7 +573,7 @@ gPad->SetLogy();
 h_pte->SetLineColor(kRed);
 h_pte->Draw("hist");
 h_ptmu->Draw("hist same");
-a3.SaveAs("detector_pt.pdf");
+a3.SaveAs("pdf_notReco/detector_pt.pdf");
 
 TCanvas a4("size","size",700,700);
 a4.Divide(1,3);
@@ -552,7 +583,7 @@ a4.cd(2);
 tracksize->Draw("hist");
 a4.cd(3);
 inter->Draw("hist");
-a4.SaveAs("tracksize.pdf");
+a4.SaveAs("pdf_notReco/tracksize.pdf");
 
 TCanvas a5("a5","a5",1400,1400);
 a5.Divide(1,3);
@@ -562,7 +593,7 @@ a5.cd(2);
 h_anglee_noreco0->Draw("hist");
 a5.cd(3);
 h_angle_noreco0->Draw("hist");
-a5.SaveAs("angles_0trk.pdf");
+a5.SaveAs("pdf_notReco/angles_0trk.pdf");
 
 TCanvas a6("a6","a6",1400,1400);
 gPad->SetLogy();
@@ -572,7 +603,7 @@ h_trackerStubs->Draw("hist");
 h_trackerStubs_noreco0->Draw("hist same");
 h_trackerStubs_noreco1->Draw("hist same");
 a6.BuildLegend();
-a6.SaveAs("trackerStubs.pdf");
+a6.SaveAs("pdf_notReco/trackerStubs.pdf");
 
 TCanvas a7("a7","a7",1400,1400);
 a7.Divide(1,3);
@@ -582,7 +613,7 @@ a7.cd(2);
 h_anglee_noreco1->Draw("hist");
 a7.cd(3);
 h_angle_noreco1->Draw("hist");
-a7.SaveAs("angles_1trk.pdf");
+a7.SaveAs("pdf_notReco/angles_1trk.pdf");
 */
 }
 
