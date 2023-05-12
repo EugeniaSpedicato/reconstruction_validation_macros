@@ -90,6 +90,11 @@ TH1D *theta2gx_if =new TH1D("theta2gx_if" , "theta x of the muon for events in t
 TH1D *theta2y_if =new TH1D("theta2y_if" , "theta y of the muon for events in the residuum if theta x in the tail" , 150,-0.0025,0.0025);
 TH1D *theta2gy_if =new TH1D("theta2gy_if" , "theta y of the muon for events in the peak of angular residuum if theta x in the tail" , 150,-0.0025,0.0025);
 
+TH1D *h_phi =new TH1D("h_phi"," outgoing muon phi angle for events in the tails of the angular residuum",180,-180,180);
+TH1D *h_phiP =new TH1D("h_phip"," outgoing muon phi angle for events in the peaks of the angular residuum",180,-180,180);
+
+TH1D *h_phie =new TH1D("h_phie"," outgoing electron phi angle for events in the tails of the angular residuum",180,-180,180);
+TH1D *h_phiPe =new TH1D("h_phipe"," outgoing electron phi angle for events in the peaks of the angular residuum",180,-180,180);
 
 double the_gen=0; double thmu_gen=0; double th_in_gen=0;
 double the_rec_vrtx=0; double thmu_rec_vrtx=0; double th_in_rec_vrtx=0;
@@ -246,11 +251,6 @@ for(int j=0; j<tracks.size();j++)
 
 if(yes_mu==1 and yes_e==0 ){reco+=MesmerEvent->wgt_full;
 
- th_mu44->Fill(thmu_rec_tracks);
- th_e44->Fill(the_rec_tracks);
- th_mu44g->Fill(thmu_gen);
- th_e44g->Fill(the_gen);
-
 double resTR = the_rec_tracks-the_gen;
 double res_muTR = thmu_rec_tracks-thmu_gen;
 double res_muinTR = th_in_rec_tracks-th_in_gen;
@@ -259,9 +259,7 @@ double resy=thmu_rec_y-thmu_gen_y;
 double resx_in=thmu_in_rec_x-thmu_in_gen_x;
 double resy_in=thmu_in_rec_y-thmu_in_gen_y;
 
-cout << "th_in_rec_tracks " << th_in_rec_tracks << endl;
-cout << "th_in_gen " << th_in_gen << endl;
-cout << "res_muinTR " << res_muinTR << endl;
+
 
 if(th_in_gen<=0.0003) {h_res_mu_in_TR1->Fill(res_muinTR,MesmerEvent->wgt_full);h_res_mu_in_TR1x->Fill(resx_in,MesmerEvent->wgt_full); h_res_mu_in_TR1y->Fill(resy_in,MesmerEvent->wgt_full);}
 if(th_in_gen<=0.0007 and thmu_gen>0.0003) {h_res_mu_in_TR2->Fill(res_muinTR,MesmerEvent->wgt_full);h_res_mu_in_TR2x->Fill(resx_in,MesmerEvent->wgt_full); h_res_mu_in_TR2y->Fill(resy_in,MesmerEvent->wgt_full);}
@@ -276,8 +274,8 @@ h_res_mu_inTR->Fill(Emu_in,res_muinTR,MesmerEvent->wgt_full);
 
 h_res_mu_inTR_all->Fill(res_muinTR,MesmerEvent->wgt_full);
 
-if(res_muTR>0.1e-03){theta1->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta1g->Fill(thmu_gen,MesmerEvent->wgt_full);}
-if(res_muTR<0.1e-03 and res_muTR>-0.1e-03){theta2->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta2g->Fill(thmu_gen,MesmerEvent->wgt_full);}
+if(abs(res_muTR)<0.1e-03){theta1->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta1g->Fill(thmu_gen,MesmerEvent->wgt_full);}
+if(abs(res_muTR)>0.1e-03){theta2->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta2g->Fill(thmu_gen,MesmerEvent->wgt_full);}
 
 
 if(abs(resx)<0.1e-03 and abs(resy)<0.1e-03) {theta1x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta1gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);

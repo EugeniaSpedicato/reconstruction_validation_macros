@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0.root");
+	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0.root");//TRMesmer_box_100k_2GeV_0_div.root");
 	// 	TFile *inputfile = new TFile("TRMesmer_ohit.root");
 	//TRMesmer_thin_5k.root");//TRMesmer_100k_box.root");//beamprofile/TRMesmer_1M.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
@@ -129,12 +129,6 @@ int TrackIdreco=-99;
 double phi=0;
 double phie=0;
 double phi_in=0.;
-
-TH1D *th_mu44g = new TH1D("th_mu44g"," angle mu 44 wrt incoming muon (generated)",200,0,0.005);
-TH1D *th_mu44 = new TH1D("th_mu44"," angle mu 44 wrt incoming muon (reconstructed)",200,0,0.005);
-TH1D *th_e44g = new TH1D("th_e44e"," angle e 44 wrt incoming muon (generated)",200,0,0.05);
-TH1D *th_e44 = new TH1D("th_mu44_r"," angle e 44 wrt incoming muon (reconstructed)",200,0,0.05);
-
 
 
 
@@ -278,16 +272,11 @@ for(int j=0; j<tracks.size();j++)
 
 if(yes_mu==1 and yes_e==1 ){reco+=MesmerEvent->wgt_full;
 
-h_phitot->Fill(phi,MesmerEvent->wgt_full);h_phietot->Fill(phie,MesmerEvent->wgt_full);
+h_phitot->Fill(phi,MesmerEvent->wgt_full); h_phietot->Fill(phie,MesmerEvent->wgt_full);
 
 h_phiin->Fill(phi_in,MesmerEvent->wgt_full);
 
 nstubs->Fill(TrackerStubs->GetEntries()-6,MesmerEvent->wgt_full);
-
- th_mu44->Fill(thmu_rec_tracks);
- th_e44->Fill(the_rec_tracks);
- th_mu44g->Fill(thmu_gen);
- th_e44g->Fill(the_gen);
 
 double resTR = the_rec_tracks-the_gen;
 double res_muTR = thmu_rec_tracks-thmu_gen;
@@ -296,23 +285,23 @@ double resx=thmu_rec_x-thmu_gen_x;
 double resy=thmu_rec_y-thmu_gen_y;
 
 
-/*if( Ee<5) h_resTR->Fill(resTR,MesmerEvent->wgt_full);
+if( Ee<5) h_resTR->Fill(resTR,MesmerEvent->wgt_full);
 if( Ee<15 and Ee>5) h_res1TR->Fill(resTR,MesmerEvent->wgt_full);
 if( Ee<25 and Ee>15) h_res2TR->Fill(resTR,MesmerEvent->wgt_full);
-if( Ee>25) h_res3TR->Fill(resTR,MesmerEvent->wgt_full);*/
-
-//h_phitot->Fill(phi,MesmerEvent->wgt_full);h_phietot->Fill(phie,MesmerEvent->wgt_full);
+if( Ee>25) h_res3TR->Fill(resTR,MesmerEvent->wgt_full);
 
 
-if(Emu>155 and Emu<=157) {h_res_muTR1->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR1x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR1y->Fill(resy,MesmerEvent->wgt_full);}
-if(Emu>157 and Emu<=160) {h_res_muTR2->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR2x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR2y->Fill(resy,MesmerEvent->wgt_full);}
-//if(Emu>158 and Emu<=160) {h_res_muTR3->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR3x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR3y->Fill(resy,MesmerEvent->wgt_full);}
+
+//if(Emu>155 and Emu<=157) {
+h_res_muTR1->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR1x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR1y->Fill(resy,MesmerEvent->wgt_full);
+//if(Emu>157 and Emu<=160) {h_res_muTR2->Fill(res_muTR,MesmerEvent->wgt_full);h_res_muTR2x->Fill(resx,MesmerEvent->wgt_full); h_res_muTR2y->Fill(resy,MesmerEvent->wgt_full);}
+
 h_res_muTR->Fill(Emu,res_muTR,MesmerEvent->wgt_full);
 h_res_mu_inTR->Fill(Emu_in,res_muinTR,MesmerEvent->wgt_full);
 h_res_mu_inTR1->Fill(res_muinTR,MesmerEvent->wgt_full);
 
-if(res_muTR>0.1e-03){theta1->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta1g->Fill(thmu_gen,MesmerEvent->wgt_full);}
-if(res_muTR<0.1e-03 and res_muTR>-0.1e-03){theta2->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta2g->Fill(thmu_gen,MesmerEvent->wgt_full);}
+if(abs(res_muTR)<0.1e-03){theta1->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta1g->Fill(thmu_gen,MesmerEvent->wgt_full);}
+if(abs(res_muTR)>0.1e-03){theta2->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta2g->Fill(thmu_gen,MesmerEvent->wgt_full);}
 
 if(abs(resx)<0.1e-03) peakx+=MesmerEvent->wgt_full;
 if(abs(resy)<0.1e-03) peaky+=MesmerEvent->wgt_full;
@@ -331,10 +320,6 @@ if(abs(resy)>0.1e-03){taily+=MesmerEvent->wgt_full;
 				   theta2x_if->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx_if->Fill(thmu_gen_x,MesmerEvent->wgt_full);}
 
      if(abs(resx)>0.1e-03 or abs(resy)>0.1e-03) {h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
-if( Ee<5) h_resTR->Fill(resTR,MesmerEvent->wgt_full);
-if( Ee<15 and Ee>5) h_res1TR->Fill(resTR,MesmerEvent->wgt_full);
-if( Ee<25 and Ee>15) h_res2TR->Fill(resTR,MesmerEvent->wgt_full);
-if( Ee>25) h_res3TR->Fill(resTR,MesmerEvent->wgt_full);
 
 }
      else{h_phiP->Fill(phi,MesmerEvent->wgt_full); h_phiPe->Fill(phie,MesmerEvent->wgt_full);}
@@ -359,8 +344,8 @@ cout << "Su " << signal << " eventi di segnale, " << reco << " sono ricostruiti,
 cout << "Su " << signal << " eventi di segnale, eventi di con proiezione x nella coda " << (tailx/reco)*100 << "%"<< endl;
 cout << "Su " << signal << " eventi di segnale, eventi di con proiezione y nella coda " << (taily/reco)*100 << "%"<< endl;
 
-cout << "Su " << signal << " eventi di segnale, eventi di con proiezione x nella coda " << (peakx/reco)*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di segnale, eventi di con proiezione y nella coda " << (peaky/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, eventi di con proiezione x nella picco " << (peakx/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, eventi di con proiezione y nella picco " << (peaky/reco)*100 << "%"<< endl;
 
 Int_t nxThTR = h_thphi->GetNbinsX();
 Int_t nyThTR = h_thphi->GetNbinsY();
@@ -370,7 +355,7 @@ if (h_thphi->GetBinContent(i,j)<1) h_thphi->SetBinContent(i,j,0);}}
 
 
 
-TCanvas b1("b1","b1",700,700);
+/*TCanvas b1("b1","b1",700,700);
 b1.Divide(1,4);
 b1.cd(1);
 h_phiP->Draw("hist");
@@ -386,7 +371,36 @@ h_phietot->Draw("hist");
 h_phitot->Draw("hist same");
 b1.cd(4);
 h_phiin->Draw("hist");
-b1.SaveAs("phi.pdf");
+b1.SaveAs("pdf_try/phi.pdf");*/
+
+
+TCanvas b1("b1","b1",700,700);
+b1.Divide(2,3);
+
+b1.cd(1);
+h_phitot->Draw("hist");
+gStyle->SetOptStat(222001111);
+b1.cd(2);
+h_phietot->SetLineColor(kRed);
+h_phietot->Draw("hist");
+gStyle->SetOptStat(222001111);
+b1.cd(3);
+h_phiP->Draw("hist");
+gStyle->SetOptStat(222001111);
+b1.cd(4);
+h_phi->Draw("hist");
+gStyle->SetOptStat(222001111);
+b1.cd(5);
+h_phiPe->SetLineColor(kRed);
+h_phiPe->Draw("hist");
+gStyle->SetOptStat(222001111);
+b1.cd(6);
+h_phie->SetLineColor(kRed);
+gStyle->SetOptStat(222001111);
+h_phie->Draw("hist");
+b1.SaveAs("pdf_try/phi.pdf");
+
+
 
 TCanvas b2("b1","b1",700,700);
 b2.Divide(1,2);
@@ -394,17 +408,19 @@ b2.cd(1);
 /*nstubs->Draw("hist");
 nstubs90->SetLineColor(kRed);
 nstubs90->Draw("hist same");
-gPad->SetLogy();
+//gPad->SetLogy();
 b2.cd(2);
 nstubs->Draw("hist");
 nstubs180->SetLineColor(kRed);
 nstubs180->Draw("hist same");
-gPad->SetLogy();
+//gPad->SetLogy();
 b2.cd(2);*/
 h_thphi->Draw("COLZ");
+gStyle->SetOptStat(222001111);
 b2.cd(2);
 h_op0->Draw("hist");
-b2.SaveAs("2Dth_phi.pdf");
+gStyle->SetOptStat(222001111);
+b2.SaveAs("pdf_try/2Dth_phi.pdf");
 
 
 TF1 *a1 = new TF1("a1", "[2]*TMath::Gaus(x,[0],[1])");
@@ -420,24 +436,28 @@ d1.cd(1);
 h_resTR->Fit("a1","R","",-0.006,+0.006);
 h_resTR->Draw("hist same");
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+gStyle->SetOptStat(222001111);
+//gPad->SetLogy();
 d1.cd(2);
 h_res1TR->Fit("a2","R","",-0.002,+0.002);
 h_res1TR->Draw("hist same");
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+gStyle->SetOptStat(222001111);
+//gPad->SetLogy();
 d1.cd(3);
 h_res2TR->Fit("a2","R","",-0.001,+0.001);
 h_res2TR->Draw("hist same");
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+gStyle->SetOptStat(222001111);
+//gPad->SetLogy();
 d1.cd(4);
-h_res3TR->Fit("a2","R","",-0.001,+0.001);
+h_res3TR->Fit("a2","R","",-0.0001,+0.0001);
 h_res3TR->Draw("hist same");
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
-d1.SaveAs("electron_res.pdf");
-/*
+gStyle->SetOptStat(222001111);
+//gPad->SetLogy();
+d1.SaveAs("pdf_try/electron_res.pdf");
+
 TF1 *f1 = new TF1("f1", "[2]*TMath::Gaus(x,[0],[1])");
 f1->SetParameters(7.7e-06,30e-06,1);
 
@@ -448,38 +468,42 @@ TF1 *f3 = new TF1("f3", "[2]*TMath::Gaus(x,[0],[1])");
 f3->SetParameters(2e-05,25e-06,1);
 
 TCanvas d2("d2","d2",700,700);
-d2.Divide(2,3);
+d2.Divide(2,2);
 d2.cd(1);
 h_res_muTR1->Draw();
 h_res_muTR1->Draw("hist same");
 h_res_muTR1->Fit("f1","R","",-0.0001,+0.0001);
 //h_res_muTR1->Fit("gaus","R","",-0.0001,+0.0001);
  gStyle->SetOptFit(1111);
-gPad->SetLogy();
-d2.cd(2);
+gStyle->SetOptStat(222001111);
+//gPad->SetLogy();
+/*d2.cd(2);
 h_res_muTR2->Draw();
 h_res_muTR2->Draw("hist same");
 h_res_muTR2->Fit("f2","R","",-0.0001,+0.0001);
-//h_res_muTR2->Fit("gaus","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
-d2.cd(3);
+//gPad->SetLogy();
+*/
+d2.cd(2);
 theta1g->SetLineColor(kOrange);
 theta1g->Draw("hist");
+gStyle->SetOptStat(222001111);
 theta1->Draw("hist same");
-gPad->SetLogy();
-d2.cd(4);
+//gPad->SetLogy();
+d2.cd(3);
 theta2g->SetLineColor(kOrange);
 theta2g->Draw("hist");
 theta2->Draw("hist same");
-gPad->SetLogy();
-d2.cd(5);
+gStyle->SetOptStat(222001111);
+//gPad->SetLogy();
+d2.cd(4);
 h_res_mu_inTR1->Draw();
 h_res_mu_inTR1->Fit("f1","R","",-0.0001,+0.0001);
 h_res_mu_inTR1->Draw("hist same");
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
-d2.SaveAs("mu_out_peren_GA.pdf");
+gStyle->SetOptStat(222001111);
+//gPad->SetLogy();
+d2.SaveAs("pdf_try/mu_out_peren_GA.pdf");
 
 
 TF1 *f4 = new TF1("f4", "[2]*TMath::Gaus(x,[0],[1])");
@@ -493,31 +517,47 @@ f6->SetParameters(-7e-05,28e-06,1);
 
 TCanvas d3("d3","d3",700,700);
 d3.Divide(2,2);
+d3.cd(3);
+h_res_muTR1x->SetMinimum(1.);
+h_res_muTR1x->Draw();
+h_res_muTR1x->Draw("hist same");
+gPad->SetLogy();
+gStyle->SetOptStat(222001111);
+d3.cd(4);
+h_res_muTR1y->SetMinimum(1.);
+h_res_muTR1y->Draw();
+h_res_muTR1y->Draw("hist same");
+gPad->SetLogy();
+gStyle->SetOptStat(222001111);
 d3.cd(1);
 h_res_muTR1x->Draw();
 h_res_muTR1x->Draw("hist same");
 h_res_muTR1x->Fit("f4","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
-d3.cd(3);
+gStyle->SetOptStat(222001111);
+//gPad->SetLogy();
+/*d3.cd(3);
 h_res_muTR2x->Draw();
 h_res_muTR2x->Draw("hist same");
 h_res_muTR2x->Fit("f5","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
+//gPad->SetLogy();
+*/
 d3.cd(2);
 h_res_muTR1y->Draw();
 h_res_muTR1y->Draw("hist same");
 h_res_muTR1y->Fit("f5","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
-d3.cd(4);
+gStyle->SetOptStat(222001111);
+//gPad->SetLogy();
+/*d3.cd(4);
 h_res_muTR2y->Draw();
 h_res_muTR2y->Draw("hist same");
 h_res_muTR2y->Fit("f6","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
-gPad->SetLogy();
-d3.SaveAs("proj_mu_GA.pdf");
+//gPad->SetLogy();
+*/
+d3.SaveAs("pdf_try/proj_mu_GA.pdf");
 
 TCanvas d3a("d3a","d3a",700,700);
 d3a.Divide(2,3);
@@ -525,20 +565,24 @@ d3a.cd(1);
 theta1gx->SetLineColor(kOrange);
 theta1gx->Draw("hist");
 theta1x->Draw("hist same");
+gStyle->SetOptStat(222001111);
 d3a.cd(2);
 theta1gy->SetLineColor(kOrange);
 theta1gy->Draw("hist");
 theta1y->Draw("hist same");
+gStyle->SetOptStat(222001111);
 d3a.cd(3);
 theta2gx->SetLineColor(kOrange);
 theta2gx->Draw("hist");
 theta2x->Draw("hist same");
+gStyle->SetOptStat(222001111);
 d3a.cd(4);
 theta2gy->SetLineColor(kRed);
 theta2gy->Draw("hist");
 theta2y->Draw("hist same");
-d3a.SaveAs("th_proj_mu_GA.pdf");
-*/
+gStyle->SetOptStat(222001111);
+d3a.SaveAs("pdf_try/th_proj_mu_GA.pdf");
+
 
 }
 
