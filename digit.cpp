@@ -85,11 +85,21 @@ TH1D *theta2y =new TH1D("theta2y" , "theta y of the muon for events in the tail 
 TH1D *theta1gy =new TH1D("theta1gy" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
 TH1D *theta2gy =new TH1D("theta2gy" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
 
+TH1D *h_cooX =new TH1D("X1","Reconstructed X coordinate for events in tail of angular residuum",100,-5,5);
+TH1D *h_cooX_g =new TH1D("X1g","Generated X coordinate for events in tail of angular residuum",100,-5,5);
+
+TH1D *h_cooXp =new TH1D("X1p","Reconstructed X coordinate for events in peak of angular residuum",100,-5,5);
+TH1D *h_cooX_gp =new TH1D("X1gp","Generated X coordinate for events in peak of angular residuum",100,-5,5);
+
+
 double phi=0;
 double phie=0;
 
-double tail=0.;
-double peak=0.;
+double tailx=0.;
+double peakx=0.;
+double taily=0.;
+double peaky=0.;
+
 
 for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) { //for(Long64_t i = numb; i < numb+1; i++) {
 		cbmsim->GetEntry(i);
@@ -328,33 +338,44 @@ h_phitot->Fill(phi,MesmerEvent->wgt_full);h_phietot->Fill(phie,MesmerEvent->wgt_
 
 
 
-if(abs(X1-dX1)>0.006 or abs(X2-dX2)>0.006){tail+=MesmerEvent->wgt_full;h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
+if(abs(dX1-X1)>0.006 or abs(dX2-X2)>0.006){tailx+=MesmerEvent->wgt_full;h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
                                    theta2x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
 					}
-else if(abs(Y1-dY1)>0.006 or abs(Y2-dY2)>0.006){tail+=MesmerEvent->wgt_full;h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
+if(abs(dY1-Y1)>0.006 or abs(dY2-Y2)>0.006){taily+=MesmerEvent->wgt_full;h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
                                    theta2y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);
 					}
-else{h_phiP->Fill(phi,MesmerEvent->wgt_full); h_phiPe->Fill(phie,MesmerEvent->wgt_full);
-peak+=MesmerEvent->wgt_full;
+if(abs(dX1-X1)<0.006 and abs(dX2-X2)<0.006 and abs(dY1-Y1)<0.006 and abs(dY2-Y2)<0.006) {
+h_phiP->Fill(phi,MesmerEvent->wgt_full); h_phiPe->Fill(phie,MesmerEvent->wgt_full);
 theta1x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta1gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
 theta1y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta1gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);
 }
 
+if(abs(dX1-X1)<0.006 and abs(dX2-X2)<0.006) peakx+=MesmerEvent->wgt_full;
+if(abs(dY1-Y1)<0.006 and abs(dY2-Y2)<0.006)peaky+=MesmerEvent->wgt_full;
 
 if( dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99 and abs(resx)<0.1e-03 and abs(resy)<0.1e-03){
 
-h_x1->Fill(X1-dX1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
-h_x2->Fill(X2-dX2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
-h_y1->Fill(Y1-dY1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
-h_y2->Fill(Y2-dY2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
+if(abs(dX1-X1)<0.006){
+h_cooXp->Fill(dX1,MesmerEvent->wgt_full);
+h_cooX_gp->Fill(X1,MesmerEvent->wgt_full);
+}
+h_x1->Fill(dX1-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
+h_x2->Fill(dX2-X2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
+h_y1->Fill(dY1-Y1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
+h_y2->Fill(dY2-Y2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
 }
 
 if(dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99 and (abs(resx)>0.1e-03 or abs(resy)>0.1e-03)){
 
-h_x1_g->Fill(X1-dX1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
-h_x2_g->Fill(X2-dX2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
-h_y1_g->Fill(Y1-dY1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
-h_y2_g->Fill(Y2-dY2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
+if(abs(dX1-X1)>0.006){
+h_cooX->Fill(dX1,MesmerEvent->wgt_full);
+h_cooX_g->Fill(X1,MesmerEvent->wgt_full);
+}
+
+h_x1_g->Fill(dX1-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
+h_x2_g->Fill(dX2-X2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
+h_y1_g->Fill(dY1-Y1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
+h_y2_g->Fill(dY2-Y2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
 }
 
 
@@ -370,11 +391,24 @@ TrackIdreco=-99;
 yes2=0;yes_v=0;
 } //end of general for
 
-cout << "Su " << signal << " eventi di segnale, eventi con residui di posizione nella coda " << (tail/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, eventi con residui di posizioneX nella coda " << (tailx/reco)*100 << "%"<< endl;
 
-cout << "Su " << signal << " eventi di segnale, eventi con residui di posizione nel picco " << (peak/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, eventi con residui di posizioneX nel picco " << (peakx/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, eventi con residui di posizioneY  nella coda " << (taily/reco)*100 << "%"<< endl;
 
+cout << "Su " << signal << " eventi di segnale, eventi con residui di posizioneY nel picco " << (peaky/reco)*100 << "%"<< endl;
 
+TCanvas f("f","f",700,700);
+h_cooXp->SetLineColor(kRed);
+h_cooXp->Draw("hist");
+h_cooX_gp->SetLineColor(kGreen);
+h_cooX_gp->Draw("hist same");
+h_cooX->Draw("hist same");
+h_cooX_g->SetLineColor(kOrange);
+h_cooX_g->Draw("hist same");
+f.SaveAs("X1coo.pdf");
+
+/*
 TCanvas d3a("d3a","d3a",700,700);
 d3a.Divide(2,2);
 d3a.cd(1);
@@ -456,7 +490,7 @@ theta2gy->Draw("hist");
 theta2y->Draw("hist same");
 gStyle->SetOptStat(222001111);
 d3aa.SaveAs("th_proj_mu_GA_digit.pdf");
-
+*/
 
 }
 

@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
- 	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV.root");
+ 	TFile *inputfile = new TFile("TRMesmer_beamProfile_mu-.root");//TRMesmer_box_100k_2GeV.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
@@ -85,7 +85,7 @@ double signal=0.; double reco=0.; double reco1=0.; double more_reco=0.; double r
 double reco_v=0.; double more_reco_v=0.; double reco0_v=0.;
 int link0; int link1=0;
 vector<int> link;
-int yes_e=0;int yes_mu=0; int yes2=0; int yes_v=0;
+int yes_e_g=0;int yes_mu_g=0; int yes2=0; int yes_v=0;
 int point_mu=0; int point_el=0;
 int code_mu=-99; int code_e=-99;
 int TrackIdreco=-99;
@@ -96,7 +96,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 
 	for(int n = 0; n < MCTrack->GetEntries(); n++) {
 	 const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
-	 if(MCTr->interactionID()==0 and MCTr->pdgCode()==-13){
+	 if(MCTr->interactionID()==0 and MCTr->pdgCode()==13){
 	 pmuin.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz());
 	 double energy=MCTr->energy();
 	 double mx=MCTr->ax();
@@ -108,7 +108,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 
 	 }
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) code_e=n;
-         if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) code_mu=n;
+         if(MCTr->interactionID()==45 and MCTr->pdgCode()==13) code_mu=n;
 	}
 
         TVector3 pmuin_dir=pmuin.Unit(); 
@@ -134,7 +134,7 @@ double Ee=0;
                                                                                                  if(TrackerPt->moduleID()==4) last_modXe++; 
                                                                                                  if(TrackerPt->moduleID()==5) last_modYe++;
 												 if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_e++;}
-                          if(TrackerPt->trackPDGCode()==-13 and SigTracks->pdgCode()==-13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1){ point_mu++;
+                          if(TrackerPt->trackPDGCode()==13 and SigTracks->pdgCode()==13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1){ point_mu++;
 												 if(TrackerPt->moduleID()==4) last_modXmu++;
                                                                                                  if(TrackerPt->moduleID()==5) last_modYmu++;
 												 if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_mu++;}
@@ -147,19 +147,19 @@ double Ee=0;
 		double my=SigTracks->ay();
 		the=sqrt(mx*mx+my*my);
 		pe_dir=pe.Unit();    the_sdr=acos(pmuin_dir.Dot(pe_dir));
-		yes_e=1;}//if(the_sdr<0.035)yes_e=1;}
- 	   if(SigTracks->pdgCode()==-13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){//and abs(SigTracks->startX())<4 and abs(SigTracks->startY())<4 and abs(last_modX)<4 and abs(last_modY)<4){ 
+		yes_e_g=1;}//if(the_sdr<0.035)yes_e=1;}
+ 	   if(SigTracks->pdgCode()==13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){//and abs(SigTracks->startX())<4 and abs(SigTracks->startY())<4 and abs(last_modX)<4 and abs(last_modY)<4){ 
 		pmu.SetXYZ(SigTracks->px(),SigTracks->py(),SigTracks->pz());
 		thmu_gen=pmu.Theta();double mx=SigTracks->ax();
 		double my=SigTracks->ay();
 		thmu=sqrt(mx*mx+my*my);
                 pmu_dir=pmu.Unit();  thmu_sdr=acos(pmuin_dir.Dot(pmu_dir));
-		yes_mu=1;}//if(thmu_sdr>0.0001)yes_mu=1;}
+		yes_mu_g=1;}//if(thmu_sdr>0.0001)yes_mu=1;}
 	 }
 	}
 
- if(yes_e!=1 or yes_mu!=1) cout << "NOT RECONSTRUCTIBLE" << endl;
- if(yes_e==1 and yes_mu==1){
+ if(yes_e_g!=1 or yes_mu_g!=1) cout << "NOT RECONSTRUCTIBLE" << endl;
+ if(yes_e_g==1 and yes_mu_g==1){
 
 cout << "RECONSTRUCTIBLE" << endl;
 
@@ -290,7 +290,7 @@ for(int s=0;s<6;s++)
 if(yes2<2 and TrackIdreco==-99){reco0+=MesmerEvent->wgt_full;
 cout <<"NOT RECONSTRUCTED"<<endl;
         if(TrackIdreco==code_e) h_part->Fill(11,MesmerEvent->wgt_full);
-        if(TrackIdreco==code_mu) h_part->Fill(-13,MesmerEvent->wgt_full);
+        if(TrackIdreco==code_mu) h_part->Fill(13,MesmerEvent->wgt_full);
 	tracksize0->Fill(tracks.size(),MesmerEvent->wgt_full);
 	h_anglee0->Fill(the_sdr,MesmerEvent->wgt_full); h_pte0->Fill(point_el,MesmerEvent->wgt_full);
 h_angle1->Fill(the_sdr,thmu_sdr,MesmerEvent->wgt_full);
@@ -306,7 +306,7 @@ h_op1->Fill(opening,MesmerEvent->wgt_full);//h_op0
 if(yes2<2 and TrackIdreco!=-99){reco1+=MesmerEvent->wgt_full;
 cout <<"NOT RECONSTRUCTED"<<endl;
 	if(TrackIdreco==code_e) h_part->Fill(11,MesmerEvent->wgt_full);
-        if(TrackIdreco==code_mu) h_part->Fill(-13,MesmerEvent->wgt_full);
+        if(TrackIdreco==code_mu) h_part->Fill(13,MesmerEvent->wgt_full);
         tracksize1->Fill(tracks.size(),MesmerEvent->wgt_full);
         if(TrackIdreco!=code_e){h_anglee1->Fill(the_sdr,MesmerEvent->wgt_full); h_pte1->Fill(point_el,MesmerEvent->wgt_full);}
         if(TrackIdreco!=code_mu){h_anglemu1->Fill(thmu_sdr,MesmerEvent->wgt_full); h_ptmu1->Fill(point_mu,MesmerEvent->wgt_full);}
@@ -333,7 +333,7 @@ cout <<"NOT RECONSTRUCTED vertex"<<endl;
 
 }
 cout << "---------------------"<<endl;
-yes_e=0;yes_mu=0;
+yes_e_g=0;yes_mu_g=0;
 code_e=-99;code_mu=-99;
 point_el=0;point_mu=0;
 TrackIdreco=-99;

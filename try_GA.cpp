@@ -70,20 +70,15 @@ TH1D *theta2 =new TH1D("theta2" , "theta of the muon for events in the tail of a
 TH1D *theta1g =new TH1D("theta1g" , "theta of the muon for events in the peak of angular residuum" , 150,0.,0.005);
 TH1D *theta2g =new TH1D("theta2g" , "theta of the muon for events in the tail of angular residuum" , 150,0.,0.005);
 
-TH1D *theta1x =new TH1D("theta1x" , "theta x of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta2x =new TH1D("theta2x" , "theta x of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta1gx =new TH1D("theta1gx" , "theta x of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta2gx =new TH1D("theta2gx" , "theta x of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta1x =new TH1D("theta1x" , "theta x of the muon for events in the peak of angular residuum" , 50,-0.0025,0.0025);//150,-0.0025,0.0025
+TH1D *theta2x =new TH1D("theta2x" , "theta x of the muon for events in the tail of angular residuum" , 50,-0.0025,0.0025);
+TH1D *theta1gx =new TH1D("theta1gx" , "theta x of the muon for events in the peak of angular residuum" , 50,-0.0025,0.0025);
+TH1D *theta2gx =new TH1D("theta2gx" , "theta x of the muon for events in the tail of angular residuum" , 50,-0.0025,0.0025);
 
-TH1D *theta1y =new TH1D("theta1y" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta2y =new TH1D("theta2y" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta1gy =new TH1D("theta1gy" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
-TH1D *theta2gy =new TH1D("theta2gy" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
-
-TH1D *theta2x_if =new TH1D("theta2x_if" , "theta x of the muon for events in the residuum if theta y in the tail" , 150,-0.0025,0.0025);
-TH1D *theta2gx_if =new TH1D("theta2gx_if" , "theta x of the muon for events in the residuum if theta y in the tail" , 150,-0.0025,0.0025);
-TH1D *theta2y_if =new TH1D("theta2y_if" , "theta y of the muon for events in the residuum if theta x in the tail" , 150,-0.0025,0.0025);
-TH1D *theta2gy_if =new TH1D("theta2gy_if" , "theta y of the muon for events in the peak of angular residuum if theta x in the tail" , 150,-0.0025,0.0025);
+TH1D *theta1y =new TH1D("theta1y" , "theta y of the muon for events in the peak of angular residuum" , 50,-0.0025,0.0025);
+TH1D *theta2y =new TH1D("theta2y" , "theta y of the muon for events in the tail of angular residuum" , 50,-0.0025,0.0025);
+TH1D *theta1gy =new TH1D("theta1gy" , "theta y of the muon for events in the peak of angular residuum" , 50,-0.0025,0.0025);
+TH1D *theta2gy =new TH1D("theta2gy" , "theta y of the muon for events in the tail of angular residuum" , 50,-0.0025,0.0025);
 
 
 TH1D *h_phiin =new TH1D("h_phiin"," entering muon phi angle",180,-180,180);
@@ -121,7 +116,7 @@ double e=0.; double mu=0.;
 double tailx=0; double peakx=0;
 double taily=0; double peaky=0;
 
-int yes_e=0;int yes_mu=0; int yes2=0; int yes_v=0;
+int yes_e_g=0;int yes_mu_g=0; int yes2=0; int yes_v=0;
 int point_mu=0; int point_el=0;
 int code_mu=-99; int code_e=-99;
 int TrackIdreco=-99;
@@ -198,7 +193,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
                 the_gen_x=mx;
                 the_gen_y=my;
                 phie=pe.Phi()*(180/M_PI);
-		yes_e=1;}
+		yes_e_g=1;}
            if(SigTracks->pdgCode()==-13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){
 		Emu=SigTracks->energy();
 		pmu.SetXYZ(SigTracks->px(),SigTracks->py(),SigTracks->pz());
@@ -209,7 +204,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
          double my=SigTracks->ay();
                 thmu_gen_x=mx;
 		thmu_gen_y=my;
-		yes_mu=1;
+		yes_mu_g=1;
                 phi=pmu.Phi()*(180/M_PI);;
 			}
 	 }
@@ -217,7 +212,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 
 	// if(yes_e!=1 or yes_mu!=1) cout << "NOT RECONSTRUCTIBLE" << endl;
 
-	if(yes_e==1 and yes_mu==1){
+	if(yes_e_g==1 and yes_mu_g==1){
 	  //cout << "RECONSTRUCTIBLE" << endl;
 	   signal+=MesmerEvent->wgt_full;
 
@@ -313,11 +308,9 @@ if(abs(resx)>0.1e-03){tailx+=MesmerEvent->wgt_full;
 
 h_thphi->Fill(phi,thmu_gen_x,MesmerEvent->wgt_full);h_op0->Fill(opening,MesmerEvent->wgt_full);
 
-                                   theta2x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
-				   theta2y_if->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy_if->Fill(thmu_gen_y,MesmerEvent->wgt_full);}
+                                   theta2x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);}
 if(abs(resy)>0.1e-03){taily+=MesmerEvent->wgt_full;
-                                   theta2y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);
-				   theta2x_if->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx_if->Fill(thmu_gen_x,MesmerEvent->wgt_full);}
+                                   theta2y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);}
 
      if(abs(resx)>0.1e-03 or abs(resy)>0.1e-03) {h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
 
@@ -328,7 +321,7 @@ if(abs(resy)>0.1e-03){taily+=MesmerEvent->wgt_full;
 
 }
 //cout << "---------------------"<<endl;
-yes_e=0;yes_mu=0;
+yes_e_g=0;yes_mu_g=0;
 code_e=-99;code_mu=-99;
 point_el=0;point_mu=0;
 TrackIdreco=-99;
@@ -356,23 +349,10 @@ if (h_thphi->GetBinContent(i,j)<1) h_thphi->SetBinContent(i,j,0);}}
 
 
 /*TCanvas b1("b1","b1",700,700);
-b1.Divide(1,4);
-b1.cd(1);
-h_phiP->Draw("hist");
-h_phiPe->SetLineColor(kRed);
-h_phiPe->Draw("hist same");
-b1.cd(2);
-h_phie->SetLineColor(kRed);
-h_phie->Draw("hist");
-h_phi->Draw("hist same");
-b1.cd(3);
-h_phietot->SetLineColor(kRed);
-h_phietot->Draw("hist");
-h_phitot->Draw("hist same");
-b1.cd(4);
 h_phiin->Draw("hist");
-b1.SaveAs("pdf_try/phi.pdf");*/
+b1.SaveAs("pdf_try/phi_in.pdf");*/
 
+/*
 
 TCanvas b1("b1","b1",700,700);
 b1.Divide(2,3);
@@ -403,9 +383,9 @@ b1.SaveAs("pdf_try/phi.pdf");
 
 
 TCanvas b2("b1","b1",700,700);
-b2.Divide(1,2);
+b2.Divide(2,2);
 b2.cd(1);
-/*nstubs->Draw("hist");
+nstubs->Draw("hist");
 nstubs90->SetLineColor(kRed);
 nstubs90->Draw("hist same");
 //gPad->SetLogy();
@@ -414,10 +394,10 @@ nstubs->Draw("hist");
 nstubs180->SetLineColor(kRed);
 nstubs180->Draw("hist same");
 //gPad->SetLogy();
-b2.cd(2);*/
+b2.cd(3);
 h_thphi->Draw("COLZ");
 gStyle->SetOptStat(222001111);
-b2.cd(2);
+b2.cd(4);
 h_op0->Draw("hist");
 gStyle->SetOptStat(222001111);
 b2.SaveAs("pdf_try/2Dth_phi.pdf");
@@ -477,13 +457,6 @@ h_res_muTR1->Fit("f1","R","",-0.0001,+0.0001);
  gStyle->SetOptFit(1111);
 gStyle->SetOptStat(222001111);
 //gPad->SetLogy();
-/*d2.cd(2);
-h_res_muTR2->Draw();
-h_res_muTR2->Draw("hist same");
-h_res_muTR2->Fit("f2","R","",-0.0001,+0.0001);
-gStyle->SetOptFit(1111);
-//gPad->SetLogy();
-*/
 d2.cd(2);
 theta1g->SetLineColor(kOrange);
 theta1g->Draw("hist");
@@ -536,13 +509,6 @@ h_res_muTR1x->Fit("f4","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
 gStyle->SetOptStat(222001111);
 //gPad->SetLogy();
-/*d3.cd(3);
-h_res_muTR2x->Draw();
-h_res_muTR2x->Draw("hist same");
-h_res_muTR2x->Fit("f5","R","",-0.0001,+0.0001);
-gStyle->SetOptFit(1111);
-//gPad->SetLogy();
-*/
 d3.cd(2);
 h_res_muTR1y->Draw();
 h_res_muTR1y->Draw("hist same");
@@ -550,14 +516,8 @@ h_res_muTR1y->Fit("f5","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
 gStyle->SetOptStat(222001111);
 //gPad->SetLogy();
-/*d3.cd(4);
-h_res_muTR2y->Draw();
-h_res_muTR2y->Draw("hist same");
-h_res_muTR2y->Fit("f6","R","",-0.0001,+0.0001);
-gStyle->SetOptFit(1111);
-//gPad->SetLogy();
-*/
 d3.SaveAs("pdf_try/proj_mu_GA.pdf");
+
 
 TCanvas d3a("d3a","d3a",700,700);
 d3a.Divide(2,3);
@@ -577,12 +537,12 @@ theta2gx->Draw("hist");
 theta2x->Draw("hist same");
 gStyle->SetOptStat(222001111);
 d3a.cd(4);
-theta2gy->SetLineColor(kRed);
+theta2gy->SetLineColor(kOrange);
 theta2gy->Draw("hist");
 theta2y->Draw("hist same");
 gStyle->SetOptStat(222001111);
 d3a.SaveAs("pdf_try/th_proj_mu_GA.pdf");
-
+*/
 
 }
 

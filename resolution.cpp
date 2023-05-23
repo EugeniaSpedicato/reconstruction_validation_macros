@@ -110,7 +110,7 @@ double signal=0.; double reco=0.; double reco1=0.; double more_reco=0.; double r
 double reco_v=0.; double more_reco_v=0.; double reco0_v=0.; double one=0;
 double e=0.; double mu=0.;
 
-int yes_e=0;int yes_mu=0; int yes2=0; int yes_v=0;
+int yes_e_g=0;int yes_mu_g=0; int yes2=0; int yes_v=0;
 int point_mu=0; int point_el=0;
 int code_mu=-99; int code_e=-99;
 int TrackIdreco=-99;
@@ -182,7 +182,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 		TVector3 z(0.,0.,1.);
                 //the_gen=pe.Theta();
 		//the_gen=acos(pe.Dot(z));
-		yes_e=1;}
+		yes_e_g=1;}
  	   if(SigTracks->pdgCode()==-13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){
 		Emu=SigTracks->energy();
 		pmu.SetXYZ(SigTracks->px(),SigTracks->py(),SigTracks->pz());
@@ -193,14 +193,14 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
          double my=SigTracks->ay();
                 thmu_gen_x=mx;
 		thmu_gen_y=my;
-		yes_mu=1;
+		yes_mu_g=1;
 			}
 	 }
 	}
 
 	// if(yes_e!=1 or yes_mu!=1) cout << "NOT RECONSTRUCTIBLE" << endl;
 
-	if(yes_e==0 and yes_mu==1){
+	if(yes_e_g==0 and yes_mu_g==1){
 	  //cout << "RECONSTRUCTIBLE" << endl;
 
 
@@ -291,7 +291,7 @@ if(abs(resy)>0.1e-03){theta2y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy->
 
 }
 //cout << "---------------------"<<endl;
-yes_e=0;yes_mu=0;
+yes_e_g=0;yes_mu_g=0;
 code_e=-99;code_mu=-99;
 point_el=0;point_mu=0;
 TrackIdreco=-99;

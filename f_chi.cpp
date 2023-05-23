@@ -126,7 +126,7 @@ double signal=0.; double reco=0.; double reco1=0.; double more_reco=0.; double r
 double reco_v=0.; double more_reco_v=0.; double reco0_v=0.; double one=0;
 double e=0.; double mu=0.;
 
-int yes_e=0;int yes_mu=0; int yes2=0; int yes_v=0;
+int yes_e_g=0;int yes_mu_g=0; int yes2=0; int yes_v=0;
 int point_mu=0; int point_el=0;
 int code_mu=-99; int code_e=-99;
 int TrackIdreco=-99;
@@ -190,7 +190,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 		TVector3 e(mx1,my1,1.0);
                 the_sdr=muin.Angle(e);
 		//the_sdr=acos(pmuin_dir.Dot(pe_dir));
-		yes_e=1;}
+		yes_e_g=1;}
  	   if(SigTracks->pdgCode()==-13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){
 		Emu=SigTracks->energy();
 		pmu.SetXYZ(SigTracks->px(),SigTracks->py(),SigTracks->pz());
@@ -202,13 +202,13 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
                 thmu_gen=mu.Theta();
 		thmu_sdr=muin.Angle(mu);
 		//thmu_sdr=acos(pmuin_dir.Dot(pmu_dir));
-		yes_mu=1;}
+		yes_mu_g=1;}
 	 }
 	}
 
- if(yes_e!=1 or yes_mu!=1) cout << "NOT RECONSTRUCTIBLE" << endl;
+ if(yes_e_g!=1 or yes_mu_g!=1) cout << "NOT RECONSTRUCTIBLE" << endl;
 
- if(yes_e==1 and yes_mu==1){
+ if(yes_e_g==1 and yes_mu_g==1){
 cout << "RECONSTRUCTIBLE" << endl;
 
 	   signal+=MesmerEvent->wgt_full;
@@ -430,7 +430,7 @@ cout <<"NOT RECONSTRUCTED vertex"<<endl;
 
 }
 cout << "---------------------"<<endl;
-yes_e=0;yes_mu=0;
+yes_e_g=0;yes_mu_g=0;
 code_e=-99;code_mu=-99;
 point_el=0;point_mu=0;
 TrackIdreco=-99;
