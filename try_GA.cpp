@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0.root");//TRMesmer_box_100k_2GeV_0_div.root");
+	TFile *inputfile = new TFile("");
 	// 	TFile *inputfile = new TFile("TRMesmer_ohit.root");
 	//TRMesmer_thin_5k.root");//TRMesmer_100k_box.root");//beamprofile/TRMesmer_1M.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
@@ -45,7 +45,7 @@ TH2D *h_res2TR=new TH2D("res2TR", "(the_rec-the_true) VS energy 15<E<25 GeV PRE-
 TH2D *h_res3TR=new TH2D("res3TR", "(the_rec-the_true) VS energy Ee>25 GeV PRE-VRTX",6,25,65,20,-0.001,0.001);*/
 
 TH1D *h_resTR=new TH1D("resTR", "(the_rec-the_true) Ee<5 GeV PRE-VRTX",100,-0.01,0.01);
-TH1D *h_res1TR=new TH1D("res1TR", "(the_rec-the_true) 5<E<15 GeV PRE-VRTX",50,-0.0025,0.0025);
+TH1D *h_res1TR=new TH1D("res1TR", "(the_rec-the_true) 5<E<15 GeV PRE-VRTX",150,-0.0025,0.0025);
 TH1D *h_res2TR=new TH1D("res2TR", "(the_rec-the_true) 15<E<25 GeV PRE-VRTX",40,-0.001,0.001);
 TH1D *h_res3TR=new TH1D("res3TR", "(the_rec-the_true) Ee>25 GeV PRE-VRTX",40,-0.001,0.001);
 
@@ -70,15 +70,15 @@ TH1D *theta2 =new TH1D("theta2" , "theta of the muon for events in the tail of a
 TH1D *theta1g =new TH1D("theta1g" , "theta of the muon for events in the peak of angular residuum" , 150,0.,0.005);
 TH1D *theta2g =new TH1D("theta2g" , "theta of the muon for events in the tail of angular residuum" , 150,0.,0.005);
 
-TH1D *theta1x =new TH1D("theta1x" , "theta x of the muon for events in the peak of angular residuum" , 50,-0.0025,0.0025);//150,-0.0025,0.0025
-TH1D *theta2x =new TH1D("theta2x" , "theta x of the muon for events in the tail of angular residuum" , 50,-0.0025,0.0025);
-TH1D *theta1gx =new TH1D("theta1gx" , "theta x of the muon for events in the peak of angular residuum" , 50,-0.0025,0.0025);
-TH1D *theta2gx =new TH1D("theta2gx" , "theta x of the muon for events in the tail of angular residuum" , 50,-0.0025,0.0025);
+TH1D *theta1x =new TH1D("theta1x" , "theta x of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);//1150,-0.0025,0.0025
+TH1D *theta2x =new TH1D("theta2x" , "theta x of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta1gx =new TH1D("theta1gx" , "theta x of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta2gx =new TH1D("theta2gx" , "theta x of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
 
-TH1D *theta1y =new TH1D("theta1y" , "theta y of the muon for events in the peak of angular residuum" , 50,-0.0025,0.0025);
-TH1D *theta2y =new TH1D("theta2y" , "theta y of the muon for events in the tail of angular residuum" , 50,-0.0025,0.0025);
-TH1D *theta1gy =new TH1D("theta1gy" , "theta y of the muon for events in the peak of angular residuum" , 50,-0.0025,0.0025);
-TH1D *theta2gy =new TH1D("theta2gy" , "theta y of the muon for events in the tail of angular residuum" , 50,-0.0025,0.0025);
+TH1D *theta1y =new TH1D("theta1y" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta2y =new TH1D("theta2y" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta1gy =new TH1D("theta1gy" , "theta y of the muon for events in the peak of angular residuum" , 150,-0.0025,0.0025);
+TH1D *theta2gy =new TH1D("theta2gy" , "theta y of the muon for events in the tail of angular residuum" , 150,-0.0025,0.0025);
 
 
 TH1D *h_phiin =new TH1D("h_phiin"," entering muon phi angle",180,-180,180);
@@ -96,7 +96,7 @@ TH1D* nstubs=new TH1D("nstubs","nstubs for well reconstructed events",25,5,30);
 TH1D* nstubs90=new TH1D("nstubs90","nstubs when 88<phi_mu<93",25,5,30);
 TH1D* nstubs180=new TH1D("nstubs180","nnstubs when 178<phi_mu<183",25,5,30);
 
-TH2D *h_thphi=new TH2D("resTR", "theta-phi for events in the tail of angular residuum",180,-180,180,150,-0.0025,0.0025);
+TH2D *h_thphi=new TH2D("resTR", "theta-phi for events in the tail of angular residuum",180,-180,180,1150,-0.0025,0.0025);
 
 TH1D *h_op0 = new TH1D("op0","opening angle for events in the tail of angular residuum",400,0,0.04);
 
@@ -124,7 +124,6 @@ int TrackIdreco=-99;
 double phi=0;
 double phie=0;
 double phi_in=0.;
-
 
 
 for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
@@ -352,7 +351,7 @@ if (h_thphi->GetBinContent(i,j)<1) h_thphi->SetBinContent(i,j,0);}}
 h_phiin->Draw("hist");
 b1.SaveAs("pdf_try/phi_in.pdf");*/
 
-/*
+
 
 TCanvas b1("b1","b1",700,700);
 b1.Divide(2,3);
@@ -542,7 +541,6 @@ theta2gy->Draw("hist");
 theta2y->Draw("hist same");
 gStyle->SetOptStat(222001111);
 d3a.SaveAs("pdf_try/th_proj_mu_GA.pdf");
-*/
 
 }
 

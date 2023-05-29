@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0_prova_offset.root");
+	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0_prova.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
@@ -207,7 +207,7 @@ vector<double> Xe;
 int ok=0;int oke=0;
 double X1,X2, Y1,Y2, Z1,Z2,Z3,Z4, X1e;
 double dX1=-99; double dX2=-99; double dY1=-99; double dY2=-99; double dX1e=-99;
-double stripX=-999; double stripXe=-999;
+double stripX=-999; double stripXe=-999; double stripY=-999;
 
 	for(int s=0; s<TrackerPoints->GetEntries(); s++)
                          {const MUonETrackerPoint *TrackerPt = static_cast<const MUonETrackerPoint*>(TrackerPoints->At(s));
@@ -276,7 +276,7 @@ for(int h=0;h<hits_.size();h++){
 if(hits_.at(h).moduleID()==0){dX1=hits_.at(h).positionPerpendicular(); stripX= hits_.at(h).seedClusterCenterStrip();
 seed_clustersize_mu=hits_.at(h).seedClusterWidth();corr_clustersize_mu=hits_.at(h).correlationClusterWidth();}
 if(hits_.at(h).moduleID()==4)dX2=hits_.at(h).positionPerpendicular();
-if(hits_.at(h).moduleID()==1)dY1=hits_.at(h).positionPerpendicular();
+if(hits_.at(h).moduleID()==1){dY1=hits_.at(h).positionPerpendicular(); stripY= hits_.at(h).seedClusterCenterStrip();}
 if(hits_.at(h).moduleID()==5)dY2=hits_.at(h).positionPerpendicular();
                 }
 	}
@@ -294,7 +294,7 @@ for(int h=0;h<hits_.size();h++){if(hits_.at(h).moduleID()==0)
 if(tracks.size()==3){
         for(int t=0; t<TrackerStubs->GetEntries(); t++)
                          {const MUonETrackerStub *stubs = static_cast<const MUonETrackerStub*>(TrackerStubs->At(t));
-	if(stubs->stationID()==1){ double stub=(stubs->seedClusterCenterStrip() + 0.5 + 0.5 * stubs->bend()) * 9.144 / 1016 - 0.5 * 9.144;
+	if(stubs->stationID()==1){ double stub=(stubs->seedClusterCenterStrip() + 0.5 +(0.5*stubs->bend())) * 9.144 / 1016 - 0.5 * 9.144;
 			  if(stubs->moduleID()==0) {digiXmu1.push_back(stub); digistripX1.push_back(stubs->seedClusterCenterStrip());}
                           if( stubs->moduleID()==4) {digiXmu2.push_back(stub);}
                           if(stubs->moduleID()==1) {digiYmu1.push_back(stub*sin(90));}
@@ -344,8 +344,8 @@ auto it2Y = min_element(begin(diff2Y),end(diff2Y));
 dY1=digiYmu1.at( distance(begin(diff1Y), itY) );
 dY2=digiYmu2.at( distance(begin(diff2Y), it2Y) );
  }
-
 */
+
 
 int ok_mu=0;
 int ok_e=0;
@@ -389,23 +389,27 @@ double bend, bende;
 if(tracks.size()==3){
         for(int t=0; t<TrackerStubs->GetEntries(); t++)
                          {const MUonETrackerStub *stubs = static_cast<const MUonETrackerStub*>(TrackerStubs->At(t));
-        if(stubs->stationID()==1){ double stub=(stubs->seedClusterCenterStrip() + 0.5 ) * 9.144 / 1016 - 0.5 * 9.144;
+        if(stubs->stationID()==1){ double stub=(stubs->seedClusterCenterStrip() + 0.5 + (0.5*stubs->bend()-3)) * 9.144 / 1016 - 0.5 * 9.144;
                           if(stubs->moduleID()==0) {dig1.push_back(stub); digistrip.push_back(stubs->seedClusterCenterStrip());digibend.push_back(stubs->bend());}
+                          if(stubs->moduleID()==1) {dig1.push_back(stub);}
 		}
 	}
 }
-vector<double> diff1,diffe1;
-double stub;
+vector<double> diff1,diff2,diffe1;
+double stub;double stub2;
 double stube;
 for(int d=0; d<digistrip.size(); d++){
 diff1.push_back(abs(digistrip.at(d)-stripX));
+diff2.push_back(abs(digistrip.at(d)-stripY));
 diffe1.push_back(abs(digistrip.at(d)-stripXe));
 }
 if(digistrip.size()!=0){
 auto it = min_element(begin(diff1),end(diff1));
+auto it2 = min_element(begin(diff2),end(diff2));
 auto ite = min_element(begin(diffe1),end(diffe1));
 
 stub=dig1.at( distance(begin(diff1), it) );
+stub2=dig1.at( distance(begin(diff2), it2) );
 stube=dig1.at( distance(begin(diffe1), ite) );
 bend=digibend.at( distance(begin(diff1), it) );
 bende=digibend.at( distance(begin(diffe1), ite) );
@@ -429,69 +433,62 @@ double resy=the_rec_y-the_gen_y;*/
 
 h_phitot->Fill(phi,MesmerEvent->wgt_full);h_phietot->Fill(phie,MesmerEvent->wgt_full);
 
-if(abs(dX1-X1)>0.006 or abs(dX2-X2)>0.006){
+if(abs(stub-X1)>0.006 or abs(dX2-X2)>0.006){
 				   tailx+=MesmerEvent->wgt_full;h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
                                    theta2x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
 					}
-if(abs(dY1-Y1)>0.006 or abs(dY2-Y2)>0.006){
+if(abs(stub2-Y1)>0.006 or abs(dY2-Y2)>0.006){
 				   taily+=MesmerEvent->wgt_full;h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
                                    theta2y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);
 					}
-if(abs(dX1-X1)<0.006 and abs(dX2-X2)<0.006 and abs(dY1-Y1)<0.006 and abs(dY2-Y2)<0.006) {
+if(abs(stub-X1)<0.006 and abs(dX2-X2)<0.006 and abs(stub2-Y1)<0.006 and abs(dY2-Y2)<0.006) {
 h_phiP->Fill(phi,MesmerEvent->wgt_full); h_phiPe->Fill(phie,MesmerEvent->wgt_full);
 theta1x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta1gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
 theta1y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta1gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);
 }
 
-if(abs(dX1-X1)<0.006 and abs(dX2-X2)<0.006) peakx+=MesmerEvent->wgt_full;
-if(abs(dY1-Y1)<0.006 and abs(dY2-Y2)<0.006)peaky+=MesmerEvent->wgt_full;
+if(abs(stub-X1)<0.006 and abs(dX2-X2)<0.006) peakx+=MesmerEvent->wgt_full;
+if(abs(stub2-Y1)<0.006 and abs(dY2-Y2)<0.006)peaky+=MesmerEvent->wgt_full;
 
-if( dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99 and abs(resx)<0.2e-03 and abs(resy)<0.1e-03){
+if( stub!=-99 and dX2!=-99 and stub2!=-99 and dY2!=-99 and abs(resx)<0.2e-03 and abs(resy)<0.1e-03){
 
-h_x1->Fill(dX1-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
+h_x1->Fill(stub-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
 h_x2->Fill(dX2-X2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
-h_y1->Fill(dY1-Y1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
+h_y1->Fill(stub2-Y1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
 h_y2->Fill(dY2-Y2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
 }
 
-if(abs(dX1e-X1e)>0.006 or abs(dX1-X1)>0.006){
+if(abs(stube-X1e)>0.006 or abs(stub-X1)>0.006){
 cout <<"---------"<< endl;
-
- double corre= stripXe + (bende-3);
- double corr= stripX + (bend-3);
- cout << "T) corr electron " << corre << endl;
- cout << "T) corr muon " << corr << endl;
-
-if(abs(dX1e-X1e)>0.006){h_seede->Fill(seed_clustersize_e,MesmerEvent->wgt_full);h_corre->Fill(corr_clustersize_e,MesmerEvent->wgt_full);
- }
-if(abs(dX1-X1)>0.006){h_seedmu->Fill(seed_clustersize_mu,MesmerEvent->wgt_full);h_corrmu->Fill(corr_clustersize_mu,MesmerEvent->wgt_full);
- }
-h_cooX->Fill(dX1-dX1e,MesmerEvent->wgt_full);
+if(abs(stube-X1e)>0.006){h_seede->Fill(seed_clustersize_e,MesmerEvent->wgt_full);h_corre->Fill(corr_clustersize_e,MesmerEvent->wgt_full);
+/*cout << stripXe << " stripXe" << endl;
+cout << stube << " stube" << ", " << dX1e << " dX1e"<< endl;
+cout << bende << " bende" << endl;*/}
+if(abs(stub-X1)>0.006){h_seedmu->Fill(seed_clustersize_mu,MesmerEvent->wgt_full);h_corrmu->Fill(corr_clustersize_mu,MesmerEvent->wgt_full);
+/*cout << stripX << " stripX" << endl;
+cout << stub << " stub" << ", " << dX1 << " dX1"<<  endl;
+cout << bend << " bend"<< endl;*/}
+h_cooX->Fill(stub-stube,MesmerEvent->wgt_full);
 h_cooX_g->Fill(X1-X1e,MesmerEvent->wgt_full);
 h_stripX->Fill(stripX-stripXe,MesmerEvent->wgt_full);
 }
 
-if(abs(dX1e-X1e)<0.006 and abs(dX1-X1)<0.006){
+if(abs(stube-X1e)<0.006 and abs(stub-X1)<0.006){
 
- double corre= stripXe + (bende-3);
- double corr= stripX + (bend-3);
- cout << "P) corr electron " << corre << endl;
- cout << "P) corr muon " << corr << endl;
+if(abs(stube-X1e)<0.006){ h_seedPe->Fill(seed_clustersize_e,MesmerEvent->wgt_full);h_corrPe->Fill(corr_clustersize_e,MesmerEvent->wgt_full);}
+if(abs(stub-X1)<0.006){ h_seedPmu->Fill(seed_clustersize_mu,MesmerEvent->wgt_full);h_corrPmu->Fill(corr_clustersize_mu,MesmerEvent->wgt_full);}
 
-if(abs(dX1e-X1e)<0.006){ h_seedPe->Fill(seed_clustersize_e,MesmerEvent->wgt_full);h_corrPe->Fill(corr_clustersize_e,MesmerEvent->wgt_full);}
-if(abs(dX1-X1)<0.006){ h_seedPmu->Fill(seed_clustersize_mu,MesmerEvent->wgt_full);h_corrPmu->Fill(corr_clustersize_mu,MesmerEvent->wgt_full);}
-
-h_cooXp->Fill(dX1-dX1e,MesmerEvent->wgt_full);
+h_cooXp->Fill(stub-stube,MesmerEvent->wgt_full);
 h_cooX_gp->Fill(X1-X1e,MesmerEvent->wgt_full);
 h_stripXp->Fill(stripX-stripXe,MesmerEvent->wgt_full);
 }
 
 
-if(dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99 and (abs(resx)>0.2e-03 or abs(resy)>0.1e-03)){
+if(stub!=-99 and dX2!=-99 and stub2!=-99 and dY2!=-99 and (abs(resx)>0.2e-03 or abs(resy)>0.1e-03)){
 
-h_x1_g->Fill(dX1-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
+h_x1_g->Fill(stub-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
 h_x2_g->Fill(dX2-X2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
-h_y1_g->Fill(dY1-Y1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
+h_y1_g->Fill(stub2-Y1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
 h_y2_g->Fill(dY2-Y2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
 }
 

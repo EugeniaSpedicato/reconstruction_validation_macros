@@ -25,7 +25,6 @@ void RealDataAnalyzer(){
         TClonesArray *TrackerStripDigis = 0;
         TClonesArray *TrackerPoints = 0;
         TClonesArray *TrackerStubs = 0;
-        MuE::Event *MesmerEvent = 0;
         MUonERecoOutput *ReconstructionOutput = 0;
 
         cbmsim->SetBranchAddress("MCTrack", &MCTrack);
@@ -33,8 +32,8 @@ void RealDataAnalyzer(){
         cbmsim->SetBranchAddress("TrackerPoints", &TrackerPoints);
         cbmsim->SetBranchAddress("TrackerStripDigis", &TrackerStripDigis);
         cbmsim->SetBranchAddress("TrackerStubs", &TrackerStubs);
-        cbmsim->SetBranchAddress("MesmerEvent", &MesmerEvent);
         cbmsim->SetBranchAddress("ReconstructionOutput", &ReconstructionOutput);
+
 
 
 double thmu_in_gen=0;
@@ -77,7 +76,7 @@ vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks(
 	 const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
 	 if(MCTr->interactionID()==0 and MCTr->pdgCode()==13){
 	 pmuin.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz());
-         energy->Fill(pmuin.Mag());//,MesmerEvent->wgt_full);
+         energy->Fill(MCTr->energy());
 
 	 pmuin=pmuin.Unit();
 	thmu_in_gen = pmuin.Theta();
@@ -119,19 +118,19 @@ if(last_modXmu_in==2 and last_modYmu_in==2 and stereo_mu_in>1){
 		yes_mu_in_g=1;
 			}
 
-	 if(yes_mu_in_g!=1) {pos_in_not->Fill(X,Y,MesmerEvent->wgt_full);
-			     posx_mx_not->Fill(X,mx,MesmerEvent->wgt_full);
-		             //energy_not->Fill(Emu_in,MesmerEvent->wgt_full);
+	 if(yes_mu_in_g!=1) {pos_in_not->Fill(X,Y);
+			     posx_mx_not->Fill(X,mx);
+		             //energy_not->Fill(Emu_in);
 }
 
-//energy->Fill(Emu_in,MesmerEvent->wgt_full);
+//energy->Fill(Emu_in);
 
 int yes_mu_in=0;
 	if( yes_mu_in_g==1){
 	   signal+=1;
-	   pos_in->Fill(X,Y,MesmerEvent->wgt_full);
-	   posx_mx->Fill(X,mx,MesmerEvent->wgt_full);
-	   //energy->Fill(Emu_in,MesmerEvent->wgt_full);
+	   pos_in->Fill(X,Y);
+	   posx_mx->Fill(X,mx);
+	   //energy->Fill(Emu_in);
 
 TVector3 in;
 for(int j=0; j<tracks.size();j++)
@@ -164,57 +163,6 @@ for(int j=0; j<tracks.size();j++)
 if(yes_mu_in==1){reco+=1;}
 
 }
-
-	for(int n = 0; n < SignalTracks->GetEntries(); n++) {
-        const MUonETrack *SigTracks = static_cast<const MUonETrack*>(SignalTracks->At(n));
-         if(SignalTracks->GetEntries()>1 and SigTracks->interactionID()==45 )
-         {
-           int last_modXmu=0; int last_modXe=0;
-           int last_modYmu=0; int last_modYe=0;
-           int stereo_mu=0; int stereo_e=0;
-
-                         for(int s=0; s<TrackerPoints->GetEntries(); s++)
-                         {const MUonETrackerPoint *TrackerPt = static_cast<const MUonETrackerPoint*>(TrackerPoints->At(s));
-                          if(TrackerPt->trackPDGCode()==11 and SigTracks->pdgCode()==11 and TrackerPt->trackID()==code_e and TrackerPt->stationID()==1){ point_el++;
-                                                                                                 if(TrackerPt->moduleID()==4) last_modXe++;
-                                                                                                 if(TrackerPt->moduleID()==5)last_modYe++;
-                                                                                                 if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_e++;
-                                                                                                }
-                          if(TrackerPt->trackPDGCode()==13 and SigTracks->pdgCode()==13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1){ point_mu++;
-                                                                                                 if(TrackerPt->moduleID()==4) last_modXmu++;
-                                                                                                 if(TrackerPt->moduleID()==5) last_modYmu++;
-                                                                                                 if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_mu++;
-                                                                                                }
-                         }
-
-    if(SigTracks->pdgCode()==11 and last_modXe==2 and last_modYe==2 and stereo_e>1){yes_e_g=1;}
-    if(SigTracks->pdgCode()==13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){yes_mu_g=1;}
-         }
-	}
-
-        if(yes_e_g==1 and yes_mu_g==1 and yes_mu_in==1 ){
-           signal_el+=MesmerEvent->wgt_full;
-
-int yes_e=0;
-int yes_mu=0;
-
-for(int j=0; j<tracks.size();j++)
-{
- if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1 and tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=0)
-        {
-
-                 if(code_e==tracks.at(j).linkedTrackID()) {yes_e++;}
-
-                 if(code_mu==tracks.at(j).linkedTrackID()) {yes_mu++;}
-        }
-}
-
-
-if(yes_mu>=1 and yes_e>=1 ){reco_el+=MesmerEvent->wgt_full;}
-
-
-		}
-
 
 yes_mu_in_g=0;
 code_mu=-99;
