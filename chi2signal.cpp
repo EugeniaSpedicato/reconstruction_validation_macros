@@ -16,9 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
- 	TFile *inputfile = new TFile("TRMesmer_box_offset_100k_2GeV_2.root");
-//TRMesmer_box_offset_100k_2GeV_2.root");//TRMesmer_boxdiv_offset_2.root");
-
+ 	TFile *inputfile = new TFile("TRMesmer_box_offset_100k_2GeV_2.root");//TRMesmer_boxdiv_offset_2.root");
 //TChain * cbmsim = new TChain("cbmsim");
 //cbmsim->Add("TRPP_1k.root");
 //cbmsim->Add("TRMesmer_1k_unw.root");
@@ -40,66 +38,16 @@ void RealDataAnalyzer(){
         cbmsim->SetBranchAddress("MesmerEvent", &MesmerEvent);
         cbmsim->SetBranchAddress("ReconstructionOutput", &ReconstructionOutput);
 
-TH1D* inter= new TH1D("inter","interactionID reco", 50,0,50);
-TH1D *tracksize = new TH1D("tr","reco_tracks.size() event reco", 10,0,10);
-
-TH1D* inter0= new TH1D("inter0","interactionID when event noreco and 0 signal particle reco", 50,0,50);
-TH1D *tracksize0 = new TH1D("tr0","reco_tracks.size() event noreco and 0 signal particle reco", 10,0,10);
-TH1D *h_anglee0 = new TH1D("e0","electron angle when not reco in event noreco and 0 signal particle reco",400,0,0.04);
-TH1D *h_anglemu0 = new TH1D("mu0","muon angle when not reco in event noreco and 0 signal particle reco",50,0,0.005);
-TH2D *h_angen_el = new TH2D("emu0","electron angle-energy when not reco",400,0,0.04,120,0,60);
-TH1F* h_pte0=new TH1F("ynr","Tracker pointes electron event noreco and 0 signal particle reco", 20,0,20);
-TH1F* h_ptmu0=new TH1F("xnr","Tracker pointes muon event noreco and 0 signal particle reco", 20,0,20);
-TH1F *h_trackerStubs0=new TH1F("trs0","#TrackerStubs event noreco and 0 signal particle reco",35,0,35);
-TH1D *h_op0 = new TH1D("op0","opening angle when not reco in event noreco and 0 signal particle reco",400,0,0.04);
-
-TH1D* inter1= new TH1D("inter1","interactionID when event noreco and 1 signal particle reco", 50,0,50);
-TH1D *tracksize1 = new TH1D("tr1","reco_tracks.size() event noreco and 1 signal particle reco", 10,0,10);
-TH1D *h_anglee1 = new TH1D("e1","electron angle when not reco in event noreco and 1 signal particle reco",400,0,0.04);
-TH1D *h_anglemu1 = new TH1D("mu1","muon angle when not reco in event noreco and 1 signal particle reco",50,0,0.005);
-TH2D *h_angle1 = new TH2D("emu1","electron-muon angle when not reco in event noreco and 1 signal particle reco",400,0,0.04,50,0,0.005);
-TH1F* h_pte1=new TH1F("ynr1","Tracker pointes electron event noreco and 1 signal particle reco", 20,0,20);
-TH1F* h_ptmu1=new TH1F("xnr1","Tracker pointes muon event noreco and 1 signal particle reco", 20,0,20);
-TH1F *h_trackerStubs1=new TH1F("trs1","#TrackerStubs event noreco and 1 signal particle reco",35,0,35);
-TH1D *h_op1 = new TH1D("op1","opening angle when not reco in event noreco and 1 signal particle reco",400,0,0.04);
-
-TH1D* interM= new TH1D("interM","interactionID when reco and yes>2", 50,0,50);
-TH1D *tracksizeM = new TH1D("trM","reco_tracks.size() event reco and yes>2", 10,0,10);
-
-TH1D *h_part=new TH1D("h_part","reconstructed particle when event is NOT reco", 5,10,15);
-
-TH2D *h_res=new TH2D("res", "(thmu_rec-the_true) VS energy Ee<5 GeV",50,0,5,400,-0.2,0.2);
-TH2D *h_res1=new TH2D("res1", "(thmu_rec-the_true) VS energy 5<E<15 GeV",20,5,15,400,-0.2,0.2);
-TH2D *h_res2=new TH2D("res2", "(thmu_rec-the_true) VS energy 15<E<25 GeV",20,15,25,400,-0.2,0.2);
-TH2D *h_res3=new TH2D("res3", "(thmu_rec-the_true) VS energy Ee>25 GeV",6,25,65,400,-0.2,0.2);
-
-TH1D *h_chidofM=new TH1D("h_chidofM", "chi2 per dof when I have MORE THAN 2 signal tracks",101,0,101);
-TH1D *h_chidof2=new TH1D("h_chidof2", "chi2 per dof when I have only 2 signal tracks",101,0,101);
-
-TH1D *h_shared=new TH1D("h_shared","multiplicity for well reconstructed elastic events",20,0,20);
-TH1D *h_op = new TH1D("op","opening angle when reco",400,0,0.04);
-
-TH1D *h_vrtx=new TH1D("vrt","number of vertices when ghosts tracks",12,0,12);
-
-TH1D *h_quality=new TH1D("q","Quality of the well reconstructed events",101,0,101);
-TH1D *h_quality_more=new TH1D("qmore","Quality of the well reconstructed events with ghosts",101,0,101);
-TH1D *vrtx_chi=new TH1D("chie","Chi2 per DOF of the kinematic vrtx for signal",100,0,600);
-
-TH2D *rid2D=new TH2D("emu1","electron-muon angle cut by th_mu and chi2 cuts",400,0,0.04,50,0,0.005);
-//TH2D *h_eff=new TH2D("h_eff","efficiency VS electron energy",15,0,150,200,0,1);
+TH1D *vrtx_chi=new TH1D("chie","Chi2 per DOF of the kinematic vrtx for signal",100,0,1500);
 
 double the_gen=0; double thmu_gen=0; double thmu=0; double the=0;
-double thmu_rec=0;double the_rec=0;
+double the_rec=0;
 double signal=0.; double reco=0.; double reco1=0.; double more_reco=0.; double reco0=0.;double reco3=0.;
 double reco_v=0.; double more_reco_v=0.; double reco0_v=0.;
-int link0; int link1=0;
-vector<int> link;
 int yes_e_g=0;int yes_mu_g=0; int yes2=0; int yes_v=0;
 int point_mu=0; int point_el=0;
 int code_mu=-99; int code_e=-99;
 int TrackIdreco=-99;
-std::array<double,14> eff;
-
 
 for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 		cbmsim->GetEntry(i);
@@ -174,47 +122,12 @@ double Ee=0;
  if(yes_e_g==1 and yes_mu_g==1){
 
 cout << "RECONSTRUCTIBLE" << endl;
-
-std::array<std::vector<double>,6> position;//={{{0.,0.},{0.,0.},{0.,0.},{0.,0.},{0.,0.},{0.,0.}}};
-double opening = acos(pe_dir.Dot(pmu_dir));
 	   signal+=MesmerEvent->wgt_full;
 vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks();
 vector<MUonERecoOutputVertex> vrtx = ReconstructionOutput->reconstructedVertices();
 
-double chi;
-
-for(int j=0; j<vrtx.size();j++)
-{
-if(vrtx.at(j).stationIndex()==1) //and tracks.at(0).processIDofLinkedTrack()==45 and tracks.at(0).linkedTrackID()!=tracks.at(1).linkedTrackID()){
-{
- MUonERecoOutputTrack mu_in = vrtx.at(j).incomingMuon();
- MUonERecoOutputTrack mu_out = vrtx.at(j).outgoingMuon();
- MUonERecoOutputTrack e_out = vrtx.at(j).outgoingElectron();
-
-//if(mu_out.processIDofLinkedTrack()==45 and e_out.processIDofLinkedTrack()==45) yes_v++;
-yes_v++;
-if(j==0){vrtx_chi->Fill(vrtx.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full); chi=vrtx.at(j).chi2perDegreeOfFreedom();}
-
-}
-}
-
-
-int sig=0;
 int yes_mu=0;
 int yes_e=0;
-
-TVector3 in;
-for(int j=0; j<tracks.size();j++)
-{
-if(tracks.at(j).processIDofLinkedTrack()==0 and tracks.at(j).sector()==0){
-double th_inx=tracks.at(j).xSlope();
-double th_iny=tracks.at(j).ySlope();
-in.SetXYZ(th_inx,th_iny,1.0);
-in=in.Unit();
- }
-}
-vector<double> thmu_rec_vec,chi_min_mu,the_rec_vec,chi_min_e;
-chi_min_mu.reserve(5);thmu_rec_vec.reserve(5);chi_min_e.reserve(5);the_rec_vec.reserve(5);
 
 for(int j=0; j<tracks.size();j++)
 {
@@ -226,152 +139,37 @@ if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(
  int sum = tracks.at(j).numberOfXProjectionHits() + tracks.at(j).numberOfYProjectionHits() + tracks.at(j).numberOfStereoHits();
 
                  if(code_e==tracks.at(j).linkedTrackID()) { yes_e++;
-TVector3 pe_rec;
- pe_rec.SetXYZ(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.);
- pe_rec= pe_rec.Unit();
- the_rec_vec.push_back(acos(in.Dot(pe_rec)));
- chi_min_e.push_back(tracks.at(j).chi2perDegreeOfFreedom());
                                         }
 
                  if(code_mu==tracks.at(j).linkedTrackID()) { yes_mu++;
-
-TVector3 pmu_rec;
- pmu_rec.SetXYZ(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.);
- pmu_rec= pmu_rec.Unit();
- thmu_rec_vec.push_back(acos(in.Dot(pmu_rec)));
- chi_min_mu.push_back(tracks.at(j).chi2perDegreeOfFreedom());
                                         }
-
-
-std::vector<MUonERecoOutputTrackHit> hits_=tracks.at(j).hits();
-
-for(int h=0;h<hits_.size();h++){
-position.at(hits_.at(h).moduleID()).push_back(hits_.at(h).position());
-		}
 	}
 }
 
-if( thmu_rec_vec.size()!=0){
-auto it = min_element(chi_min_mu.begin(),chi_min_mu.end()); thmu_rec = thmu_rec_vec.at(std::distance(chi_min_mu.begin(), it));
-        }
-if( the_rec_vec.size()!=0){
-auto it = min_element(chi_min_e.begin(),chi_min_e.end()); the_rec = the_rec_vec.at(std::distance(chi_min_e.begin(), it));
-        }
-
-if(yes_e>=1 and yes_mu>=1){//and thmu_rec>0.0002 and chi<100){reco+=MesmerEvent->wgt_full; //chi<100 and thmu_rec>0.0002
-double res_mu = thmu_rec-thmu_sdr;
-double res_e = the_rec-the_sdr;
-
-if(thmu_rec>0.0002){reco+=MesmerEvent->wgt_full;}
-else rid2D->Fill(the_sdr,thmu_sdr,MesmerEvent->wgt_full);
-
-
-/*if(E_e>=0.2 and E_e<=2) eff.at(0)+=MesmerEvent->wgt_full;
-else if(E_e>=2 and E_e<=20) eff.at(1)+=MesmerEvent->wgt_full;
-else if(E_e>=20 and E_e<=30) eff.at(2)+=MesmerEvent->wgt_full;
-else if(E_e>=30 and E_e<=40) eff.at(3)+=MesmerEvent->wgt_full;
-else if(E_e>=40 and E_e<=50) eff.at(4)+=MesmerEvent->wgt_full;
-else if(E_e>=50 and E_e<=60) eff.at(5)+=MesmerEvent->wgt_full;
-else if(E_e>=60 and E_e<=70) eff.at(6)+=MesmerEvent->wgt_full;
-else if(E_e>=70 and E_e<=80) eff.at(7)+=MesmerEvent->wgt_full;
-else if(E_e>=80 and E_e<=90) eff.at(8)+=MesmerEvent->wgt_full;
-else if(E_e>=90 and E_e<=100) eff.at(9)+=MesmerEvent->wgt_full;
-else if(E_e>=100 and E_e<=110) eff.at(10)+=MesmerEvent->wgt_full;
-else if(E_e>=110 and E_e<=120) eff.at(11)+=MesmerEvent->wgt_full;
-else if(E_e>=120 and E_e<=130) eff.at(12)+=MesmerEvent->wgt_full;
-else if(E_e>=130 and E_e<=140) eff.at(13)+=MesmerEvent->wgt_full;*/
-
-
-        tracksize->Fill(tracks.size(),MesmerEvent->wgt_full);
-	h_trackerStubs0->Fill(TrackerStubs->GetEntries(),MesmerEvent->wgt_full);
-	h_op->Fill(opening,MesmerEvent->wgt_full);
-        for(int j=0; j<tracks.size();j++)
-        {inter->Fill(tracks.at(j).processIDofLinkedTrack(),MesmerEvent->wgt_full);}}
-
-if(yes_e==1 and yes_mu==1 and tracks.size()==3 and thmu_rec>0.0002 and chi<100) {reco3+=MesmerEvent->wgt_full;}
-else{h_angle1->Fill(the_sdr,thmu_sdr,MesmerEvent->wgt_full);}
-
-if(yes_e==1 and yes_mu==1 and thmu_rec>0.0002 and chi<100){
-h_shared->Fill(tracks.size(),MesmerEvent->wgt_full);
-
-        for(int j=0; j<tracks.size();j++)
-        {
-	if(tracks.at(j).processIDofLinkedTrack()==45) h_chidof2->Fill(tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
-if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1 and  tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=0) 
-	{h_quality->Fill(tracks.at(j).percentageOfHitsSharedWithLinkedTrack(),MesmerEvent->wgt_full);}
-	}
+if(yes_e>=1 and yes_mu>=1){reco+=MesmerEvent->wgt_full;
+for(int j=0; j<vrtx.size();j++)
+{
+if(vrtx.at(j).stationIndex()==1) //and tracks.at(0).processIDofLinkedTrack()==45 and tracks.at(0).linkedTrackID()!=tracks.at(1).linkedTrackID()){
+{
+  if(vrtx.at(j).chi2perDegreeOfFreedom()<150)yes_v++; if(j==0)vrtx_chi->Fill(vrtx.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
+ }
 }
-
-if((yes_e>1 or yes_mu>1) and yes_e!=0 and yes_mu!=0 and thmu_rec>0.0002 and chi<100){more_reco+=MesmerEvent->wgt_full;
-
-        for(int j=0; j<tracks.size();j++)
-        {
-if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1 and  tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=0) 
-        {h_quality_more->Fill(tracks.at(j).percentageOfHitsSharedWithLinkedTrack(),MesmerEvent->wgt_full);}
-        }
-
-h_vrtx->Fill(vrtx.size(),MesmerEvent->wgt_full);
-cout << "event " << i << endl;
-int sig=0;
-int sig_1=0;
-int sig_2=0;
-for(int s=0;s<6;s++)
-{sort(position.at(s).begin(), position.at(s).end());
- for(int j=1; j<position.at(s).size();j++)
-        {
-         if(position.at(s).at(j)==position.at(s).at(j-1))sig=1;
-        }
- if(s<4 and sig==1)sig_1=1;
- if(s>=4 and sig==1)sig_2=1; sig=0;
 }
-
-//if(sig_1==1 and sig_2==0)more_reco+=MesmerEvent->wgt_full;
-//else if(sig_1==0 and sig_2==0)more_reco+=MesmerEvent->wgt_full;
-
-        tracksizeM->Fill(tracks.size(),MesmerEvent->wgt_full);
-        for(int j=0; j<tracks.size();j++)
-	{//if(tracks.at(j).processIDofLinkedTrack()==45) h_chidofM->Fill(tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
-	 interM->Fill(tracks.at(j).processIDofLinkedTrack(),MesmerEvent->wgt_full);}}
 
 if(yes2<2 and TrackIdreco==-99){reco0+=MesmerEvent->wgt_full;
 cout <<"NOT RECONSTRUCTED"<<endl;
-        if(TrackIdreco==code_e) h_part->Fill(11,MesmerEvent->wgt_full);
-        if(TrackIdreco==code_mu) h_part->Fill(-13,MesmerEvent->wgt_full);
-	tracksize0->Fill(tracks.size(),MesmerEvent->wgt_full);
-	h_anglee0->Fill(the_sdr,MesmerEvent->wgt_full); h_pte0->Fill(point_el,MesmerEvent->wgt_full);
-	h_angle1->Fill(the_sdr,thmu_sdr,MesmerEvent->wgt_full);
-        h_anglemu0->Fill(thmu_sdr,MesmerEvent->wgt_full); h_ptmu0->Fill(point_mu,MesmerEvent->wgt_full);
-        //h_angen_el->Fill(the_sdr,thmu_sdr,MesmerEvent->wgt_full);
-h_op1->Fill(opening,MesmerEvent->wgt_full);//h_op0
-	//if(tracks.size()==0) h_trackerStubs0->Fill(TrackerStubs->GetEntries(),MesmerEvent->wgt_full);
-
-	for(int j=0; j<tracks.size();j++)
-	{inter0->Fill(tracks.at(j).processIDofLinkedTrack(),MesmerEvent->wgt_full);}
 	}
 
 if(yes2<2 and TrackIdreco!=-99){reco1+=MesmerEvent->wgt_full;
-cout <<"NOT RECONSTRUCTED"<<endl;
-	if(TrackIdreco==code_e) h_part->Fill(11,MesmerEvent->wgt_full);
-        if(TrackIdreco==code_mu) h_part->Fill(-13,MesmerEvent->wgt_full);
-        tracksize1->Fill(tracks.size(),MesmerEvent->wgt_full);
-        if(TrackIdreco!=code_e){h_anglee1->Fill(the_sdr,MesmerEvent->wgt_full); h_pte1->Fill(point_el,MesmerEvent->wgt_full);}
-        if(TrackIdreco!=code_mu){h_anglemu1->Fill(thmu_sdr,MesmerEvent->wgt_full); h_ptmu1->Fill(point_mu,MesmerEvent->wgt_full);}
-        h_angle1->Fill(the_sdr,thmu_sdr,MesmerEvent->wgt_full);
-	h_angen_el->Fill(the_sdr,Ee,MesmerEvent->wgt_full);
-        if(tracks.size()==1) h_trackerStubs1->Fill(TrackerStubs->GetEntries(),MesmerEvent->wgt_full);
-        h_op1->Fill(opening,MesmerEvent->wgt_full);
-
-        for(int j=0; j<tracks.size();j++)
-        {inter1->Fill(tracks.at(j).processIDofLinkedTrack(),MesmerEvent->wgt_full);}
 	}
 
-if(yes_v>=1 and yes_e>=1 and yes_mu>=1 and thmu_rec>0.0002){reco_v+=MesmerEvent->wgt_full;
+if(yes_v>=1 and yes_e>=1 and yes_mu>=1){reco_v+=MesmerEvent->wgt_full;
         }
 
-if(yes_v>1 and yes_e>=1 and yes_mu>=1 and thmu_rec>0.0002){more_reco_v+=MesmerEvent->wgt_full;
+if(yes_v>1 and yes_e>=1 and yes_mu>=1){more_reco_v+=MesmerEvent->wgt_full;
         }
 
-if(yes_v<1 and yes_e>=1 and yes_mu>=1 and thmu_rec>0.0002){reco0_v+=MesmerEvent->wgt_full;
+if(yes_v<1 and yes_e>=1 and yes_mu>=1){reco0_v+=MesmerEvent->wgt_full;
 cout <<"NOT RECONSTRUCTED vertex"<<endl;
         }
 
@@ -384,19 +182,7 @@ code_e=-99;code_mu=-99;
 point_el=0;point_mu=0;
 TrackIdreco=-99;
 yes2=0;yes_v=0;
-link.clear();
 } //end of general for
-
-double ratio =reco/signal;
-double ratio1 =reco1/signal;
-double ratio0 =reco0/signal;
-double ratioM =more_reco/signal;
-
-cout << "Su " << signal << " eventi di segnale, " << reco << " sono ricostruiti, con un rapporto del " << ratio*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di segnale, " << reco3 << " sono ricostruiti con 3 tracce, con un rapporto del " << (reco3/signal)*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di segnale con piu tracce (stesso id), " << more_reco << " sono ricostruiti, con un rapporto del " << ratioM*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di segnale con 0 tracce di segnale reco, " << reco0 << ", con un rapporto del " << ratio0*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di con 1 sola traccia di segnale reco, " << reco1 << ", con un rapporto del " << ratio1*100 << "%"<< endl;
 
 double ratio_v =reco_v/reco;
 double ratio0_v =reco0_v/reco;
@@ -406,27 +192,22 @@ cout << "Su " << signal << " eventi di segnale, " << reco_v << " sono ricostruit
 cout << "Su " << signal << " eventi di segnale, " << more_reco_v << " sono ricostruiti con piu' di unun vertice, con un rapporto del " << ratioM_v*100 << "%"<< endl;
 cout << "Su " << signal << " eventi di segnale, " << reco0_v << " hanno 0 vertici, con un rapporto del " << ratio0_v*100 << "%"<< endl;
 
-Int_t nxTh1 = rid2D->GetNbinsX();
-Int_t nyTh1 = rid2D->GetNbinsY();
-for (Int_t i=1; i<nxTh1+1; i++) {
-for (Int_t j=1; j<nyTh1+1; j++) {
-if (rid2D->GetBinContent(i,j)<1) rid2D->SetBinContent(i,j,0);}}
-
-
 TCanvas o1("o1","o1",700,700);
-o1.Divide(1,2);
-o1.cd(1);
-rid2D->Draw("COLZ");
-o1.cd(2);
+
+/*h_quality->SetLineWidth(5);
+h_quality->Draw("hist");
+h_quality_more->SetLineWidth(5);
+h_quality_more->SetLineColor(kOrange);
+h_quality_more->Draw("hist same");*/
 vrtx_chi->Draw("hist");
 //vrtx_chi->SetMinimum(0);
 gPad->SetLogy();
 //vrtx_chi->SetMinimum(0);
 o1.SaveAs("vrtx_chi_sig.pdf");
-TCanvas o("o","o",700,700);
+/*TCanvas o("o","o",700,700);
 h_op->Draw("hist");
 o.SaveAs("pdf_notReco/op.pdf");
-/*
+
 TCanvas b("b","b",700,700);
 h_shared->Draw("hist");
 gPad->SetLogy();
@@ -489,8 +270,8 @@ Int_t nyTh = h_angen_el->GetNbinsY();
 for (Int_t i=1; i<nxTh+1; i++) {
 for (Int_t j=1; j<nyTh+1; j++) {
 if (h_angen_el->GetBinContent(i,j)<1) h_angen_el->SetBinContent(i,j,0);}}
-*/
-/*Int_t nxTh1 = h_angle1->GetNbinsX();
+
+Int_t nxTh1 = h_angle1->GetNbinsX();
 Int_t nyTh1 = h_angle1->GetNbinsY();
 for (Int_t i=1; i<nxTh1+1; i++) {
 for (Int_t j=1; j<nyTh1+1; j++) {
@@ -515,8 +296,7 @@ h_op0->Draw("hist");
 a2.cd(8);
 h_op1->Draw("hist");
 a2.SaveAs("pdf_notReco/angle.pdf");
-*/
-/*
+
 TCanvas m("m","m",1400,1400);
 h_vrtx->Draw("hist");
 m.SaveAs("pdf_notReco/vrtx.pdf");

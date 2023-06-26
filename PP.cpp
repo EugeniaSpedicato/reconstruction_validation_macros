@@ -147,15 +147,14 @@ double e_e,e_p,ein;
 	}
 
 
-if(yes==2 and yes_44==1)
+/*if(yes==2){
 {
-// h_E1->Fill(ein-e44);
 double Eres=e44+e_e+e_p-ein;
 h_E1->Fill(ein-e44);
 h_E2->Fill(e_e+e_p);
 h_E3->Fill(Eres);
 cout << "Eres " << Eres << endl;
-}
+}*/
 
            int last_modXmu=0; int last_modXel=0;
            int last_modYmu=0; int last_modYel=0;
@@ -202,7 +201,7 @@ double ok_em=0.; double ok_ep=0.;
 double them_sdr,thep_sdr;
 		them_gen=acos(pmu_in_dir.Dot(pem_dir));
                 thep_gen=acos(pmu_in_dir.Dot(pep_dir));
-                the44_gen=acos(pmu_in_dir.Dot(pmu_44_dir));
+                //the44_gen=acos(pmu_in_dir.Dot(pmu_44_dir));
 
 
 
@@ -214,18 +213,19 @@ if(yes==0 and yes_44==1) {c_44++; h_Em_no->Fill(e44);h_thm_no->Fill(the44_gen);	
 
 cout << "------------------" << endl;
 
-if(yes==2 and yes_44==1){//if(ok_em==1 or ok_ep==1){
+if(yes==2){// and yes_44==1){//if(ok_em==1 or ok_ep==1){
+
 if(st0==1) n_st0++;
 if(st1==1) n_st1++;
 bkg++;
 gen++;
 
-h_Em->Fill(e44);
+//h_Em->Fill(e44);
 h_Ee->Fill(e_e);
 h_Ep->Fill(e_p);
 h_the->Fill(them_gen);
 h_thp->Fill(thep_gen);
-h_thm->Fill(the44_gen);
+//h_thm->Fill(the44_gen);
 
 
 
@@ -274,7 +274,7 @@ if(tracks.at(j).sector()==1 and tracks.size()==3) { h_part2->Fill(tracks.at(j).p
 if(tracks.at(j).sector()==1 and tracks.size()==4) { h_part3->Fill(tracks.at(j).processIDofLinkedTrack()); h_quality3->Fill(tracks.at(j).percentageOfHitsSharedWithLinkedTrack());}
 if(tracks.at(j).sector()==1 and tracks.size()>4) { h_part_more->Fill(tracks.at(j).processIDofLinkedTrack()); h_quality_more->Fill(tracks.at(j).percentageOfHitsSharedWithLinkedTrack());}
 
-if(tracks.at(j).processIDofLinkedTrack()==44 and tracks.at(j).sector()==1) {yes_mu_44=1; TVector3 p; p.SetXYZ(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0);
+if(tracks.at(j).processIDofLinkedTrack()==0 and tracks.at(j).sector()==1) {yes_mu_44=1; TVector3 p; p.SetXYZ(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0);
 									    pmu_44_rec=p.Unit(); thmu_44_rec=acos(pmu_44_rec.Dot(in)); //th_in44_r->Fill(p.Theta()); th_in44->Fill(the44_gen);
 									    chi_44=tracks.at(j).chi2perDegreeOfFreedom();}
 

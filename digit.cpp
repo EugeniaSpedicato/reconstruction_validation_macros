@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0_prova_offset.root");
+	TFile *inputfile = new TFile("TRMesmer_box_offset_100k_2GeV_0.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
@@ -448,7 +448,7 @@ if(abs(dY1-Y1)<0.006 and abs(dY2-Y2)<0.006)peaky+=MesmerEvent->wgt_full;
 
 if( dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99 and abs(resx)<0.2e-03 and abs(resy)<0.1e-03){
 
-h_x1->Fill(dX1-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
+h_x1->Fill(stub-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
 h_x2->Fill(dX2-X2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
 h_y1->Fill(dY1-Y1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
 h_y2->Fill(dY2-Y2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);

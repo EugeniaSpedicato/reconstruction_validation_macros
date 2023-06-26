@@ -17,7 +17,7 @@ using namespace std;
 
 void RealDataAnalyzer(int numb){
 
-	TFile *inputfile = new TFile("TRPP_1k.root");//nrrowBP_20GeV_1shared.root");//trPoints,20GeV.root");//exampleProductionJob.root");narrowBP.root
+	TFile *inputfile = new TFile("TRPP_minbias_1M.root");//nrrowBP_20GeV_1shared.root");//trPoints,20GeV.root");//exampleProductionJob.root");narrowBP.root
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
