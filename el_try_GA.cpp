@@ -16,7 +16,8 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-	TFile *inputfile = new TFile("TRMesmer_box_100k_2GeV_0.root");
+       TFile *inputfile = new TFile("TRMesmer_box_nobend_parallel_20k_2GeV_0.root");
+
 	// 	TFile *inputfile = new TFile("TRMesmer_ohit.root");
 	//TRMesmer_thin_5k.root");//TRMesmer_100k_box.root");//beamprofile/TRMesmer_1M.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
@@ -42,7 +43,7 @@ void RealDataAnalyzer(){
 TH1D *h_resTR=new TH1D("resTR", "(the_rec-the_true) Ee<5 GeV PRE-VRTX",100,-0.01,0.01);
 TH1D *h_res1TR=new TH1D("res1TR", "(the_rec-the_true) 5<E<15 GeV PRE-VRTX",50,-0.0025,0.0025);
 TH1D *h_res2TR=new TH1D("res2TR", "(the_rec-the_true) 15<E<25 GeV PRE-VRTX",40,-0.001,0.001);
-TH1D *h_res3TR=new TH1D("res3TR", "(the_rec-the_true) Ee>10 GeV PRE-VRTX",40,-0.001,0.001);
+TH1D *h_res3TR=new TH1D("res3TR", "(the_rec-the_true) Ee>25 GeV PRE-VRTX",40,-0.001,0.001);
 
 TH2D *h_res_TR=new TH2D("h_res_TR", "(thmu_rec-thmu_true) VS energy Emu(GeV) PRE-VRTX",30,155,160,100,-0.01,0.01);//30,140,170,100,-0.01,0.01);
 TH2D *h_res_mu_inTR=new TH2D("h_res_mu_inTR", "(thmu_in_rec-thmu_in_true) VS energy Emu(GeV) PRE-VRTX",10,150,160,22,-0.0006,0.0006);
@@ -278,28 +279,28 @@ double resx=the_rec_x-the_gen_x;
 double resy=the_rec_y-the_gen_y;
 
 
-if( Ee>10) {h_res_TR1->Fill(resTR,MesmerEvent->wgt_full);h_res_TR1x->Fill(resx,MesmerEvent->wgt_full); h_res_TR1y->Fill(resy,MesmerEvent->wgt_full);}
-if( Ee<10) {h_res_TR2->Fill(resTR,MesmerEvent->wgt_full);h_res_TR2x->Fill(resx,MesmerEvent->wgt_full); h_res_TR2y->Fill(resy,MesmerEvent->wgt_full);}
+if( Ee>25) {h_res_TR1->Fill(resTR,MesmerEvent->wgt_full);h_res_TR1x->Fill(resx,MesmerEvent->wgt_full); h_res_TR1y->Fill(resy,MesmerEvent->wgt_full);}
+if( Ee<25) {h_res_TR2->Fill(resTR,MesmerEvent->wgt_full);h_res_TR2x->Fill(resx,MesmerEvent->wgt_full); h_res_TR2y->Fill(resy,MesmerEvent->wgt_full);}
 
-if(abs(resTR)<0.0003 and Ee>10){theta1->Fill(the_rec_tracks,MesmerEvent->wgt_full);theta1g->Fill(the_gen,MesmerEvent->wgt_full);}
-if(abs(resTR)>0.0003 and Ee>10){theta2->Fill(the_rec_tracks,MesmerEvent->wgt_full);theta2g->Fill(the_gen,MesmerEvent->wgt_full);}
+if(abs(resTR)<0.0003 and Ee>25){theta1->Fill(the_rec_tracks,MesmerEvent->wgt_full);theta1g->Fill(the_gen,MesmerEvent->wgt_full);}
+if(abs(resTR)>0.0003 and Ee>25){theta2->Fill(the_rec_tracks,MesmerEvent->wgt_full);theta2g->Fill(the_gen,MesmerEvent->wgt_full);}
 
-if(abs(resx)<0.0003 and Ee>10) peakx+=MesmerEvent->wgt_full;
-if(abs(resy)<0.0003 and Ee>10) peaky+=MesmerEvent->wgt_full;
+if(abs(resx)<0.0003 and Ee>25) peakx+=MesmerEvent->wgt_full;
+if(abs(resy)<0.0003 and Ee>25) peaky+=MesmerEvent->wgt_full;
 
-if(abs(resx)<0.0003 and abs(resy)<0.0003 and Ee>10) {theta1x->Fill(the_rec_x,MesmerEvent->wgt_full);theta1gx->Fill(the_gen_x,MesmerEvent->wgt_full);
+if(abs(resx)<0.0003 and abs(resy)<0.0003 and Ee>25) {theta1x->Fill(the_rec_x,MesmerEvent->wgt_full);theta1gx->Fill(the_gen_x,MesmerEvent->wgt_full);
 						theta1y->Fill(the_rec_y,MesmerEvent->wgt_full);theta1gy->Fill(the_gen_y,MesmerEvent->wgt_full);}
 
-if(abs(resx)>0.0003 and Ee>10){tailx+=MesmerEvent->wgt_full; 
+if(abs(resx)>0.0003 and Ee>25){tailx+=MesmerEvent->wgt_full;
 
 //h_thphi->Fill(phi,thmu_gen_x,MesmerEvent->wgt_full);h_op0->Fill(opening,MesmerEvent->wgt_full);
 h_thphi->Fill(phie,the_gen_x,MesmerEvent->wgt_full);h_op0->Fill(opening,MesmerEvent->wgt_full);
                                    theta2x->Fill(the_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(the_gen_x,MesmerEvent->wgt_full);}
 
-if(abs(resy)>0.0003 and Ee>10){taily+=MesmerEvent->wgt_full;
+if(abs(resy)>0.0003 and Ee>25){taily+=MesmerEvent->wgt_full;
                                    theta2y->Fill(the_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(the_gen_y,MesmerEvent->wgt_full);}
 
-if((abs(resy)>0.0003 or abs(resy)>0.0003) and Ee>10) {
+if((abs(resy)>0.0003 or abs(resy)>0.0003) and Ee>25) {
 
 h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
 if( Ee<5) h_resTR->Fill(resTR,MesmerEvent->wgt_full);
@@ -377,7 +378,7 @@ b2.cd(2);
 h_op0->Draw("hist");
 b2.SaveAs("2Dth_phi.pdf");
 
-/*
+
 TF1 *a1 = new TF1("a1", "[2]*TMath::Gaus(x,[0],[1])");
 a1->SetParameters(5.3e-05,110e-05,1);
 
@@ -417,7 +418,7 @@ f2->SetParameters(3.8e-05,25e-06,1);
 
 TF1 *f3 = new TF1("f3", "[2]*TMath::Gaus(x,[0],[1])");
 f3->SetParameters(2e-05,25e-06,1);
-*/
+
 TCanvas d2("d2","d2",700,700);
 d2.Divide(2,3);
 d2.cd(1);

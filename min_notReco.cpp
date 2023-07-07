@@ -117,7 +117,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 cout << "INIZIO" << endl;
           if(MCTr->pdgCode()==11) {yes_e_g=1; Ee=MCTr->energy();
                                    pe_dir.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); code_e=n; pe_dir=pe_dir.Unit();
-                                   the_gen=acos(pmu_in.Dot(pe_dir));Z_ep=MCTr->startZ();}// cout << "thep_gen " <<thep_gen << endl;}
+                                   the_gen=pmu_in.Angle(pe_dir);Z_ep=MCTr->startZ();}// cout << "thep_gen " <<thep_gen << endl;}
 
          }
 
@@ -197,7 +197,7 @@ if(tracks.at(j).processIDofLinkedTrack()==9 and tracks.size()>=3 and tracks.at(j
 TVector3 pe_rec;
  pe_rec.SetXYZ(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.);
  pe_rec= pe_rec.Unit();
- the_rec_vec.push_back(acos(in.Dot(pe_rec)));
+ the_rec_vec.push_back(in.Angle(pe_rec));
  chi_min_e.push_back(tracks.at(j).chi2perDegreeOfFreedom());
 
                                         }
@@ -210,7 +210,7 @@ if(tracks.at(j).processIDofLinkedTrack()==0 and tracks.size()>=3 and tracks.at(j
 TVector3 pmu_rec;
  pmu_rec.SetXYZ(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.);
  pmu_rec= pmu_rec.Unit();
- thmu_rec_vec.push_back(acos(in.Dot(pmu_rec)));
+ thmu_rec_vec.push_back(in.Angle(pmu_rec));
  chi_min_mu.push_back(tracks.at(j).chi2perDegreeOfFreedom());
                                         }
 

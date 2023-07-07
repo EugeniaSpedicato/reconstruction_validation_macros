@@ -16,7 +16,10 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-	TFile *inputfile = new TFile("TRMesmer_box_offset_100k_2GeV_0.root");
+        //TFile *inputfile = new TFile("TRMesmer_box_nobend_parallel_50k_60GeV_0.root");
+      //TFile *inputfile = new TFile("TRMesmer_box_offset/TRMesmer_box_offset_100k_2GeV_0.root");
+	//TFile *inputfile = new TFile("TRMesmer_box_nobend_100k_2.root");
+        TFile *inputfile = new TFile("TRMesmer_box_nobend_parallel_10k_2GeV_2.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
@@ -58,14 +61,38 @@ int TrackIdreco=-99;
 TH1D *h_res_muTR2r=new TH1D("h_res_muTR2r", "(thmu_rec-thmu_true) VS energy 157<Emu<160(GeV) PRE-VRTX",180,-0.0006,0.0006);
 
 
-TH1D *h_x1=new TH1D("h_x1","residuum (x_g4-x_digit) module 0 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
-TH1D *h_x1_g=new TH1D("h_x1g","residuum (x_g4-x_digit) module 0 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
-TH1D *h_x2=new TH1D("h_x2","residuum (x_g4-x_digit) module 4 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
-TH1D *h_x2_g=new TH1D("h_x2g","residuum (x_g4-y_digit) module 4 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
-TH1D *h_y1=new TH1D("h_y1","residuum (y_g4-y_digit) module 1 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
-TH1D *h_y1_g=new TH1D("h_y1g","residuum (y_g4-y_digit) module 1 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
-TH1D *h_y2=new TH1D("h_y2","residuum (y_g4-y_digit) module 5 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
-TH1D *h_y2_g=new TH1D("h_y2g","residuum (y_g4-y_digit) module 5 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_resTRx=new TH1D("resTRx", "(the_recX-the_trueX) Ee<10 GeV for events in position residua tails",100,-0.01,0.01);
+TH1D *h_resTRy=new TH1D("resTRy", "(the_recY-the_trueY) Ee<10 GeV for events in position residua tails",100,-0.01,0.01);
+
+TH1D *h_resTRx10=new TH1D("resTRx10", "(the_recX-the_trueX) Ee>10 GeV for events in position residua tails",100,-0.01,0.01);
+TH1D *h_resTRy10=new TH1D("resTRy10", "(the_recY-the_trueY) Ee>10 GeV for events in position residua tails",100,-0.01,0.01);
+
+TH1D *h_resTRxmu=new TH1D("resTRxmu", "(thmu_recX-thmu_trueX) for events in position residua tails",120,-0.0006,0.0006);
+TH1D *h_resTRxmup=new TH1D("resTRxmup", "(thmu_recX-thmu_trueX) for events in position residua peak",120,-0.0006,0.0006);
+
+TH1D *h_resTRymu=new TH1D("resTRymu", "(thmu_recY-thmu_trueY) for events in position residua tails",120,-0.0006,0.0006);
+
+TH1D *h_Ee=new TH1D("res3TR", "Electron energy for events in position residua tails",300,0,150);
+
+TH1D *h_x1=new TH1D("h_x1","Muon residuum (x_g4-x_digit) module 0 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_x1_g=new TH1D("h_x1g","Muon residuum (x_g4-x_digit) module 0 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_x2=new TH1D("h_x2","Muon residuum (x_g4-x_digit) module 4 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_x2_g=new TH1D("h_x2g","Muon residuum (x_g4-y_digit) module 4 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_y1=new TH1D("h_y1","Muon residuum (y_g4-y_digit) module 1 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_y1_g=new TH1D("h_y1g","Muon residuum (y_g4-y_digit) module 1 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_y2=new TH1D("h_y2","Muon residuum (y_g4-y_digit) module 5 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_y2_g=new TH1D("h_y2g","Muon residuum (y_g4-y_digit) module 5 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+
+
+TH1D *h_x1e=new TH1D("h_x1e","Electron residuum (x_g4-x_digit) module 0 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_x1_ge=new TH1D("h_x1ge","Electron residuum (x_g4-x_digit) module 0 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_x2e=new TH1D("h_x2e","Electron residuum (x_g4-x_digit) module 4 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_x2_ge=new TH1D("h_x2ge","Electron residuum (x_g4-y_digit) module 4 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_y1e=new TH1D("h_y1e","Electron residuum (y_g4-y_digit) module 1 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_y1_ge=new TH1D("h_y1ge","Electron residuum (y_g4-y_digit) module 1 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_y2e=new TH1D("h_y2e","Electron residuum (y_g4-y_digit) module 5 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+TH1D *h_y2_ge=new TH1D("h_y2ge","Electron residuum (y_g4-y_digit) module 5 hit peak angular res. (blue) and tail angular res. (red)",100,-0.05,0.05);//100,-0.05,0.05);
+
 
 TH1D *h_phi =new TH1D("h_phi"," outgoing muon phi angle for events in the tails of the angular residuum",180,-180,180);
 TH1D *h_phiP =new TH1D("h_phip"," outgoing muon phi angle for events in the peaks of the angular residuum",180,-180,180);
@@ -114,6 +141,12 @@ double tailx=0.;
 double peakx=0.;
 double taily=0.;
 double peaky=0.;
+
+double tailxe=0.;
+double peakxe=0.;
+double tailye=0.;
+double peakye=0.;
+
 
 
 for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) { //for(Long64_t i = numb; i < numb+1; i++) {
@@ -202,11 +235,12 @@ vector<double> Xmu; Xmu.reserve(4);
 vector<double> Ymu; Ymu.reserve(4);
 vector<double> Zmu; Zmu.reserve(8);
 
-vector<double> Xe;
+vector<double> Xe; Xe.reserve(4);
+vector<double> Ye; Ye.reserve(4);
 
 int ok=0;int oke=0;
-double X1,X2, Y1,Y2, Z1,Z2,Z3,Z4, X1e;
-double dX1=-99; double dX2=-99; double dY1=-99; double dY2=-99; double dX1e=-99;
+double X1,X2, Y1,Y2, Z1,Z2,Z3,Z4, X1e,X2e, Y1e,Y2e;
+double dX1=-99; double dX2=-99; double dY1=-99; double dY2=-99; double dX1e=-99; double dX2e=-99; double dY1e=-99; double dY2e=-99;
 double stripX=-999; double stripXe=-999;
 
 	for(int s=0; s<TrackerPoints->GetEntries(); s++)
@@ -228,7 +262,8 @@ if(TrackerPt->trackPDGCode()==11 and TrackerPt->trackID()==code_e and TrackerPt-
 { oke=1;
                                   TVector3 exiting=TrackerPt->exitingPositionGlobalCoordinates();
 
-				  if(TrackerPt->moduleID()==0) Xe.push_back(exiting.X());
+				  if(TrackerPt->moduleID()==0 or TrackerPt->moduleID()==4) Xe.push_back(exiting.X());
+                                  if(TrackerPt->moduleID()==1 or TrackerPt->moduleID()==5) Ye.push_back(exiting.Y());
 
 }
 
@@ -237,7 +272,7 @@ if(TrackerPt->trackPDGCode()==11 and TrackerPt->trackID()==code_e and TrackerPt-
 
 
 if(ok==1 and oke==1){
-      X1=(Xmu.at(0)+Xmu.at(1))/2;
+/*      X1=(Xmu.at(0)+Xmu.at(1))/2;
         X2=(Xmu.at(2)+Xmu.at(3))/2;
         Y1=(Ymu.at(0)+Ymu.at(1))/2;
         Y2=(Ymu.at(2)+Ymu.at(3))/2;
@@ -248,7 +283,23 @@ if(ok==1 and oke==1){
         Z4=(Zmu.at(6)+Zmu.at(7))/2;
 
       X1e=(Xe.at(0)+Xe.at(1))/2;
+      X2e=(Xe.at(2)+Xe.at(3))/2;
+      Y1e=(Ye.at(0)+Ye.at(1))/2;
+      Y2e=(Ye.at(2)+Ye.at(3))/2;*/
+      X1=Xmu.at(0);
+        X2=Xmu.at(2);
+        Y1=Ymu.at(0);
+        Y2=Ymu.at(2);
 
+        Z1=(Zmu.at(0)+Zmu.at(1))/2;
+        Z2=(Zmu.at(2)+Zmu.at(3))/2;
+        Z3=(Zmu.at(4)+Zmu.at(5))/2;
+        Z4=(Zmu.at(6)+Zmu.at(7))/2;
+
+      X1e=Xe.at(0);
+      X2e=Xe.at(2);
+      Y1e=Ye.at(0);
+      Y2e=Ye.at(2);
         }
 
 
@@ -281,9 +332,13 @@ if(hits_.at(h).moduleID()==5)dY2=hits_.at(h).positionPerpendicular();
                 }
 	}
 if(code_e==tracks.at(j).linkedTrackID()){
-for(int h=0;h<hits_.size();h++){if(hits_.at(h).moduleID()==0)
-{dX1e=hits_.at(h).positionPerpendicular();seed_clustersize_e=hits_.at(h).seedClusterWidth();corr_clustersize_e=hits_.at(h).correlationClusterWidth();
-						 stripXe= hits_.at(h).seedClusterCenterStrip();}	
+for(int h=0;h<hits_.size();h++){
+if(hits_.at(h).moduleID()==0){dX1e=hits_.at(h).positionPerpendicular();seed_clustersize_e=hits_.at(h).seedClusterWidth();corr_clustersize_e=hits_.at(h).correlationClusterWidth();
+						 stripXe= hits_.at(h).seedClusterCenterStrip();}
+if(hits_.at(h).moduleID()==1)dY1e=hits_.at(h).positionPerpendicular();
+if(hits_.at(h).moduleID()==4)dX2e=hits_.at(h).positionPerpendicular();
+if(hits_.at(h).moduleID()==5)dY2e=hits_.at(h).positionPerpendicular();
+
 		}
 
 	}
@@ -423,35 +478,69 @@ if(ok_mu==1 and ok_e==1 ){reco+=MesmerEvent->wgt_full;
  res_muTR2 = thmu_rec_tracks2-thmu_gen;
 double resx=thmu_rec_x-thmu_gen_x;
 double resy=thmu_rec_y-thmu_gen_y;
-/*double resx=the_rec_x-the_gen_x;
-double resy=the_rec_y-the_gen_y;*/
+double resxe=the_rec_x-the_gen_x;
+double resye=the_rec_y-the_gen_y;
 
 
 h_phitot->Fill(phi,MesmerEvent->wgt_full);h_phietot->Fill(phie,MesmerEvent->wgt_full);
 
 if(abs(dX1-X1)>0.006 or abs(dX2-X2)>0.006){
+				   h_resTRxmu->Fill(resx,MesmerEvent->wgt_full);
 				   tailx+=MesmerEvent->wgt_full;h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
-                                   theta2x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
 					}
+else{h_resTRxmup->Fill(resx,MesmerEvent->wgt_full);}
+if(abs(dX1e-X1e)>0.006 or abs(dX2e-X2e)>0.006){tailxe+=MesmerEvent->wgt_full;
+
+					if(Ee<10) h_resTRx->Fill(resxe,MesmerEvent->wgt_full);
+					else h_resTRx10->Fill(resxe,MesmerEvent->wgt_full);
+					h_Ee->Fill(Ee,MesmerEvent->wgt_full);
+					theta2x->Fill(the_rec_x,MesmerEvent->wgt_full);theta2gx->Fill(the_gen_x,MesmerEvent->wgt_full);
+					}
+
+
+
 if(abs(dY1-Y1)>0.006 or abs(dY2-Y2)>0.006){
+                                   h_resTRymu->Fill(resy,MesmerEvent->wgt_full);
 				   taily+=MesmerEvent->wgt_full;h_phi->Fill(phi,MesmerEvent->wgt_full);h_phie->Fill(phie,MesmerEvent->wgt_full);
-                                   theta2y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);
 					}
+
+if(abs(dY1e-Y1e)>0.006 or abs(dY2e-Y2e)>0.006){tailye+=MesmerEvent->wgt_full;
+                                        if(Ee<10) h_resTRy->Fill(resye,MesmerEvent->wgt_full);
+					else h_resTRy10->Fill(resye,MesmerEvent->wgt_full);
+					h_Ee->Fill(Ee,MesmerEvent->wgt_full);
+                                   	theta2y->Fill(the_rec_y,MesmerEvent->wgt_full);theta2gy->Fill(the_gen_y,MesmerEvent->wgt_full);
+					}
+
 if(abs(dX1-X1)<0.006 and abs(dX2-X2)<0.006 and abs(dY1-Y1)<0.006 and abs(dY2-Y2)<0.006) {
 h_phiP->Fill(phi,MesmerEvent->wgt_full); h_phiPe->Fill(phie,MesmerEvent->wgt_full);
-theta1x->Fill(thmu_rec_x,MesmerEvent->wgt_full);theta1gx->Fill(thmu_gen_x,MesmerEvent->wgt_full);
-theta1y->Fill(thmu_rec_y,MesmerEvent->wgt_full);theta1gy->Fill(thmu_gen_y,MesmerEvent->wgt_full);
 }
+
+if(abs(dX1e-X1e)<0.006 and abs(dX2e-X2e)<0.006 and abs(dY1e-Y1e)<0.006 and abs(dY2e-Y2e)<0.006)
+{theta1x->Fill(the_rec_x,MesmerEvent->wgt_full);theta1gx->Fill(the_gen_x,MesmerEvent->wgt_full);
+theta1y->Fill(the_rec_y,MesmerEvent->wgt_full);theta1gy->Fill(the_gen_y,MesmerEvent->wgt_full);}
 
 if(abs(dX1-X1)<0.006 and abs(dX2-X2)<0.006) peakx+=MesmerEvent->wgt_full;
 if(abs(dY1-Y1)<0.006 and abs(dY2-Y2)<0.006)peaky+=MesmerEvent->wgt_full;
 
-if( dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99 and abs(resx)<0.2e-03 and abs(resy)<0.1e-03){
+if(abs(dX1e-X1e)<0.006 and abs(dX2e-X2e)<0.006)peakxe+=MesmerEvent->wgt_full;
+if(abs(dY1e-Y1e)<0.006 and abs(dY2e-Y2e)<0.006)peakye+=MesmerEvent->wgt_full;
 
-h_x1->Fill(stub-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
+if( dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99){
+
+h_x1->Fill(dX1-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
 h_x2->Fill(dX2-X2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
 h_y1->Fill(dY1-Y1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
 h_y2->Fill(dY2-Y2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
+}
+
+if(dX1e!=-99 and dX2e!=-99 and dY1e!=-99 and dY2e!=-99 ){
+
+cout << " dX1e-X1e " << dX1e-X1e << endl;
+
+h_x1e->Fill(dX1e-X1e,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
+h_x2e->Fill(dX2e-X2e,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
+h_y1e->Fill(dY1e-Y1e,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
+h_y2e->Fill(dY2e-Y2e,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
 }
 
 if(abs(dX1e-X1e)>0.006 or abs(dX1-X1)>0.006){
@@ -487,7 +576,7 @@ h_stripXp->Fill(stripX-stripXe,MesmerEvent->wgt_full);
 }
 
 
-if(dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99 and (abs(resx)>0.2e-03 or abs(resy)>0.1e-03)){
+/*if(dX1!=-99 and dX2!=-99 and dY1!=-99 and dY2!=-99 and (abs(resx)>0.1e-03 or abs(resy)>0.1e-03)){
 
 h_x1_g->Fill(dX1-X1,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
 h_x2_g->Fill(dX2-X2,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
@@ -495,6 +584,14 @@ h_y1_g->Fill(dY1-Y1,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerE
 h_y2_g->Fill(dY2-Y2,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
 }
 
+if(dX1e!=-99 and dX2e!=-99 and dY1e!=-99 and dY2e!=-99 and Ee>10 and (abs(resxe)>0.0003 or abs(resye)>0.0003)){
+
+h_x1_ge->Fill(dX1e-X1e,MesmerEvent->wgt_full);// h_x1_g->Fill(digiXmu.at(0),MesmerEvent->wgt_full);
+h_x2_ge->Fill(dX2e-X2e,MesmerEvent->wgt_full); //h_x2_g->Fill(digiXmu.at(1),MesmerEvent->wgt_full);
+h_y1_ge->Fill(dY1e-Y1e,MesmerEvent->wgt_full); //h_y1_g->Fill(digiYmu.at(0),MesmerEvent->wgt_full);
+h_y2_ge->Fill(dY2e-Y2e,MesmerEvent->wgt_full); //h_y2_g->Fill(digiYmu.at(1),MesmerEvent->wgt_full);
+}
+*/
 
 }
 
@@ -508,12 +605,19 @@ TrackIdreco=-99;
 yes2=0;yes_v=0;
 } //end of general for
 
-cout << "Su " << signal << " eventi di segnale, eventi con residui di posizioneX nella coda " << (tailx/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, muoni con  residui di posizioneX nella coda " << (tailx/reco)*100 << "%"<< endl;
 
-cout << "Su " << signal << " eventi di segnale, eventi con residui di posizioneX nel picco " << (peakx/reco)*100 << "%"<< endl;
-cout << "Su " << signal << " eventi di segnale, eventi con residui di posizioneY  nella coda " << (taily/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, muoni con  residui di posizioneX nel picco " << (peakx/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, muoni con  residui di posizioneY  nella coda " << (taily/reco)*100 << "%"<< endl;
 
-cout << "Su " << signal << " eventi di segnale, eventi con residui di posizioneY nel picco " << (peaky/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, muoni con  residui di posizioneY nel picco " << (peaky/reco)*100 << "%"<< endl;
+
+cout << "Su " << signal << " eventi di segnale, elettroni con residui di posizioneX nella coda " << (tailxe/reco)*100 << "%"<< endl;
+
+cout << "Su " << signal << " eventi di segnale, elettroni con residui di posizioneX nel picco " << (peakxe/reco)*100 << "%"<< endl;
+cout << "Su " << signal << " eventi di segnale, elettroni con residui di posizioneY  nella coda " << (tailye/reco)*100 << "%"<< endl;
+
+cout << "Su " << signal << " eventi di segnale, elettroni con residui di posizioneY nel picco " << (peakye/reco)*100 << "%"<< endl;
 
 TCanvas f("f","f",700,700);
 f.Divide(2,2);
@@ -584,7 +688,43 @@ h_y2->SetMinimum(1.0);
 gStyle->SetOptStat(222001111);
 d3a.SaveAs("h_digi.pdf");
 
-/*TCanvas b1("b1","b1",700,700);
+
+
+TCanvas d3ae("d3ae","d3ae",700,700);
+d3ae.Divide(2,2);
+d3ae.cd(1);
+h_x1e->Draw("hist");
+h_x1_ge->SetLineColor(kRed);
+gPad->SetLogy();
+h_x1e->SetMinimum(1.0);
+h_x1_ge->Draw("hist same");
+gStyle->SetOptStat(222001111);
+d3ae.cd(2);
+h_x2e->Draw("hist");
+h_x2_ge->SetLineColor(kRed);
+gPad->SetLogy();
+h_x2e->SetMinimum(1.0);
+h_x2_ge->Draw("hist same");
+gStyle->SetOptStat(222001111);
+d3ae.cd(3);
+h_y1e->Draw("hist");
+h_y1_ge->SetLineColor(kRed);
+gPad->SetLogy();
+h_y1_ge->Draw("hist same");
+h_y1e->SetMinimum(1.0);
+gStyle->SetOptStat(222001111);
+d3ae.cd(4);
+h_y2e->Draw("hist");
+h_y2_ge->SetLineColor(kRed);
+h_y2_ge->Draw("hist same");
+gPad->SetLogy();
+h_y2e->SetMinimum(1.0);
+gStyle->SetOptStat(222001111);
+d3ae.SaveAs("h_digi_ele.pdf");
+
+
+
+TCanvas b1("b1","b1",700,700);
 b1.Divide(2,3);
 
 b1.cd(1);
@@ -610,6 +750,28 @@ h_phie->Draw("hist");
 gStyle->SetOptStat(222001111);
 b1.SaveAs("phi_digit.pdf");
 
+
+TCanvas el("el","el",700,700);
+el.Divide(2,3);
+el.cd(1);
+h_resTRx->Draw("hist");
+h_resTRx10->SetLineColor(kRed);
+h_resTRx10->Draw("hist same");
+el.cd(2);
+h_resTRy->Draw("hist");
+h_resTRy10->SetLineColor(kRed);
+h_resTRy10->Draw("hist same");
+el.cd(3);
+h_resTRxmu->Draw("hist");
+h_resTRxmup->SetLineColor(kRed);
+h_resTRxmup->Draw("hist same");
+el.cd(4);
+h_resTRymu->Draw("hist");
+el.cd(5);
+h_Ee->Draw("hist");
+el.SaveAs("resEL.pdf");
+
+/*
 TCanvas d3aa("d3aa","d3aa",700,700);
 d3aa.Divide(2,3);
 d3aa.cd(1);
