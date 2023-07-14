@@ -18,9 +18,10 @@ void RealDataAnalyzer(){
 
 
 TChain * cbmsim = new TChain("cbmsim");
-cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_firstSample.root");
-cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_secondSample.root");
-cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_thirdSample.root");
+//cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_firstSample.root");
+//cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_secondSample.root");
+//cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_thirdSample.root");
+cbmsim->Add("TRPP_minbias_1M_nobend_firstSample.root");
 
         MUonERecoOutput *ReconstructionOutput = 0;
         TClonesArray *MCTrack = 0;
@@ -39,7 +40,7 @@ TH1D *h_thep_all=new TH1D("t3_all","Generated angle of all the gen electron from
 
 TH1D *h_them_gen=new TH1D("t2_gen","Generated angle of the reco muon from sig wrt incoming muon (rad)",1143,0,0.04);
 TH1D *h_thep_gen=new TH1D("t3_gen","Generated angle of the reco electron from sig wrt incoming muon (rad)",1143,0,0.04);
-TH1D *h_them_rec=new TH1D("t2_rec","Reconstructed ngle of the muon from sig wrt incoming muon (rad)",1143,0,0.04);
+TH1D *h_them_rec=new TH1D("t2_rec","Reconstructed angle of the muon from sig wrt incoming muon (rad)",1143,0,0.04);
 TH1D *h_thep_rec=new TH1D("t3_rec","Reconstructed angle of the electron from sig wrt incoming muon (rad)",1143,0,0.04);
 
 
@@ -53,12 +54,28 @@ TH1D *perc=new TH1D("perc","Quality muon and electron tracks",100,0,100);
 TH1D *vrtx_chi=new TH1D("chipp","Chi2 per DOF of the kinematic vrtx for PP",40,0,200);
 TH1D *vrtx_chi_after02=new TH1D("chiapp","Chi2 per DOF of the kinematic vrtx for sig after th_mu>0.2mrad cut",40,0,200);
 
-TH2D *th_mu_e=new TH2D("th_mu_em","Angle muon and muon/electron from sig",700,0,0.07,50,0,0.005);
-TH2D *th_gst=new TH2D("th_mu_em","Angle two particles where we have 1 ghost 0r 1 particle !=sig",700,0,0.07,50,0,0.005);
+TH2D *th_mu_e=new TH2D("th_mu_em","Reconstructed angle mu and mu/el signal with th_mu<35mrad",350,0,0.035,125,0,0.005);
+TH2D *th_mu_e_chi=new TH2D("th_mu_em_chi","Angle mu and mu/el signal with th_mu<35mrad with Cv<100",350,0,0.035,125,0,0.005);
+TH2D *th_mu_e_aco=new TH2D("th_mu_em_aco","Angle mu and mu/el signal with th_mu<35mrad with abs(aco)<1",350,0,0.035,125,0,0.005);
+TH2D *th_mu_e_both=new TH2D("th_mu_em_both","Angle mu and mu/el signal with th_mu<35mrad, Cv<100 and abs(aco)<1",350,0,0.035,125,0,0.005);
+
+TH2D *th_gst=new TH2D("thgst","Angle two particles where we have 1 ghost 0r 1 particle !=sig",350,0,0.035,125,0,0.005);
+TH2D *th_gst_chi=new TH2D("thgst_chi","Angle mu and mu/el signal with th_mu<35mrad with Cv<100",350,0,0.035,125,0,0.005);
+TH2D *th_gst_aco=new TH2D("thgst_aco","Angle mu and mu/el signal with th_mu<35mrad with abs(aco)<1",350,0,0.035,125,0,0.005);
+TH2D *th_gst_both=new TH2D("th_gst_both","Angle mu and mu/el signal with th_mu<35mrad, Cv<100 and abs(aco)<1",350,0,0.035,125,0,0.005);
 
 
 TH1D * Z_sig=new TH1D("Zsig" , "Z position with adaptive fitter for sig", 400,930,1150);
-TH1D * Z_sig_gen=new TH1D("Zsig_gen" , "Generated Z position sig particles", 400,930,1150);
+TH1D * Z_sig_gen=new TH1D("Zsig_gen" , "Generated Z position sig particles in acceptance (th_mu<35mrad)", 400,930,1150);
+TH1D * Z_sig_gen_chi=new TH1D("Zsig_gen_chi" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with Cv<100", 400,930,1150);
+TH1D * Z_sig_gen_aco=new TH1D("Zsig_gen_aco" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with abs(aco)<1", 400,930,1150);
+TH1D * Z_sig_gen_both=new TH1D("Zsig_gen_both" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with Cv<100 and abs(aco)<1", 400,930,1150);
+
+TH1D * Z_sig_gen02=new TH1D("Zsig_gen02" , "Generated Z position sig particles in acceptance (th_mu<35mrad) and th_mu>0.2mrad", 400,930,1150);
+TH1D * Z_sig_gen_chi02=new TH1D("Zsig_gen_chi02" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with Cv<100 and th_mu>0.2mrad", 400,930,1150);
+TH1D * Z_sig_gen_aco02=new TH1D("Zsig_gen_aco02" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with abs(aco)<1 and th_mu>0.2mrad", 400,930,1150);
+TH1D * Z_sig_gen_both02=new TH1D("Zsig_gen_both02" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with Cv<100 and abs(aco)<1 and th_mu>0.2mrad", 400,930,1150);
+
 TH1D * Z_sig_rec=new TH1D("Zsig_rec" , "Generated Z position sig particles when #reco==3", 400,930,1150);
 
 TH1D* mult=new TH1D("mul","multiplicity of reconstructed tracks in second station when sig hasigens", 20,0,20);
@@ -69,6 +86,9 @@ TH1D *h_part_more=new TH1D("pm","reconstructed particle ID multiplicity>3", 50,0
 
 TH1D* h_aco=new TH1D("aco","Acoplanarity of muone+electron from sig minbias",600,-3.14,3.14);
 TH1D* h_aco_02=new TH1D("aco02","Acoplanarity of muone+electron from sig minbias after th_mu>0.2mrad",600,-3.14,3.14);
+
+TH2D *th_mu_e_gen=new TH2D("th_mu_em_gen","Generated angle mu and mu/el signal with th_mu<35mrad",350,0,0.035,125,0,0.005);
+
 
 double danger=0;
 double danger_02=0;
@@ -112,10 +132,11 @@ cout << "INIZIO" << endl;
 if(yes5==1)h_int->Fill(5);
 if(yes9==1)h_int->Fill(9);
 
-if(yes==1 and Z_ep<1037 and Z_ep>1031)// and thep_gen<=0.035)// and Z_ep<1037 and Z_ep>1031)
+if(yes==1)// and Z_ep<1037 and Z_ep>1031)// and thep_gen<=0.035)// and Z_ep<1037 and Z_ep>1031)
 {
+
 energy_g->Fill(Ep);
-Z_sig_gen->Fill(Z_ep);
+//Z_sig_gen->Fill(Z_ep);
 h_thep_all->Fill(thep_gen);
 
 cout << "___________" << endl;
@@ -193,7 +214,8 @@ if(tracks.at(j).sector()==1 and tracks.size()>4 and st0_m==1)  {h_part_more->Fil
 
 if( thmu_rec_vec.size()!=0){ auto it = min_element(chi_min_mu.begin(),chi_min_mu.end());
                                  thin2_rec = thmu_rec_vec.at(std::distance(chi_min_mu.begin(), it));
-                                 thin2 = thin2_v.at(std::distance(chi_min_mu.begin(), it));}
+                                 thin2 = thin2_v.at(std::distance(chi_min_mu.begin(), it));
+				 th_mu_e_gen->Fill(thep_gen,thin2_rec);}
 
 double diff=thin1_rec-thin2.Theta();
 h_T1->Fill(thin2_rec);
@@ -233,14 +255,21 @@ double chi;
 
 if(yes_p>=1) Z_sig_rec->Fill(Z_ep);
 
-if(yes_p==1 and yes_mu2==1 and tracks.size()==3 and st0_m==1 and chi<100 and thep_rec<0.035 and abs(acoplanarity)<1){ //tracks.size()==4 and st0_m>1 and thep_rec<0.035
+if(yes_p==1 and yes_mu2==1 and tracks.size()==3 and st0_m==1 and chi>0 and thep_rec<0.035 and abs(acoplanarity)>=0){ //tracks.size()==4 and st0_m>1 and thep_rec<0.035
  vrtx_chi->Fill(chi);
  h_aco->Fill(acoplanarity);
-
  danger++;
- if(thin2_rec>0.0002){danger_02++; vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity);}
+                         Z_sig_gen->Fill(Z_ep);
+ if(thin2_rec>0.0002){danger_02++; vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity);
+			 Z_sig_gen02->Fill(Z_ep);
+			 if(chi<100) Z_sig_gen_chi02->Fill(Z_ep);
+			 if(abs(acoplanarity)<1) Z_sig_gen_aco02->Fill(Z_ep);
+			 if(chi<100 and abs(acoplanarity)<1) Z_sig_gen_both02->Fill(Z_ep);}
 
- if(yes_p==1) th_mu_e->Fill(thep_rec,thin2_rec);
+ th_mu_e->Fill(thep_rec,thin2_rec);
+ if(chi<100) {th_mu_e_chi->Fill(thep_rec,thin2_rec);Z_sig_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {th_mu_e_aco->Fill(thep_rec,thin2_rec);Z_sig_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {th_mu_e_both->Fill(thep_rec,thin2_rec);Z_sig_gen_both->Fill(Z_ep);}
 
 // vector<MUonERecoOutputAdaptiveFitterVertex> vrtx = ReconstructionOutput->adaptiveFitterVertices();
 // Z_sig_rec->Fill(Z_ep);
@@ -250,27 +279,60 @@ if(yes_p==1 and yes_mu2==1 and tracks.size()==3 and st0_m==1 and chi<100 and the
 	chi_e->Fill(tracks.at(j).chi2perDegreeOfFreedom()); }
 	}
   }
-else if((yes_p==2 and yes_mu2==0 and tracks.size()==3 and st0_m==1 and chi<100 and thep_rec<0.035 and abs(acoplanarity)<1) or (yes_p==0 and yes_mu2==2 and tracks.size()==3 and st0_m==1 and chi<100) or (yes_m==0 and chi<100 and yes_p==0 and tracks.size()==3 and st0_m==1 and thmu_rec_vec.size()==2 and abs(acoplanarity)<1))
+else if((yes_p==2 and yes_mu2==0 and tracks.size()==3 and st0_m==1 and chi>0 and thep_rec_vec.at(1)<0.035 and thep_rec_vec.at(0)<0.035 and abs(acoplanarity)>=0) or (yes_p==0 and yes_mu2==2 and tracks.size()==3 and st0_m==1 and chi>0) or (yes_m==0 and chi>0 and yes_p==0 and tracks.size()==3 and st0_m==1 and thmu_rec_vec.size()==2 and abs(acoplanarity)>=0 and thmu_rec_vec.at(0)<0.35 and thmu_rec_vec.at(1)<0.35))
 	{
 	 danger_ghost++;
          if(yes_p==2){ if(thep_rec_vec.at(1)>thep_rec_vec.at(0))
 			{th_gst->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0));  vrtx_chi->Fill(chi); h_aco->Fill(acoplanarity);
-				if(thep_rec_vec.at(0)>0.0002){danger_ghost02++;vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity);}
+ if(chi<100) {th_gst_chi->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0));Z_sig_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {th_gst_aco->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0));Z_sig_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {th_gst_both->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0));Z_sig_gen_both->Fill(Z_ep);}
+
+			if(thep_rec_vec.at(0)>0.0002){danger_ghost02++;vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity);
+                         Z_sig_gen02->Fill(Z_ep);
+                         if(chi<100) Z_sig_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_sig_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_sig_gen_both02->Fill(Z_ep);
+				}
 			 }
 			else{th_gst->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1));  vrtx_chi->Fill(chi);  h_aco->Fill(acoplanarity);
-				if(thep_rec_vec.at(1)>0.0002){danger_ghost02++;vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity);}
+ if(chi<100) {th_gst_chi->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1));Z_sig_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {th_gst_aco->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1));Z_sig_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {th_gst_both->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1));Z_sig_gen_both->Fill(Z_ep);}
+				if(thep_rec_vec.at(1)>0.0002){danger_ghost02++;vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity);
+                         Z_sig_gen02->Fill(Z_ep);
+                         if(chi<100) Z_sig_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_sig_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_sig_gen_both02->Fill(Z_ep);
+				}
 			 }
 			}
          if(yes_p==0 and thmu_rec_vec.size()==2){if(thmu_rec_vec.at(1)>thmu_rec_vec.at(0))
 			{th_gst->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0)); vrtx_chi->Fill(chi);  h_aco->Fill(acoplanarity);
-				if(thmu_rec_vec.at(0)>0.0002){danger_ghost02++;vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity);}
+ if(chi<100) {th_gst_chi->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0));Z_sig_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {th_gst_aco->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0));Z_sig_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {th_gst_both->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0));Z_sig_gen_both->Fill(Z_ep);}
+				if(thmu_rec_vec.at(0)>0.0002){danger_ghost02++;vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity);
+                         Z_sig_gen02->Fill(Z_ep);
+                         if(chi<100) Z_sig_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_sig_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_sig_gen_both02->Fill(Z_ep);
+				}
 			 }
 			else{th_gst->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1)); vrtx_chi->Fill(chi); h_aco->Fill(acoplanarity);
-				if(thmu_rec_vec.at(1)>0.0002){danger_ghost02++;vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity);}
+ if(chi<100) {th_gst_chi->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1));Z_sig_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {th_gst_aco->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1));Z_sig_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {th_gst_both->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1));Z_sig_gen_both->Fill(Z_ep);}
+				if(thmu_rec_vec.at(1)>0.0002){danger_ghost02++;vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity);
+                         Z_sig_gen02->Fill(Z_ep);
+                         if(chi<100) Z_sig_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_sig_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_sig_gen_both02->Fill(Z_ep);
+				}
 			 }
 			}
 	 	}
-else if(yes_p==0 and thmu_rec_vec.size()==1 and tracks.size()==3 and st0_m==1 and chi<100) {other++;
+else if(yes_p==0 and thmu_rec_vec.size()==1 and tracks.size()==3 and st0_m==1 and chi>0) {other++;
 		if(th_9>thmu_rec_vec.at(0)){th_gst->Fill(th_9,thmu_rec_vec.at(0)); if(thmu_rec_vec.at(0)>0.0002)other02++;}
 		else{th_gst->Fill(thmu_rec_vec.at(0),th_9);if(th_9>0.0002)other02++;}
 		}
@@ -287,6 +349,112 @@ cout << "Di cui " << danger_ghost02 << " hanno un angolo >0.2mrad con una percen
 cout << "Su " << cbmsim->GetEntries() << " di muoni, hanno 1 mu+1 altro " << other << " con una percentuale di " << 100*(other/cbmsim->GetEntries()) << "%" << endl;
 cout << "Di cui " << other02 << " hanno un angolo >0.2mrad con una percentuale di " << 100*(other02/cbmsim->GetEntries()) << "%" << endl;
 cout << "Su " << cbmsim->GetEntries() << " di muoni, hanno 2 altri (no mu/e) " << other0 << " con una percentuale di " << 100*(other0/cbmsim->GetEntries()) << "%" << endl;
+
+/*
+TCanvas b5("b5","b5",700,700);
+b5.Divide(2,2);
+b5.cd(1);
+Z_sig_gen->Draw("hist");
+gPad->SetLogy();
+b5.cd(2);
+Z_sig_gen_chi->Draw("hist");
+gPad->SetLogy();
+b5.cd(3);
+Z_sig_gen_aco->Draw("hist");
+gPad->SetLogy();
+b5.cd(4);
+Z_sig_gen_both->Draw("hist");
+gPad->SetLogy();
+//Z_sig_gen->SaveAs("Z_sig_cut.root");
+b5.SaveAs("Z_sig_cut.pdf");
+
+TCanvas b52("b52","b52",700,700);
+b52.Divide(2,2);
+b52.cd(1);
+Z_sig_gen02->Draw("hist");
+gPad->SetLogy();
+b52.cd(2);
+Z_sig_gen_chi02->Draw("hist");
+gPad->SetLogy();
+b52.cd(3);
+Z_sig_gen_aco02->Draw("hist");
+gPad->SetLogy();
+b52.cd(4);
+Z_sig_gen_both02->Draw("hist");
+gPad->SetLogy();
+//Z_sig_gen02->SaveAs("Z_sig_cut_02.root");
+
+Z_sig_gen->SaveAs("Z_sig_gen.root");
+Z_sig_gen_both02->SaveAs("Z_sig_gen_both02.root");
+b52.SaveAs("Z_sig_cut_02.pdf");
+*/
+
+TF1 *Elastic = new TF1("Elastic","0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(x)*cos(x))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(x)*cos(x)))",0,0.035); 
+TF1 *Elastic2 = new TF1("Elastic2","asin( (sin(x)*sqrt(Elastic(x)*Elastic(x)-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic(x))*(160+0.5109989461*0.001-Elastic(x))-105.6583745 *0.001*105.6583745 *0.001 ) )",0,0.035); 
+TLine *t = new TLine(0.,0.0002,0.035,0.0002);
+t->SetLineWidth(1);
+t->SetLineColor(kRed);
+Elastic2->SetLineColor(6);
+Elastic2->SetLineWidth(1);
+
+TCanvas c51("c51","c51",700,700);
+th_mu_e_gen->SetMarkerColor(kBlue);
+th_mu_e_gen->SetMarkerStyle(43);
+th_mu_e_gen->SetMarkerSize(1);
+th_mu_e_gen->Draw();
+Elastic2->Draw("same");
+t->Draw("same");
+c51.SaveAs("gen2Dsig.pdf");
+
+
+TCanvas b51("b51","b51",700,700);
+b51.Divide(2,2);
+b51.cd(1);
+th_mu_e->SetMarkerColor(kBlue);
+th_mu_e->SetMarkerStyle(43);
+th_mu_e->SetMarkerSize(1);
+//Elastic2->Draw();
+th_mu_e->Draw();
+th_gst->SetMarkerColor(kBlue);
+th_gst->SetMarkerStyle(43);
+th_gst->SetMarkerSize(1);
+th_gst->Draw("same");
+Elastic2->Draw("same");
+t->Draw("same");
+b51.cd(2);
+th_mu_e_chi->SetMarkerColor(kBlue);
+th_mu_e_chi->SetMarkerStyle(43);
+th_mu_e_chi->SetMarkerSize(1);
+th_mu_e_chi->Draw();
+th_gst_chi->SetMarkerColor(kBlue);
+th_gst_chi->SetMarkerStyle(43);
+th_gst_chi->SetMarkerSize(1);
+th_gst_chi->Draw("same");
+Elastic2->Draw("same");
+t->Draw("same");
+b51.cd(3);
+th_mu_e_aco->SetMarkerColor(kBlue);
+th_mu_e_aco->SetMarkerStyle(43);
+th_mu_e_aco->SetMarkerSize(1);
+th_mu_e_aco->Draw();
+th_gst_aco->SetMarkerColor(kBlue);
+th_gst_aco->SetMarkerStyle(43);
+th_gst_aco->SetMarkerSize(1);
+th_gst_aco->Draw("same");
+Elastic2->Draw("same");
+t->Draw("same");
+b51.cd(4);
+th_mu_e_both->SetMarkerColor(kBlue);
+th_mu_e_both->SetMarkerStyle(43);
+th_mu_e_both->SetMarkerSize(1);
+th_mu_e_both->Draw();
+th_gst_both->SetMarkerStyle(43);
+th_gst_both->SetMarkerSize(1);
+th_gst_both->SetMarkerColor(kBlue);
+th_gst_both->Draw("same");
+Elastic2->Draw("same");
+t->Draw("same");
+b51.SaveAs("2Dplots.pdf");
 
 /*
 TCanvas b7("b7","b7",700,700);
@@ -375,7 +543,7 @@ TCanvas b2("b2","b2",700,700);
 b2.Divide(2,2);
 b2.cd(1);
 h_thep_all->Draw("hist");
-h_thep_gen->SetLineColor(kOrange);
+h_thep_gen->SetLineColor(kRed);
 h_thep_gen->Draw("hist same");
 h_thep_rec->SetLineColor(kRed);
 h_thep_rec->Draw("hist same");

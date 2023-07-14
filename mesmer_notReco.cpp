@@ -26,6 +26,7 @@ int fn=2;
 //TChain * cbmsim = new TChain("cbmsim");
 //cbmsim->Add("TRPP_1k.root");
 //cbmsim->Add("TRMesmer_1k_unw.root");
+
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
@@ -112,11 +113,14 @@ int code_mu=-99; int code_e=-99;
 int TrackIdreco=-99;
 std::array<double,14> eff;
 
+double all=0;
 
 for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 		cbmsim->GetEntry(i);
 		if(i%1000 == 0) cout<<"Entry "<<i<<endl;
 	TVector3 pmuin,pe,pmu;
+
+all+=MesmerEvent->wgt_full;
 
 	for(int n = 0; n < MCTrack->GetEntries(); n++) {
 	 const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
@@ -170,14 +174,14 @@ double Ee=0;
 		double mx=SigTracks->ax();
 		double my=SigTracks->ay();
 		the=sqrt(mx*mx+my*my);
-		pe_dir=pe.Unit();    the_sdr=acos(pmuin_dir.Dot(pe_dir));
+		pe_dir=pe.Unit();    the_sdr=pmuin_dir.Angle(pe_dir);
 		yes_e_g=1;}//if(the_sdr<0.035)yes_e=1;}
  	   if(SigTracks->pdgCode()==-13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){//and abs(SigTracks->startX())<4 and abs(SigTracks->startY())<4 and abs(last_modX)<4 and abs(last_modY)<4){ 
 		pmu.SetXYZ(SigTracks->px(),SigTracks->py(),SigTracks->pz());
 		thmu_gen=pmu.Theta();double mx=SigTracks->ax();
 		double my=SigTracks->ay();
 		thmu=sqrt(mx*mx+my*my);
-                pmu_dir=pmu.Unit();  thmu_sdr=acos(pmuin_dir.Dot(pmu_dir));
+                pmu_dir=pmu.Unit();  thmu_sdr=pmuin_dir.Angle(pmu_dir);
 		yes_mu_g=1;}//if(thmu_sdr>0.0001)yes_mu=1;}
 	 }
 	}
@@ -188,7 +192,7 @@ double Ee=0;
 cout << "RECONSTRUCTIBLE" << endl;
 
 std::array<std::vector<double>,6> position;//={{{0.,0.},{0.,0.},{0.,0.},{0.,0.},{0.,0.},{0.,0.}}};
-double opening = acos(pe_dir.Dot(pmu_dir));
+double opening = pe_dir.Angle(pmu_dir);
 	   signal+=MesmerEvent->wgt_full;
 vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks();
 vector<MUonERecoOutputVertex> vrtx = ReconstructionOutput->reconstructedVertices();
@@ -245,7 +249,7 @@ if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(
 TVector3 pe_rec;
  pe_rec.SetXYZ(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.);
  pe_rec= pe_rec.Unit();
- the_rec_vec.push_back(acos(in.Dot(pe_rec)));
+ the_rec_vec.push_back(in.Angle(pe_rec));
  chi_min_e.push_back(tracks.at(j).chi2perDegreeOfFreedom());
  p_eout.push_back(pe_rec);
                                         }
@@ -255,7 +259,7 @@ TVector3 pe_rec;
 TVector3 pmu_rec;
  pmu_rec.SetXYZ(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.);
  pmu_rec= pmu_rec.Unit();
- thmu_rec_vec.push_back(acos(in.Dot(pmu_rec)));
+ thmu_rec_vec.push_back(in.Angle(pmu_rec));
  chi_min_mu.push_back(tracks.at(j).chi2perDegreeOfFreedom());
  p_muout.push_back(pmu_rec);
                                         }
@@ -287,12 +291,17 @@ if(yes_e>=1 and yes_mu>=1){//and thmu_rec>0.0002 and chi>0){
 
 double res_mu = thmu_rec-thmu_sdr;
 double res_e = the_rec-the_sdr;
-reco+=MesmerEvent->wgt_full;
+//reco+=MesmerEvent->wgt_full;
 if(thmu_rec<0.0002 or chi>100) rid2D->Fill(the_rec,thmu_rec,MesmerEvent->wgt_full);
 if(thmu_rec>0.0002 and chi<100) post2D->Fill(the_rec,thmu_rec,MesmerEvent->wgt_full);
 pre2D->Fill(the_rec,thmu_rec,MesmerEvent->wgt_full);
 
 if(the_rec<0.035){
+
+reco+=MesmerEvent->wgt_full;
+//if(thmu_rec>0.0002 and chi>0 and abs(acoplanarity)>=0){reco+=MesmerEvent->wgt_full;}
+
+
 vrtx_chi->Fill(chi,MesmerEvent->wgt_full);
 h_aco->Fill(acoplanarity);
 if(thmu_rec>0.0002){vrtx_chi_after->Fill(chi,MesmerEvent->wgt_full);h_aco_02->Fill(acoplanarity);}

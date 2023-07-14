@@ -18,10 +18,11 @@ void RealDataAnalyzer(){
 
 
 TChain * cbmsim = new TChain("cbmsim");
-cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_firstSample.root");
-cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_secondSample.root");
-cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_thirdSample.root");
+//cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_firstSample.root");
+//cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_secondSample.root");
+//cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_thirdSample.root");
 
+cbmsim->Add("TRPP_minbias_1M_nobend_firstSample.root");
 
         MUonERecoOutput *ReconstructionOutput = 0;
         TClonesArray *MCTrack = 0;
@@ -54,12 +55,30 @@ TH1D *perc=new TH1D("perc","Quality electron and positron tracks",100,0,100);
 TH1D *vrtx_chi=new TH1D("chipp","Chi2 per DOF of the kinematic vrtx for PP",40,0,200);
 TH1D *vrtx_chi_after02=new TH1D("chiapp","Chi2 per DOF of the kinematic vrtx for sig after th_mu>0.2mrad cut",40,0,200);
 
-TH2D *th_mu_e=new TH2D("th_mu_em","All events: angle muon and electron/positron from PP",700,0,0.07,50,0,0.005);
-TH2D *th_gst=new TH2D("th_gst","Remaining events: angle muon and electron/positron from PP",700,0,0.07,50,0,0.005);
+TH2D *th_mu_e=new TH2D("th_mu_em","Reconstructed ngle mu and mu/el from sig in acceptance (th_mu<35mrad)",350,0,0.035,125,0,0.005);
+TH2D *th_mu_e_chi=new TH2D("th_mu_em_chi","Angle mu and mu/el from sig in acceptance (th_mu<35mrad) with Cv<100",350,0,0.035,125,0,0.005);
+TH2D *th_mu_e_aco=new TH2D("th_mu_em_aco","Angle mu and mu/el from sig in acceptance (th_mu<35mrad) with abs(aco)<1",350,0,0.035,125,0,0.005);
+TH2D *th_mu_e_both=new TH2D("th_mu_em_both","Angle mu and mu/el from sig in acceptance (th_mu<35mrad) with Cv<100 and abs(aco)<1",350,0,0.035,125,0,0.005);
+
+TH2D *th_gst=new TH2D("thgst","Angle two particles where we have 1 ghost 0r 1 particle !=sig",350,0,0.035,125,0,0.005);
+TH2D *th_gst_chi=new TH2D("thgst_chi","Angle mu and mu/el from sig in acceptance (th_mu<35mrad) with Cv<100",350,0,0.035,125,0,0.005);
+TH2D *th_gst_aco=new TH2D("thgst_aco","Angle mu and mu/el from sig in acceptance (th_mu<35mrad) with abs(aco)<1",350,0,0.035,125,0,0.005);
+TH2D *th_gst_both=new TH2D("th_gst_both","Angle mu and mu/el from sig in acceptance (th_mu<35mrad) with Cv<100 and abs(aco)<1",350,0,0.035,125,0,0.005);
+
+
+TH1D * Z_PP=new TH1D("Zsig" , "Z position with adaptive fitter for sig", 400,930,1150);
+TH1D * Z_PP_gen=new TH1D("Zsig_gen" , "Generated Z position sig particles in acceptance (th_mu<35mrad)", 400,930,1150);
+TH1D * Z_PP_gen_chi=new TH1D("Zsig_gen_chi" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with Cv<100", 400,930,1150);
+TH1D * Z_PP_gen_aco=new TH1D("Zsig_gen_aco" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with abs(aco)<1", 400,930,1150);
+TH1D * Z_PP_gen_both=new TH1D("Zsig_gen_both" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with Cv<100 and abs(aco)<1", 400,930,1150);
+
+TH1D * Z_PP_gen02=new TH1D("Zsig_gen02" , "Generated Z position sig particles in acceptance (th_mu<35mrad) and th_mu>0.2mrad", 400,930,1150);
+TH1D * Z_PP_gen_chi02=new TH1D("Zsig_gen_chi02" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with Cv<100 and th_mu>0.2mrad", 400,930,1150);
+TH1D * Z_PP_gen_aco02=new TH1D("Zsig_gen_aco02" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with abs(aco)<1 and th_mu>0.2mrad", 400,930,1150);
+TH1D * Z_PP_gen_both02=new TH1D("Zsig_gen_both02" , "Generated Z position sig particles in acceptance (th_mu<35mrad) with Cv<100 and abs(aco)<1 and th_mu>0.2mrad", 400,930,1150);
 
 
 TH1D * Z_pp=new TH1D("Zpp" , "Z position with adaptive fitter for PP", 400,930,1150);
-TH1D * Z_pp_gen=new TH1D("Zpp_gen" , "Generated Z position PP particles", 400,930,1150);
 TH1D * Z_pp_rec=new TH1D("Zpp_rec" , "Generated Z position PP particles when #reco==3", 400,930,1150);
 
 TH1D* mult=new TH1D("mul","multiplicity of reconstructed tracks in second station when PP happens", 20,0,20);
@@ -103,18 +122,16 @@ double code_em, code_ep;
 
 	for(int n = 0; n < MCTrack->GetEntries(); n++) {
 	 const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
-
          if(MCTr->interactionID()==0 and MCTr->pdgCode()==-13) {pmu_in.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); pmu_in=pmu_in.Unit();}
 	 if(MCTr->interactionID()!=0) h_int->Fill(MCTr->interactionID());
 	 if(MCTr->interactionID()==5){
 cout << "INIZIO" << endl;
-
 	  if(MCTr->pdgCode()==-11) {yes++; Em=MCTr->energy();
 				   pem.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); code_em=n; pem=pem.Unit();
 				   them_gen=pmu_in.Angle(pem);}// h_them_gen->Fill(them_gen); cout << "them_gen " << them_gen << endl;}
           if(MCTr->pdgCode()==11) {yes++; Ep=MCTr->energy();
 				   pep.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); code_ep=n; pep=pep.Unit();
-				   thep_gen=pmu_in.Angle(pep);Z_ep=MCTr->startZ();}// cout << "thep_gen " <<thep_gen << endl;}
+				   thep_gen=pmu_in.Angle(pep);Z_ep=MCTr->startZ(); cout << "Z_ep " << Z_ep << endl;}// cout << "thep_gen " <<thep_gen << endl;}
 
 	 }
          //if(MCTr->interactionID()==9){cout << "pdgCode "<< MCTr->pdgCode() << " and mum " << MCTr->motherID() << endl;}
@@ -127,7 +144,7 @@ if(yes==2)// and Z_ep<1037 and Z_ep>1031)
 {
 energy_g->Fill(Em);
 energy_g->Fill(Ep);
-Z_pp_gen->Fill(Z_ep);
+//Z_pp_gen->Fill(Z_ep);
 h_them_all->Fill(them_gen);
 h_thep_all->Fill(thep_gen);
 cout << "___________" << endl;
@@ -264,19 +281,35 @@ double chi;
 
 if(yes_p>=1 or yes_m>=1) Z_pp_rec->Fill(Z_ep);
 
-if((yes_p==1 and yes_m==0 and tracks.size()==3 and st0_m==1 and chi<100 and thep_rec<0.035 and abs(acoplanarity)>0) or (yes_p==0 and yes_m==1 and tracks.size()==3 and st0_m==1 and chi<100 and them_rec<0.035 and abs(acoplanarity)>0)){ //tracks.size()==4 and st0_m>1
+if((yes_p==1 and yes_m==0 and tracks.size()==3 and st0_m==1 and chi>0 and thep_rec<0.035 and abs(acoplanarity)>=0) or (yes_p==0 and yes_m==1 and tracks.size()==3 and st0_m==1 and chi>0 and them_rec<0.035 and abs(acoplanarity)>=0)){ //tracks.size()==4 and st0_m>1
 
 vrtx_chi->Fill(chi);//chi_v.push_back(chi);
 h_aco->Fill(acoplanarity);
+Z_PP_gen->Fill(Z_ep);
 
  if(yes_p==1) th_mu_e->Fill(thep_rec,thin2_rec);
  if(yes_m==1) th_mu_e->Fill(them_rec,thin2_rec);
 
+ if(chi<100) {
+		if(yes_p==1) th_mu_e_chi->Fill(thep_rec,thin2_rec);
+		if(yes_m==1) th_mu_e_chi->Fill(them_rec,thin2_rec);
+		Z_PP_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {
+                if(yes_p==1) th_mu_e_aco->Fill(thep_rec,thin2_rec);
+                if(yes_m==1) th_mu_e_aco->Fill(them_rec,thin2_rec);
+		Z_PP_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {
+                if(yes_p==1) th_mu_e_both->Fill(thep_rec,thin2_rec);
+                if(yes_m==1) th_mu_e_both->Fill(them_rec,thin2_rec);
+		Z_PP_gen_both->Fill(Z_ep);}
  danger++;
 
  if(thin2_rec>0.0002){danger_02++; vrtx_chi_after02->Fill(chi); h_aco_02->Fill(acoplanarity); //chi02_v.push_back(chi);
- if(yes_p==1) th_gst->Fill(thep_rec,thin2_rec);
- if(yes_m==1) th_gst->Fill(them_rec,thin2_rec);}
+                         Z_PP_gen02->Fill(Z_ep);
+                         if(chi<100) Z_PP_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_PP_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_PP_gen_both02->Fill(Z_ep);
+}
 
 // vector<MUonERecoOutputAdaptiveFitterVertex> vrtx = ReconstructionOutput->adaptiveFitterVertices();
 // Z_pp_rec->Fill(Z_ep);
@@ -287,36 +320,139 @@ h_aco->Fill(acoplanarity);
     if(tracks.at(j).processIDofLinkedTrack()==5 and tracks.at(j).linkedTrackID()==code_em and tracks.at(j).sector()==1){chi_m->Fill(tracks.at(j).chi2perDegreeOfFreedom());}
 	}
   }
-else if((yes_p==1 and yes_m==1 and tracks.size()==3 and st0_m==1 and chi<100 and them_rec<0.035 and thep_rec<0.035 and abs(acoplanarity)>0)){danger_ee++; vrtx_chi->Fill(chi);}
-else if((yes_p==2 and yes_m==0 and tracks.size()==3 and st0_m==1 and chi<100 and thep_rec<0.035 and abs(acoplanarity)>0) or (yes_p==0 and yes_m==2 and tracks.size()==3 and st0_m==1 and chi<100 and them_rec<0.035) or (yes_m==0 and chi<100 and yes_p==0 and tracks.size()==3 and st0_m==1 and thmu_rec_vec.size()==2  and abs(acoplanarity)>0 and them_rec<0.035 ))
+else if((yes_p==1 and yes_m==1 and tracks.size()==3 and st0_m==1 and chi>0 and them_rec<0.035 and thep_rec<0.035 and abs(acoplanarity)>=0)){danger_ee++; vrtx_chi->Fill(chi);}
+else if((yes_p==2 and yes_m==0 and tracks.size()==3 and st0_m==1 and chi>0 and thep_rec<0.035 and abs(acoplanarity)>=0) or (yes_p==0 and yes_m==2 and tracks.size()==3 and st0_m==1 and chi>0 and them_rec<0.035) or (yes_m==0 and chi>0 and yes_p==0 and tracks.size()==3 and st0_m==1 and thmu_rec_vec.size()==2  and abs(acoplanarity)>=0 and them_rec<0.035 ))
 	{
 	 danger_ghost++;
 	 if(yes_m==2){ if(them_rec_vec.at(1)>them_rec_vec.at(0))
-			{th_mu_e->Fill(them_rec_vec.at(1),them_rec_vec.at(0)); vrtx_chi->Fill(chi);h_aco->Fill(acoplanarity);//chi_v.push_back(chi);
-			 if(them_rec_vec.at(0)>0.0002){danger_ghost02++; th_gst->Fill(them_rec_vec.at(1),them_rec_vec.at(0)); vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);} //chi02_v.push_back(chi);}
+			{th_mu_e->Fill(them_rec_vec.at(1),them_rec_vec.at(0)); 
+ if(chi<100) {
+              	th_mu_e_chi->Fill(them_rec_vec.at(1),them_rec_vec.at(0));
+                Z_PP_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {
+                th_mu_e_aco->Fill(them_rec_vec.at(1),them_rec_vec.at(0));
+                Z_PP_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {
+		th_mu_e_both->Fill(them_rec_vec.at(1),them_rec_vec.at(0));
+                Z_PP_gen_both->Fill(Z_ep);}
+
+			vrtx_chi->Fill(chi);h_aco->Fill(acoplanarity);//chi_v.push_back(chi);
+			 if(them_rec_vec.at(0)>0.0002){danger_ghost02++; th_gst->Fill(them_rec_vec.at(1),them_rec_vec.at(0)); 
+							vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);
+                         Z_PP_gen02->Fill(Z_ep);
+                         if(chi<100) Z_PP_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_PP_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_PP_gen_both02->Fill(Z_ep);
+				} //chi02_v.push_back(chi);}
 			}
-			else{th_mu_e->Fill(them_rec_vec.at(0),them_rec_vec.at(1)); vrtx_chi->Fill(chi);h_aco->Fill(acoplanarity);//chi_v.push_back(chi);
-				if(them_rec_vec.at(1)>0.0002){danger_ghost02++; th_gst->Fill(them_rec_vec.at(0),them_rec_vec.at(1)); vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);} //chi02_v.push_back(chi);}
+			else{th_mu_e->Fill(them_rec_vec.at(0),them_rec_vec.at(1)); 
+ if(chi<100) {
+              	th_mu_e_chi->Fill(them_rec_vec.at(0),them_rec_vec.at(1));
+                Z_PP_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {
+                th_mu_e_aco->Fill(them_rec_vec.at(0),them_rec_vec.at(1));
+                Z_PP_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {
+                th_mu_e_both->Fill(them_rec_vec.at(0),them_rec_vec.at(1));
+                Z_PP_gen_both->Fill(Z_ep);}
+
+vrtx_chi->Fill(chi);h_aco->Fill(acoplanarity);//chi_v.push_back(chi);
+				if(them_rec_vec.at(1)>0.0002){danger_ghost02++; th_gst->Fill(them_rec_vec.at(0),them_rec_vec.at(1)); 
+								vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);
+                         Z_PP_gen02->Fill(Z_ep);
+                         if(chi<100) Z_PP_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_PP_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_PP_gen_both02->Fill(Z_ep);
+				} //chi02_v.push_back(chi);}
 			    }
 		     }
          if(yes_p==2){ if(thep_rec_vec.at(1)>thep_rec_vec.at(0))
-			{th_mu_e->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0)); vrtx_chi->Fill(chi);h_aco->Fill(acoplanarity);//chi_v.push_back(chi);
-			 if(thep_rec_vec.at(0)>0.0002){danger_ghost02++; th_gst->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0)); vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);} //chi02_v.push_back(chi);}
+			{th_mu_e->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0)); 
+ if(chi<100) {
+              	th_mu_e_chi->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0));
+                Z_PP_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {
+                th_mu_e_aco->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0));
+                Z_PP_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {
+                th_mu_e_both->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0));
+                Z_PP_gen_both->Fill(Z_ep);}
+
+vrtx_chi->Fill(chi);h_aco->Fill(acoplanarity);//chi_v.push_back(chi);
+			 if(thep_rec_vec.at(0)>0.0002){danger_ghost02++; th_gst->Fill(thep_rec_vec.at(1),thep_rec_vec.at(0)); 
+							vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);
+                         Z_PP_gen02->Fill(Z_ep);
+                         if(chi<100) Z_PP_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_PP_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_PP_gen_both02->Fill(Z_ep);
+				} //chi02_v.push_back(chi);}
 			}
-			else{th_mu_e->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1)); vrtx_chi->Fill(chi);//chi_v.push_back(chi);
-			 	if(thep_rec_vec.at(1)>0.0002){danger_ghost02++; th_gst->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1)); vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);} //chi02_v.push_back(chi);}
+			else{th_mu_e->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1));
+ if(chi<100) {
+                th_mu_e_chi->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1));
+                Z_PP_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {
+                th_mu_e_aco->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1));
+                Z_PP_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {
+                th_mu_e_both->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1));
+                Z_PP_gen_both->Fill(Z_ep);}
+
+ vrtx_chi->Fill(chi);//chi_v.push_back(chi);
+			 	if(thep_rec_vec.at(1)>0.0002){danger_ghost02++; th_gst->Fill(thep_rec_vec.at(0),thep_rec_vec.at(1));
+								 vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);
+                         Z_PP_gen02->Fill(Z_ep);
+                         if(chi<100) Z_PP_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_PP_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_PP_gen_both02->Fill(Z_ep);
+				} //chi02_v.push_back(chi);}
 			}
 		     }
          if(yes_p==0 and yes_m==0 and thmu_rec_vec.size()==2){if(thmu_rec_vec.at(1)>thmu_rec_vec.at(0))
-			{th_mu_e->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0)); vrtx_chi->Fill(chi);h_aco->Fill(acoplanarity);//chi_v.push_back(chi);
-			 if(thmu_rec_vec.at(0)>0.0002){danger_ghost02++; th_gst->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0)); vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);} //chi02_v.push_back(chi);}
+			{th_mu_e->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0));
+ if(chi<100) {
+                th_mu_e_chi->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0));
+                Z_PP_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {
+                th_mu_e_aco->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0));
+                Z_PP_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {
+                th_mu_e_both->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0));
+                Z_PP_gen_both->Fill(Z_ep);}
+
+
+ vrtx_chi->Fill(chi);h_aco->Fill(acoplanarity);//chi_v.push_back(chi);
+			 if(thmu_rec_vec.at(0)>0.0002){danger_ghost02++; th_gst->Fill(thmu_rec_vec.at(1),thmu_rec_vec.at(0));
+							vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);
+                         Z_PP_gen02->Fill(Z_ep);
+                         if(chi<100) Z_PP_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_PP_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_PP_gen_both02->Fill(Z_ep);
+				} //chi02_v.push_back(chi);}
 			}
-			else{th_mu_e->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1)); vrtx_chi->Fill(chi);h_aco->Fill(acoplanarity);//chi_v.push_back(chi);
-				if(thmu_rec_vec.at(1)>0.0002){danger_ghost02++;th_gst->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1)); vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);} //chi02_v.push_back(chi);}
+			else{th_mu_e->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1));
+if(chi<100) {
+                th_mu_e_chi->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1));
+                Z_PP_gen_chi->Fill(Z_ep);}
+ if(abs(acoplanarity)<1) {
+                th_mu_e_aco->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1));
+                Z_PP_gen_aco->Fill(Z_ep);}
+ if(chi<100 and abs(acoplanarity)<1) {
+                th_mu_e_both->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1));
+                Z_PP_gen_both->Fill(Z_ep);}
+
+ vrtx_chi->Fill(chi);h_aco->Fill(acoplanarity);//chi_v.push_back(chi);
+				if(thmu_rec_vec.at(1)>0.0002){danger_ghost02++;th_gst->Fill(thmu_rec_vec.at(0),thmu_rec_vec.at(1));
+								 vrtx_chi_after02->Fill(chi);h_aco_02->Fill(acoplanarity);
+                         Z_PP_gen02->Fill(Z_ep);
+                         if(chi<100) Z_PP_gen_chi02->Fill(Z_ep);
+                         if(abs(acoplanarity)<1) Z_PP_gen_aco02->Fill(Z_ep);
+                         if(chi<100 and abs(acoplanarity)<1) Z_PP_gen_both02->Fill(Z_ep);
+				} //chi02_v.push_back(chi);}
 			     }
 			}
  	}
-else if(yes_p==0 and yes_m==0 and thmu_rec_vec.size()==1 and tracks.size()==3 and st0_m==1 and chi<100 and th_9<0.035) {other++;
+else if(yes_p==0 and yes_m==0 and thmu_rec_vec.size()==1 and tracks.size()==3 and st0_m==1 and chi>0 and th_9<0.035) {other++;
 		if(th_9>thmu_rec_vec.at(0)){if(thmu_rec_vec.at(0)>0.0002)other02++;}
 		else{if(th_9>0.0002){other02++;}}
 	}
@@ -343,6 +479,101 @@ cout << "Su " << cbmsim->GetEntries() << " di muoni, hanno 2 tracce elettroniche
 cout << "Su " << cbmsim->GetEntries() << " di muoni, hanno 1 mu+1 altro " << other << " con una percentuale di " << 100*(other/cbmsim->GetEntries()) << "%" << endl;
 cout << "Di cui " << other02 << " hanno un angolo >0.2mrad con una percentuale di " << 100*(other02/cbmsim->GetEntries()) << "%" << endl;
 cout << "Su " << cbmsim->GetEntries() << " di muoni, hanno 2 altri (no mu/e) " << other0 << " con una percentuale di " << 100*(other0/cbmsim->GetEntries()) << "%" << endl;
+
+
+TF1 *Elastic = new TF1("Elastic","0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(x)*cos(x))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(x)*cos(x)))",0,0.030); 
+TF1 *Elastic2 = new TF1("Elastic2","asin( (sin(x)*sqrt(Elastic(x)*Elastic(x)-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic(x))*(160+0.5109989461*0.001-Elastic(x))-105.6583745 *0.001*105.6583745 *0.001 ) )",0,0.030);   
+TLine *t = new TLine(0.,0.0002,0.035,0.0002);
+t->SetLineWidth(2);
+t->SetLineColor(kRed);
+
+TCanvas b51("b51","b51",700,700);
+b51.Divide(2,2);
+b51.cd(1);
+
+th_mu_e->SetMarkerColor(kGreen);
+Elastic->SetLineColor(6);
+th_mu_e->SetMarkerStyle(43);
+th_mu_e->SetMarkerSize(1);
+th_mu_e->Draw();
+th_gst->SetMarkerColor(kGreen);
+th_gst->SetMarkerStyle(43);
+th_gst->SetMarkerSize(1);
+th_gst->Draw("same");
+Elastic2->Draw("same");
+t->Draw("same");
+b51.cd(2);
+Elastic->SetLineColor(6);
+th_mu_e_chi->SetMarkerColor(kGreen);
+th_mu_e_chi->SetMarkerStyle(43);
+th_mu_e_chi->SetMarkerSize(1);
+th_mu_e_chi->Draw();
+th_gst_chi->SetMarkerColor(kGreen);
+th_gst_chi->SetMarkerStyle(43);
+th_gst_chi->SetMarkerSize(1);
+th_gst_chi->Draw("same");
+Elastic2->Draw("same");
+t->Draw("same");
+b51.cd(3);
+Elastic->SetLineColor(6);
+th_mu_e_aco->SetMarkerColor(kGreen);
+th_mu_e_aco->SetMarkerStyle(43);
+th_mu_e_aco->SetMarkerSize(1);
+th_mu_e_aco->Draw();
+th_gst_aco->SetMarkerColor(kGreen);
+th_gst_aco->SetMarkerStyle(43);
+th_gst_aco->SetMarkerSize(1);
+th_gst_aco->Draw("same");
+Elastic2->Draw("same");
+t->Draw("same");
+b51.cd(4);
+Elastic->SetLineColor(6);
+th_mu_e_both->SetMarkerColor(kGreen);
+th_mu_e_both->SetMarkerStyle(43);
+th_mu_e_both->SetMarkerSize(1);
+th_mu_e_both->Draw();
+th_gst_both->SetMarkerColor(kGreen);
+th_gst_both->SetMarkerStyle(43);
+th_gst_both->SetMarkerSize(1);
+th_gst_both->Draw("same");
+Elastic2->Draw("same");
+t->Draw("same");
+b51.SaveAs("2Dplots_bkg.pdf");
+
+TCanvas b5("b5","b5",700,700);
+b5.Divide(2,2);
+b5.cd(1);
+Z_PP_gen->Draw("hist");
+gPad->SetLogy();
+b5.cd(2);
+Z_PP_gen_chi->Draw("hist");
+gPad->SetLogy();
+b5.cd(3);
+Z_PP_gen_aco->Draw("hist");
+gPad->SetLogy();
+b5.cd(4);
+Z_PP_gen_both->Draw("hist");
+gPad->SetLogy();
+//Z_PP_gen->SaveAs("Z_PP_gen.root");
+b5.SaveAs("Z_PP_cut.pdf");
+
+TCanvas b52("b52","b52",700,700);
+b52.Divide(2,2);
+b52.cd(1);
+Z_PP_gen02->Draw("hist");
+gPad->SetLogy();
+b52.cd(2);
+Z_PP_gen_chi02->Draw("hist");
+gPad->SetLogy();
+b52.cd(3);
+Z_PP_gen_aco02->Draw("hist");
+gPad->SetLogy();
+b52.cd(4);
+Z_PP_gen_both02->Draw("hist");
+gPad->SetLogy();
+//Z_PP_gen_both02->SaveAs("Z_PP_gen_both02.root");
+b52.SaveAs("Z_PP_cut_02.pdf");
+
 
 /*
 TCanvas b7("b7","b7",700,700);
@@ -481,7 +712,8 @@ h_int_rec->Draw("hist");
 gPad->SetLogy();
 b3.SaveAs("int.pdf");
 
-TCanvas b5("b5","b5",700,700);
+
+
 b5.Divide(2,2);
 b5.cd(1);
 th_mu_e->Draw("COLZ");

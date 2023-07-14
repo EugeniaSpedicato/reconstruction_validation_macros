@@ -17,8 +17,8 @@ using namespace std;
 void RealDataAnalyzer(){
 
 TChain * cbmsim = new TChain("cbmsim");
-cbmsim->Add("TRPP_minbias_1M_firstSample.root");
-cbmsim->Add("TRPP_minbias_1M_secondSample.root");
+cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_firstSample.root");
+cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_secondSample.root");
 
 //        TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 

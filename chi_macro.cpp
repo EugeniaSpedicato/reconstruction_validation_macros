@@ -17,6 +17,7 @@ using namespace std;
 void chi_macro()
 {
 
+/*
 TFile s("vrtx_chi_sig02gev_norm_ovrf.root");
 TFile s2("vrtx_chi_sig2gev_norm_ovrf.root");
 TFile p("vrtx_chi_PP_norm_ovrflw.root");
@@ -25,12 +26,12 @@ TFile sm("vrtx_chi_sigminb_norm_ovrflw.root");
 TH1F *sig_mes_02gev=(TH1F*)s.Get("htmp_s");
 TH1F *sig_mes_2gev=(TH1F*)s2.Get("htmp_s");
 
-sig_mes_02gev->SetTitle("Vertex quality signal MESMER  Ee>0.2GeV (blue) and bkg minbias (red) with acceptance cut th_mu<35mrad");
-sig_mes_2gev->SetTitle("Vertex quality signal MESMER  Ee>2GeV (blue) and bkg minbias (red) with acceptance cut th_mu<35mrad");
+sig_mes_02gev->SetTitle("Vertex quality signal MESMER  Ee>0.2GeV (blue) and bkg minbias (red) with acceptance cut th<35mrad");
+sig_mes_2gev->SetTitle("Vertex quality signal MESMER  Ee>2GeV (blue) and bkg minbias (red) with acceptance cut th<35mrad");
 
 TH1F *bkg_min=(TH1F*)p.Get("h1");
 TH1F *sig_min=(TH1F*)sm.Get("h1_sm_o");
-sig_min->SetTitle("Vertex quality signal minbias (blue) and bkg minbias (red) with acceptance cut th_mu<35mrad");
+sig_min->SetTitle("Vertex quality signal minbias (blue) and bkg minbias (red) with acceptance cut th<35mrad");
 
 TCanvas c1("c1","c1",700,700);
 c1.Divide(1,3);
@@ -66,12 +67,12 @@ TFile sm_a("vrtx_chi_sigminb_norm_after02_ovrflw.root");
 TH1F *sig_mes_02gev_a=(TH1F*)s_a.Get("h2s");
 TH1F *sig_mes_2gev_a=(TH1F*)s2_a.Get("h2s");
 
-sig_mes_02gev_a->SetTitle("Vertex quality signal MESMER  Ee>0.2GeV (blue) and bkg minbias (red) with acceptance cut th_mu<35mrad and th_mu>0.2mrad");
-sig_mes_2gev_a->SetTitle("Vertex quality signal MESMER  Ee>2GeV (blue) and bkg minbias (red) with acceptance cut th_mu<35mrad and th_mu>0.2mrad");
+sig_mes_02gev_a->SetTitle("Vertex quality signal MESMER  Ee>0.2GeV (blue) and bkg minbias (red) with acceptance cut th<35mrad and th>0.2mrad");
+sig_mes_2gev_a->SetTitle("Vertex quality signal MESMER  Ee>2GeV (blue) and bkg minbias (red) with acceptance cut th<35mrad and th>0.2mrad");
 
 TH1F *bkg_min_a=(TH1F*)p_a.Get("h2");
 TH1F *sig_min_a=(TH1F*)sm_a.Get("htmp_sm2_o");
-sig_min_a->SetTitle("Vertex quality signal minbias (blue) and bkg minbias (red) with acceptance cut th_mu<35mrad and th_mu>0.2mrad");
+sig_min_a->SetTitle("Vertex quality signal minbias (blue) and bkg minbias (red) with acceptance cut th<35mrad and th>0.2mrad");
 
 TCanvas c2("c2","c2",700,700);
 c2.Divide(1,3);
@@ -115,9 +116,9 @@ h_ac_s2->Rebin(4);
 h_ac_p->Rebin(4);
 h_ac_sm->Rebin(4);
 
-h_ac_s->SetTitle("Acoplanarity sig MESEMER Ee>0.2GeV (blu) and bkg minbias (red) with acceptance cut th_mu<35mrad");
-h_ac_s2->SetTitle("Acoplanarity sig MESMER Ee>2GeV (blu) and bkg minbias (red) with acceptance cut th_mu<35mrad");
-h_ac_sm->SetTitle("Acoplanarity sig minbias (green) and bkg minbias (red) with acceptance cut th_mu<35mrad");
+h_ac_s->SetTitle("Acoplanarity sig MESEMER Ee>0.2GeV (blu) and bkg minbias (red) with acceptance cut th<35mrad");
+h_ac_s2->SetTitle("Acoplanarity sig MESMER Ee>2GeV (blu) and bkg minbias (red) with acceptance cut th<35mrad");
+h_ac_sm->SetTitle("Acoplanarity sig minbias (green) and bkg minbias (red) with acceptance cut th<35mrad");
 
 TCanvas a1("a1","a1",700,700);
 a1.Divide(2,4);
@@ -159,7 +160,7 @@ h_ac_sm->Draw("hist");
 h_ac_s->Draw("hist same");
 a1.cd(8);
 //h_ac_s->SetMinimum(0);
-h_ac_sm->SetTitle("Acoplanarity sig minbias (green) and sig MESMER (blu) with acceptance cut th_mu<35mrad");
+h_ac_sm->SetTitle("Acoplanarity sig minbias (green) and sig MESMER (blu) with acceptance cut th<35mrad");
 h_ac_sm->SetLineColor(8);
 h_ac_sm->Draw("hist");
 h_ac_s->Draw("hist same");
@@ -184,9 +185,9 @@ h_ac_s2a->Rebin(4);
 h_ac_pa->Rebin(4);
 h_ac_sma->Rebin(4);
 
-h_ac_sa->SetTitle("Acoplanarity sig MESEMER Ee>0.2GeV (blu) and bkg minbias (red) with acceptance cut th_mu<35mrad and th_mu>0.2mrad");
-h_ac_s2a->SetTitle("Acoplanarity sig MESMER Ee>2GeV (blu) and bkg minbias (red) with acceptance cut th_mu<35mrad and th_mu>0.2mrad");
-h_ac_sma->SetTitle("Acoplanarity sig minbias (green) and bkg minbias (red) with acceptance cut th_mu<35mrad and th_mu>0.2mrad");
+h_ac_sa->SetTitle("Acoplanarity sig MESEMER Ee>0.2GeV (blu) and bkg minbias (red) with acceptance cut th<35mrad and th>0.2mrad");
+h_ac_s2a->SetTitle("Acoplanarity sig MESMER Ee>2GeV (blu) and bkg minbias (red) with acceptance cut th<35mrad and th>0.2mrad");
+h_ac_sma->SetTitle("Acoplanarity sig minbias (green) and bkg minbias (red) with acceptance cut th<35mrad and th>0.2mrad");
 
 
 TCanvas a2("a2","a2",700,700);
@@ -229,14 +230,47 @@ h_ac_sma->Draw("hist");
 h_ac_sa->Draw("hist same");
 a2.cd(8);
 //h_ac_s->SetMinimum(0);
-h_ac_sma->SetTitle("Acoplanarity sig minbias (green) and sig MESMER (blu) with acceptance cut th_mu<35mrad");
+h_ac_sma->SetTitle("Acoplanarity sig minbias (green) and sig MESMER (blu) with acceptance cut th<35mrad");
 h_ac_sma->SetLineColor(8);
 h_ac_sma->Draw("hist");
 h_ac_sa->Draw("hist same");
 gPad->SetLogy();
 
 a2.SaveAs("h_acoN_after02.pdf");
+*/
 
+TFile p2("Z_PP_gen_both02.root");
+TFile p("Z_PP_gen.root");
+TFile s2("Z_sig_gen_both02.root");
+TFile s("Z_sig_gen.root");
 
+TH1F *ZPP_gen_both02=(TH1F*)p2.Get("Zsig_gen_both02");
+TH1F *ZPP_gen=(TH1F*)p.Get("Zsig_gen");
+TH1F *Zsig_gen_both02=(TH1F*)s2.Get("Zsig_gen_both02");
+TH1F *Zsig_gen=(TH1F*)s.Get("Zsig_gen");
+
+Zsig_gen->SetTitle("Generated Z signal minbias (blue) and bkg minbias (red) with acceptance cut th<35mrad");
+Zsig_gen_both02->SetTitle("Vertex quality signal minbias (blue) and bkg minbias (red) with th<35mrad, th_mu>0.2mrad, Cv<100, abs(aco)<1");
+
+auto hs = new THStack("hs","Generated Z signal minbias (blue) and bkg minbias (red) with acceptance cut th<35mrad");
+auto hs2 = new THStack("hs2","Generated Z signal minbias (blue) and bkg minbias (red) with acceptance cut th<35mrad");
+Zsig_gen->Rebin(2);
+Zsig_gen_both02->Rebin(2);
+ZPP_gen->Rebin(2);
+ZPP_gen_both02->Rebin(2);
+
+TCanvas a3("a3","a3",700,700);
+a3.Divide(1,2);
+a3.cd(1);
+hs->Add(Zsig_gen);
+hs->Add(ZPP_gen);
+hs->Draw("pfc nostack");
+//gPad->SetLogy();
+a3.cd(2);
+hs2->Add(Zsig_gen_both02);
+hs2->Add(ZPP_gen_both02);
+hs2->Draw("pfc nostack");
+gPad->SetLogy();
+a3.SaveAs("Z.pdf");
 
 }
