@@ -33,7 +33,7 @@ double zcrosslines(double x0_0, double y0_0, double tanx_0, double tany_0,double
 
 
 TH1D* h_aco=new TH1D("aco","Acoplanarity of muone+electron from sig minbias",600,-3.14,3.14);
-
+TH1D* h_chi=new TH1D("h_chi","chi2 of the kinematic vertex", 1000,0,1000);
 
 void RealDataAnalyzer(){
 
@@ -41,7 +41,8 @@ void RealDataAnalyzer(){
 //        TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
 TChain * cbmsim = new TChain("cbmsim");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_merged_3232_3233_bigsample_outlier.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_merged_3238_3239_2hit.root");
+//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_merged_3238_3239_second_outlier_1.root");
 //3232_3233_1_4M_outlier.root");
 //cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_merged_3232_3233_small4M_outlier.root");
 
@@ -57,12 +58,28 @@ cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_merged_3232_323
 // X or Y position on the track at a given Z
                 auto pos_on_track = [](double q, double m, double z){return (q + m*z);};
 
-for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
+for(Long64_t i = 0; i < 100000; i++) {//cbmsim->GetEntries(); i++) {
 		cbmsim->GetEntry(i);
 		if(i%1000 == 0) cout<<"Entry "<<i<<endl;
 
 vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks();
 vector<MUonERecoOutputVertex> vrtx = ReconstructionOutput->reconstructedVertices();
+//vector<MUonERecoOutputAdaptiveFitterVertex> vrtx = ReconstructionOutput->adaptiveFitterVertices();
+
+double chi=99.;
+double Z_sig=0.;
+
+  for(int j=0; j<vrtx.size();j++)
+        {
+	 if(j==0) {chi=vrtx.at(j).chi2perDegreeOfFreedom(); h_chi->Fill(chi);
+        //if(vrtx.at(j).chi2()<50) h_Z->Fill(vrtx.at(j).z());
+	 //if(vrtx.at(j).chi2perDegreeOfFreedom()<50){h_Z->Fill(vrtx.at(j).z());
+	Z_sig=vrtx.at(j).z();
+	 cout << "vertex chi " << chi  << " at Z_sig " << vrtx.at(j).z() << endl;
+		}
+        }
+// }
+
 
     int sec0=0; int sec1=0;
 
@@ -134,14 +151,14 @@ if(sec0==1 and sec1==2){
 	double Z=zcrosslines(x0[0],y0[0],mx[0],my[0],x0[1],y0[1],mx[1],my[1]);
 //tracks.at(1).x0(),tracks.at(1).y0(),tracks.at(1).xSlope(),tracks.at(1).ySlope(), tracks.at(2).x0(),tracks.at(2).y0(),tracks.at(2).xSlope(),tracks.at(2).ySlope());
 
-  if(chi<50 and chi_min.at(0)<50 and chi_min.at(1)<50) h_aco->Fill(acoplanarity);
+  if(abs(Z-911.)<20. and chi_min.at(0)<50 and chi_min.at(1)<50) h_aco->Fill(acoplanarity);
 
 //  if(abs(acoplanarity)<1) h_Z->Fill(Z);
 
 //if(abs(Z-911.)<20. and
-	if(abs(Z-911.)<20. and abs(acoplanarity)<1 and chi_min.at(0)<50 and chi_min.at(1)<50){
+	if(abs(acoplanarity)<1 and chi<50){
                         h_2d->Fill(th_el,th_mu);
-			h_Z->Fill(Z);
+			//h_Z->Fill(Z);
 		}
 
 	}//if(sec0==1 and sec1==2)
@@ -158,7 +175,9 @@ if(sec0==1 and sec1==2){
     h_2d->Draw();
     n.cd(3);
     h_aco->Draw();
-    n.SaveAs("info.pdf");
+    n.cd(4);
+    h_chi->Draw();
+    n.SaveAs("info_2hit.pdf");
 
 }
 
