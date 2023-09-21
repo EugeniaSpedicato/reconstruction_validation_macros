@@ -14,29 +14,10 @@
 
 using namespace std;
 
-double zcrosslines(double x0_0, double y0_0, double tanx_0, double tany_0,double x0_1, double y0_1, double tanx_1, double tany_1){
-
-  double invn0norm=1./sqrt(tanx_0*tanx_0+tany_0*tany_0+1);
-  double invn1norm=1./sqrt(tanx_1*tanx_1+tany_1*tany_1+1);
-  double cs=(tanx_0*tanx_1+tany_0*tany_0+1)*invn0norm*invn1norm;
-  double rr[]={x0_0-x0_1,y0_0-y0_1};
-
-  double a0 = -1/(1-cs*cs)* ( (tanx_0*invn0norm-cs*tanx_1*invn1norm)*rr[0]+(tany_0*invn0norm-cs*tany_1*invn1norm)*rr[1] );
-  double a1 = -1/(1-cs*cs)* ( (cs*tanx_0*invn0norm-tanx_1*invn1norm)*rr[0]+(cs*tany_0*invn0norm-tany_1*invn1norm)*rr[1] );
-
-  //double xav = (t0.x0+t1.x0)/2. + (t0.tanx*invn0norm * a0 + + t1.tanx*invn1norm * a1)/2.
-  //double yav = (t0.y0+t1.y0)/2. + (t0.tany*invn0norm * a0 + + t1.tany*invn1norm * a1)/2.
-  double zav = (1.*invn0norm * a0 + 1.*invn1norm * a1)/2.;
-
-  return zav;
-}
-
-
-
 
 void RealDataAnalyzer(){
 
- 	TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_nobend_try.root");
+ 	TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_filtered.root");//dataReconstruction_target.root");
 //dataReconstruction_merged_3232_3233_small4M_outlier.root");
 //dataReconstruction_merged_3238_3239_0hit_1.root");
 //dataReconstruction_merged_3232_3233_small4M_outlier.root");
@@ -69,16 +50,16 @@ h_imp.at(3)=new TH1D("h_imp3","Y profile station 1 ",800,-5.,5.);
 for(int m=0; m<6; m++){
 	string name="residual1_"+to_string(m);
                 string title="Residual station1 of module "+to_string(m);
-if(m==2 or m==3) residual1.at(m)=new TH1D(name.c_str(),title.c_str(),100,-0.01,0.01);
-else residual1.at(m)=new TH1D(name.c_str(),title.c_str(),500,-0.005,0.005);
+if(m==2 or m==3) residual1.at(m)=new TH1D(name.c_str(),title.c_str(),600,-0.06,0.06);//100,-0.1,0.1);
+else residual1.at(m)=new TH1D(name.c_str(),title.c_str(),600,-0.06,0.06);//500,-0.005,0.005);
 			}
 
         std::vector<TH1D*> residual2(6);
 for(int m=0; m<6; m++){
         string name="residual2_"+to_string(m);
                 string title="Residual station2 of module "+to_string(m);
-if(m==2 or m==3) residual2.at(m)=new TH1D(name.c_str(),title.c_str(),100,-0.1,0.1);
-else residual2.at(m)=new TH1D(name.c_str(),title.c_str(),500,-0.005,0.005);
+if(m==2 or m==3) residual2.at(m)=new TH1D(name.c_str(),title.c_str(),600,-0.06,0.06);//100,-0.1,0.1);
+else residual2.at(m)=new TH1D(name.c_str(),title.c_str(),600,-0.06,0.06);//500,-0.005,0.005);
                         }
 
         std::vector<TH1D*> localX1(6);
@@ -94,6 +75,8 @@ for(int m=0; m<6; m++){
                 localX2.at(m)=new TH1D(name.c_str(),title.c_str(),100,-5.,5.);}
 
 
+TH1D *h_nstubs_1=new TH1D("h_nstubs_1", "number of stubs for a track in station1", 13,0,13);
+TH1D *h_nstubs_2=new TH1D("h_nstubs_2", "number of stubs for a track in station1", 13,0,13);
 
 
 // X or Y position on the track at a given Z
@@ -125,12 +108,12 @@ double pos2[6];
 
         if(tracks.at(j).sector()==0)
 					{sec0++;
-					 x0=pos_on_track(tracks.at(j).x0(),tracks.at(j).xSlope(),911.2);
-					 y0=pos_on_track(tracks.at(j).y0(),tracks.at(j).ySlope(),911.2);}
+					 x0=pos_on_track(tracks.at(j).x0(),tracks.at(j).xSlope(),912.7);
+					 y0=pos_on_track(tracks.at(j).y0(),tracks.at(j).ySlope(),912.7);}
         if(tracks.at(j).sector()==1)
 					 {sec1++;
-					 x1=pos_on_track(tracks.at(j).x0(),tracks.at(j).xSlope(),911.2);
-					 y1=pos_on_track(tracks.at(j).y0(),tracks.at(j).ySlope(),911.2);}
+					 x1=pos_on_track(tracks.at(j).x0(),tracks.at(j).xSlope(),912.7);
+					 y1=pos_on_track(tracks.at(j).y0(),tracks.at(j).ySlope(),912.7);}
 	}
 
     for(int j=0; j<tracks.size();j++)
@@ -139,9 +122,10 @@ double pos2[6];
      	if(tracks.at(j).sector()==0 and sec0==1){
 
 std::vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
+h_nstubs_1->Fill(hits_.size());
   for(int h=0;h<hits_.size();h++)
   {
-        if(sec1==1) residual1.at(hits_.at(h).moduleID())->Fill(hits_.at(h).perpendicularResiduum());
+        if(sec1==1 and hits_.at(h).stationID()==0) residual1.at(hits_.at(h).moduleID())->Fill(hits_.at(h).perpendicularResiduum());
         localX1.at(hits_.at(h).moduleID())->Fill(hits_.at(h).positionPerpendicular());
 
 
@@ -153,11 +137,11 @@ std::vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
  }
 
    	if(tracks.at(j).sector()==1 and sec1==1){
-
 std::vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
+h_nstubs_2->Fill(hits_.size());
   for(int h=0;h<hits_.size();h++)
   {
-	if(sec0==1) residual2.at(hits_.at(h).moduleID())->Fill(hits_.at(h).perpendicularResiduum());
+	if(sec0==1 and hits_.at(h).stationID()==1) residual2.at(hits_.at(h).moduleID())->Fill(hits_.at(h).perpendicularResiduum());
 	localX2.at(hits_.at(h).moduleID())->Fill(hits_.at(h).positionPerpendicular());
   }
  }
@@ -211,7 +195,8 @@ TCanvas n3("n3","n3",1000,1000);
 n3.Divide(2,3);
 for(int m=0; m<6; m++){
 n3.cd(m+1);
-residual1[m]->Draw();}
+residual1[m]->Draw();
+gPad->SetLogy();}
 n3.SaveAs("res1.pdf");
 
 
@@ -219,7 +204,8 @@ TCanvas n4("n4","n4",1000,1000);
 n4.Divide(2,3);
 for(int m=0; m<6; m++){
 n4.cd(m+1);
-residual2[m]->Draw();}
+residual2[m]->Draw();
+gPad->SetLogy();}
 n4.SaveAs("res2.pdf");
 
 TCanvas n5("n5","n5",1000,1000);
@@ -228,8 +214,16 @@ for(int m=0; m<6; m++){
 n5.cd(m+1);
 localX1[m]->Draw();
 localX2[m]->SetLineColor(kRed);
-localX2[m]->Draw("same"); }
+localX2[m]->Draw("same");
+gPad->SetLogy();}
 n5.SaveAs("local.pdf");
+
+TCanvas n6("n6","n6",700,700);
+h_nstubs_1->Draw();
+h_nstubs_2->SetLineColor(kRed);
+h_nstubs_2->Draw("same");
+gPad->SetLogy();
+n6.SaveAs("nstubs_6_6.pdf");
 
 }
 

@@ -40,7 +40,7 @@ TH1D* h_chi_tr0=new TH1D("h_chi0","chi2 of track2 mu in", 100,0,100);
 
 void RealDataAnalyzer(){
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_try_sigma.root");
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_filtered.root");//dataReconstruction_try_sigma.root");
 //TRMesmer_3cm.root");
 //dataReconstruction_try.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
@@ -75,9 +75,9 @@ void RealDataAnalyzer(){
                 auto pos_on_track = [](double q, double m, double z){return (q + m*z);};
 
 double all=0.;
-double e=0.;
-double mu=0.;
-double mu_in=0.;
+double e_c=0.;
+double mu_c=0.;
+double mu_in_c=0.;
 double v=0.;
 
 for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
@@ -103,6 +103,9 @@ double Z_sig=0.;
         }*/
 
 MUonERecoOutputVertex vrtx = ReconstructionOutput->bestVertex();
+MUonERecoOutputTrack muin=vrtx.incomingMuon();
+MUonERecoOutputTrack mu=vrtx.outgoingMuon();
+MUonERecoOutputTrack e=vrtx.outgoingElectron();
 
 chi=vrtx.chi2perDegreeOfFreedom();
 
@@ -110,7 +113,12 @@ double chi2_muin_vrtx=vrtx.incomingMuon().chi2perDegreeOfFreedom();
 double chi2_e_vrtx=vrtx.outgoingElectron().chi2perDegreeOfFreedom();
 double chi2_mu_vrtx=vrtx.outgoingMuon().chi2perDegreeOfFreedom();
 
-if(chi<50 and chi!=0) {cout << "Best vertex chi " << chi << endl;}
+double x_v=0.;
+double y_v=0.;
+double z_v=0.;
+
+if(chi!=99 and chi!=0) {//cout << "Best vertex chi " << chi << endl;
+                        x_v=vrtx.x(); y_v=vrtx.y(); z_v=vrtx.z();}
 
     int sec0=0; int sec1=0;
 
@@ -126,6 +134,8 @@ double x0[2];
 double y0[2];
 double mx[2];
 double my[2];
+int stubs_muin=0.;
+int stubs[2]={0};
 
 std::array<double,2> chi_min;
 
@@ -140,7 +150,9 @@ int index=0;
 double chi2_muin;
     for(int j=0; j<tracks.size();j++)
     {
+        std::vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
 	if(tracks.at(j).sector()==0 and sec0==1){
+        stubs_muin=hits_.size();
 	double th_inx=tracks.at(j).xSlope();
 	double th_iny=tracks.at(j).ySlope();
 	thin1.SetXYZ(th_inx,th_iny,1.0);
@@ -162,18 +174,20 @@ double chi2_muin;
         my[index]=th_iny;
         x0[index]=tracks.at(j).x0();
         y0[index]=tracks.at(j).y0();
+        stubs[index]=hits_.size();
 	index++;
 		 }
 
 	}
 
-double chi2_e,chi2_mu;
+double chi2_e,chi2_mu,id_e,id_mu;
 
-if(sec0==1 and sec1==2){
+if(sec0==1 and sec1==2 and stubs[0]==6 and stubs[1]==6 and stubs_muin==6){
 
 
-	if(theta.at(0)>theta.at(1)){electron=thin2_v.at(0); muon=thin2_v.at(1); th_el=theta.at(0); th_mu=theta.at(1); chi2_e=chi_min.at(0); chi2_mu=chi_min.at(1);}
-	else{electron=thin2_v.at(1); muon=thin2_v.at(0); th_el=theta.at(1); th_mu=theta.at(0); chi2_e=chi_min.at(1); chi2_mu=chi_min.at(0);}
+	if(theta.at(0)>theta.at(1)){id_e=1; id_mu=2; electron=thin2_v.at(0); muon=thin2_v.at(1); th_el=theta.at(0);
+				    th_mu=theta.at(1); chi2_e=chi_min.at(0); chi2_mu=chi_min.at(1);}
+	else{id_e=2; id_mu=1; electron=thin2_v.at(1); muon=thin2_v.at(0); th_el=theta.at(1); th_mu=theta.at(0); chi2_e=chi_min.at(1); chi2_mu=chi_min.at(0);}
 
 						double dotProduct = muon.Dot(electron);
                                                 TVector3 crossProduct = muon.Cross(electron);
@@ -185,14 +199,11 @@ if(sec0==1 and sec1==2){
 
 	double Z=zcrosslines(x0[0],y0[0],mx[0],my[0],x0[1],y0[1],mx[1],my[1]);
 
-double Zx = ( x0[0]-x0[1] )/ (mx[0]-mx[1]);
-double Zy = ( y0[0]-y0[1] )/ (my[0]-my[1]);
-double Z_all = (Zx+Zy)/2;
-
  double prob_e=TMath::Prob(chi2_e, 2);
  double prob_mu=TMath::Prob(chi2_mu, 2);
  double prob_muin=TMath::Prob(chi2_muin, 2);
 
+if(th_el<0.032){
  h_aco->Fill(acoplanarity);
  h_prob_e->Fill(TMath::Prob(chi2_e, 2));
  h_prob_mu->Fill(TMath::Prob(chi2_mu, 2));
@@ -204,36 +215,76 @@ double Z_all = (Zx+Zy)/2;
  h_chi_e_vrtx->Fill(chi2_e_vrtx);
  h_chi_mu_vrtx->Fill(chi2_mu_vrtx);
 
+
 all++;
 if(chi>20)v++;
-if(chi2_e_vrtx>20)e++;
-if(chi2_muin_vrtx>20)mu_in++;
-if(chi2_mu_vrtx>20)mu++;
+if(chi2_e_vrtx>20)e_c++;
+if(chi2_muin_vrtx>20)mu_in_c++;
+if(chi2_mu_vrtx>20)mu_c++;
 
-cout << "--------New event--------" << endl;
+/*cout << "--------New event--------" << endl;
 cout << "Incoming Muon chi2 before vrtx and after vrtxing: " << endl;
 cout << "	" << chi2_muin << "  ->   " << chi2_muin_vrtx << endl;
 cout << "Outgoing Muon before vrtx and after vrtxing : "  << endl;
 cout << "       " << chi2_mu <<  "  ->   " << chi2_mu_vrtx << endl;
 cout << "Outgoing Electron before vrtx and after vrtxing : "  << endl;
 cout << "       " << chi2_e <<  "  ->   " << chi2_e_vrtx << endl;
+*/
 
-	if(abs(acoplanarity)<1){//and prob_mu>0.5 and prob_e>0.5){// and chi<50 and chi!=0){
-//cout << "Z position " << Z_all << " with Zx,Zy " <<Zx << ", " << Zy << endl;
-//cout << "Fedor Z position " << Z << endl;
-	if(th_el>0.01 and th_mu>0.0004) cout << "event " << i << endl;
+double deltaX[3];
+double deltaY[3];
+    for(int j=0; j<tracks.size();j++){
+
+          if(j==0) {    double x0=pos_on_track(tracks.at(j).x0(),tracks.at(j).xSlope(),z_v);
+                        double y0=pos_on_track(tracks.at(j).y0(),tracks.at(j).ySlope(),z_v);
+                        double x1=pos_on_track(muin.x0(),muin.xSlope(),0.);
+                        double y1=pos_on_track(muin.y0(),muin.ySlope(),0.);
+
+                        deltaX[0]=x0-x_v;
+                        deltaY[0]=y0-y_v;
+                        }
+          if(j==id_mu) {
+                        double x0=pos_on_track(tracks.at(j).x0(),tracks.at(j).xSlope(),z_v);
+                        double y0=pos_on_track(tracks.at(j).y0(),tracks.at(j).ySlope(),z_v);
+                        double x1=pos_on_track(mu.x0(),mu.xSlope(),0.);
+                        double y1=pos_on_track(mu.y0(),mu.ySlope(),0.);
+
+                        deltaX[1]=x0-x_v;
+                        deltaY[1]=y0-y_v;
+                        }
+          if(j==id_e) {
+                        double x0=pos_on_track(tracks.at(j).x0(),tracks.at(j).xSlope(),z_v);
+                        double y0=pos_on_track(tracks.at(j).y0(),tracks.at(j).ySlope(),z_v);
+                        double x1=pos_on_track(e.x0(),e.xSlope(),0.);
+                        double y1=pos_on_track(e.y0(),e.ySlope(),0.);
+
+			deltaX[2]=x0-x_v;
+			deltaY[2]=y0-y_v;
+                        }
+
+
+ }
+
+//th_mu>0.0002
+	if(abs(acoplanarity)<1){/*and deltaX[0]<0.129 and deltaX[0]>-0.071
+						and deltaX[1]<0.129 and deltaX[1]>-0.071
+						and deltaX[2]<0.2 and deltaX[2]>-0.17
+						and deltaY[0]<0.3 and deltaY[0]>0.
+						and deltaY[1]<0.3 and deltaY[1]>0.
+						and deltaY[2]<0.4 and deltaY[2]>-0.1){*/
+
+	//if(th_el>0.01 and th_mu>0.0004) cout << "event " << i << endl;
                         h_2d->Fill(th_el,th_mu);
                         h_2d_vrtx->Fill(vrtx.electronTheta(),vrtx.muonTheta());
-			//h_Z->Fill(Z);
-		}
-
+			}
+		}//th_mu<32mrad
 	}//if(sec0==1 and sec1==2)
 
 }
 cout << "Fraction of KF vrtx wth chi2>20 " << v/all << endl;
-cout << "Fraction of muon_in tracks post-vrtx wth chi2>20 " << mu_in/all << endl;
-cout << "Fraction of muon_out tracks post-vrtx wth chi2>20 " << mu/all << endl;
-cout << "Fraction of electron_out tracks post-vrtx wth chi2>20 " << e/all << endl;
+cout << "Fraction of muon_in tracks post-vrtx wth chi2>20 " << mu_in_c/all << endl;
+cout << "Fraction of muon_out tracks post-vrtx wth chi2>20 " << mu_c/all << endl;
+cout << "Fraction of electron_out tracks post-vrtx wth chi2>20 " << e_c/all << endl;
 
     TCanvas n("n","n",700,700);
     n.Divide(1,3);
@@ -247,7 +298,7 @@ cout << "Fraction of electron_out tracks post-vrtx wth chi2>20 " << e/all << end
 
 
     TCanvas n1("n1","n1",1000,1000);
-    n1.Divide(1,4);
+    n1.Divide(2,2);
     n1.cd(1);
 h_prob_e->SetLineColor(kRed);
 h_prob_e->Draw();
