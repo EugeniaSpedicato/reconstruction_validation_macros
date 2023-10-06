@@ -40,7 +40,9 @@ TH1D* h_chi_tr0=new TH1D("h_chi0","chi2 of track2 mu in", 100,0,100);
 
 void RealDataAnalyzer(){
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_filtered.root");//dataReconstruction_try_sigma.root");
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_try_shift.root");
+//TRMesmer_3cm.root");
+//dataReconstruction_3234-3235_filtered.root");//dataReconstruction_try_sigma.root");
 //TRMesmer_3cm.root");
 //dataReconstruction_try.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
@@ -222,14 +224,14 @@ if(chi2_e_vrtx>20)e_c++;
 if(chi2_muin_vrtx>20)mu_in_c++;
 if(chi2_mu_vrtx>20)mu_c++;
 
-/*cout << "--------New event--------" << endl;
+cout << "--------New event--------" << endl;
 cout << "Incoming Muon chi2 before vrtx and after vrtxing: " << endl;
 cout << "	" << chi2_muin << "  ->   " << chi2_muin_vrtx << endl;
 cout << "Outgoing Muon before vrtx and after vrtxing : "  << endl;
 cout << "       " << chi2_mu <<  "  ->   " << chi2_mu_vrtx << endl;
 cout << "Outgoing Electron before vrtx and after vrtxing : "  << endl;
 cout << "       " << chi2_e <<  "  ->   " << chi2_e_vrtx << endl;
-*/
+
 
 double deltaX[3];
 double deltaY[3];
@@ -316,9 +318,9 @@ h_prob_mu->Draw("same");
 h_chi_tr1->SetLineColor(kRed);
 h_chi_tr2->SetLineColor(kBlue);
 h_chi_tr0->SetLineColor(kOrange);
-h_chi_tr1->Draw();
+h_chi_tr0->Draw();
 h_chi_tr2->Draw("same");
-h_chi_tr0->Draw("same");
+h_chi_tr1->Draw("same");
 //gPad->SetLogy();
     n1.cd(4);
 h_chi_muin_vrtx->SetLineColor(kOrange);

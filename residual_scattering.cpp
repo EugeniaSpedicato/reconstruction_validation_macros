@@ -17,7 +17,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/TRMesmer_3cm.root");
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_filtered.root");
 //dataReconstruction_3234-3235_filtered.root");
 //run3234_3235_1.root");
 //dataReconstruction_3234-3235_new.root");
@@ -116,6 +116,12 @@ TH2D *h_2d_all=new TH2D("h_2dall","Electron VS muone angle with all events" ,320
 TH2D *h_2d_chi=new TH2D("h_2dchi","Electron VS muone angle with chi2 cut" ,320,0.,0.032,90,0.,0.003);
 TH2D *h_2d_aco=new TH2D("h_2daco","Electron VS muone angle with  chi2 and aco cut" ,320,0.,0.032,90,0.,0.003);
 TH2D *h_2d=new TH2D("h_2d","Electron VS muone angle (1 reco in- 2 reco out)" ,320,0.,0.032,90,0.,0.003);
+
+TH1D *vrtx_x=new TH1D("vrtx_x","Kinemtic vertex x position",250,-5.,5.);
+TH1D *vrtx_y=new TH1D("vrtx_y","Kinemtic vertex y position",250,-5.,5.);
+TH1D *mu_in_x=new TH1D("mu_in_x","Muon_in x position at Z_t when interacts",250,-5.,5.);
+TH1D *mu_in_y=new TH1D("mu_in_y","Muon_in y position at Z_t when interacts",250,-5.,5.);
+
 
 // X or Y position on the track at a given Z
                 auto pos_on_track = [](double q, double m, double z){return (q + m*z);};
@@ -253,7 +259,7 @@ if(sec0==1 and sec1==2 and stubs[0]==6 and stubs[1]==6 and stubs_muin==6){
                                                 T = T>0? 1:-1;
                                                 acoplanarity= T*(TMath::Pi()- acos( ((im).Dot(ie))/(im.Mag()*ie.Mag()) ));
 
-if(th_el<0.032){
+if(th_el<0.032 and th_mu>0.0002){
 
         h_2d_all->Fill(th_el,th_mu);
        if(chi2_e<5. and chi2_e<5. and chi2_muin<5.) {h_2d_chi->Fill(th_el,th_mu);  h_aco->Fill(acoplanarity);}
@@ -324,11 +330,16 @@ std::vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
                         residual_e_trk.at(2)->Fill( (x_t[2]-x_t[0])/( sqrt(x0_err_e*x0_err_e + x0_err_muin*x0_err_muin) ) );
                         residual_e_trk.at(3)->Fill( (y_t[2]-y_t[0])/( sqrt(y0_err_e*y0_err_e + y0_err_muin*y0_err_muin) ) );
 
+			vrtx_x->Fill(x_v);
+			mu_in_x->Fill(x_t[0]);
+                        vrtx_y->Fill(y_v);
+                        mu_in_y->Fill(y_t[0]);
+
 		}//th_el<32
 	}//acop
     }//if(sec0==1 and sec1==2)
   }
-
+/*
 TCanvas n("n","n",700,700);
 n.Divide(2,2);
 n.cd(1);
@@ -338,7 +349,7 @@ h_2d_chi->Draw();
 n.cd(3);
 h_2d_aco->Draw();
 n.SaveAs("h_2d.pdf");
-
+*/
 /*TCanvas n0("n0","n0",1000,1000);
 n0.Divide(2,3);
 for(int m=0; m<6; m++){
@@ -363,7 +374,7 @@ residual_e[m]->Draw();
 gPad->SetLogy();}
 n2.SaveAs("res_e.pdf");
 */
-
+/*
 TCanvas n3("n3","n3",1000,1000);
 n3.Divide(2,4);
 n3.cd(1);
@@ -399,42 +410,53 @@ n4.Divide(2,3);
 n4.cd(1);
 residual_muin_vrtx[0]->Draw();
 residual_muin_vrtx[2]->SetLineColor(kRed);
-residual_muin_vrtx[2]->Draw("same");
+//residual_muin_vrtx[2]->Draw("same");
 //gPad->SetLogy();
 n4.cd(2);
 residual_muin_vrtx[1]->Draw();
 residual_muin_vrtx[3]->SetLineColor(kRed);
-residual_muin_vrtx[3]->Draw("same");
+//residual_muin_vrtx[3]->Draw("same");
 //gPad->SetLogy();
 
 n4.cd(3);
 residual_mu_vrtx[0]->Draw();
 residual_mu_vrtx[2]->SetLineColor(kRed);
-residual_mu_vrtx[2]->Draw("same");
+//residual_mu_vrtx[2]->Draw("same");
 //gPad->SetLogy(); 
 n4.cd(4);
 residual_mu_vrtx[1]->Draw();
 residual_mu_vrtx[3]->SetLineColor(kRed);
-residual_mu_vrtx[3]->Draw("same");
+//residual_mu_vrtx[3]->Draw("same");
 //gPad->SetLogy();
 
 n4.cd(5);
 residual_e_vrtx[0]->Draw();
 residual_e_vrtx[2]->SetLineColor(kRed);
-residual_e_vrtx[2]->Draw("same");
+//residual_e_vrtx[2]->Draw("same");
 //gPad->SetLogy();
 n4.cd(6);
 residual_e_vrtx[1]->Draw();
 residual_e_vrtx[3]->SetLineColor(kRed);
-residual_e_vrtx[3]->Draw("same");
+//residual_e_vrtx[3]->Draw("same");
 //gPad->SetLogy();
 n4.SaveAs("res_vrtx.pdf");
 
 
 TCanvas n5("n5","n5",700,700);
 h_aco->Draw();
-n5.SaveAs("aco.pdf");
+n5.SaveAs("aco.pdf");*/
 
+TCanvas n6("n6","n6",700,700);
+n6.Divide(1,2);
+n6.cd(1);
+vrtx_x->SetLineColor(kRed);
+vrtx_x->Draw();
+mu_in_x->Draw("same");
+n6.cd(2);
+vrtx_y->SetLineColor(kRed);
+vrtx_y->Draw();
+mu_in_y->Draw("same");
+n6.SaveAs("vrtx.pdf");
 
 }
 

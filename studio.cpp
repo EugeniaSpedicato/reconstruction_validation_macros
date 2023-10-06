@@ -17,7 +17,9 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_filtered.root");
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/TRMesmer_3cm_600k.root");//dataReconstruction_3234-3235_filtered.root");
+//TRMesmer_3cm_600k.root");
+//dataReconstruction_3234-3235_filtered.root");
 //dataReconstruction_run3234_3235_1.root");//TRMesmer_3cm.root");//dataReconstruction_run3234_3235_1.root");
 //run3234_3235_1.root");
 //dataReconstruction_3234-3235_new.root");
@@ -36,30 +38,30 @@ string title;
         std::vector<TH1D*> residual_mu_trk(4);
 	residual_mu_trk.at(0)=new TH1D("residual_mu_trk0","Residual mu_out X track Vs mu_in X track",100,-0.05,0.05);
         residual_mu_trk.at(1)=new TH1D("residual_mu_trk1","Residual mu_out Y track Vs mu_in Y track",100,-0.05,0.05);
-        residual_mu_trk.at(2)=new TH1D("residual_mu_trk2","Pull residual mu_out X track Vs mu_in X track",150,-0.3,0.3);
-        residual_mu_trk.at(3)=new TH1D("residual_mu_trk3","Pull residual mu_out Y track Vs mu_in Y track",150,-0.3,0.3);
+        residual_mu_trk.at(2)=new TH1D("residual_mu_trk2","Pull residual mu_out X track Vs mu_in X track",100,-5.,5.);//150,-0.3,0.3);
+        residual_mu_trk.at(3)=new TH1D("residual_mu_trk3","Pull residual mu_out Y track Vs mu_in Y track",100,-5.,5.);//150,-0.3,0.3);
 
 
         std::vector<TH1D*> residual_e_trk(4);
         residual_e_trk.at(0)=new TH1D("residual_e_trk0","Residual e_out X track Vs mu_in X track",200,-0.8,0.8);
         residual_e_trk.at(1)=new TH1D("residual_e_trk1","Residual e_out Y track Vs mu_in Y track",200,-0.8,0.8);
-        residual_e_trk.at(2)=new TH1D("residual_e_trk2","Pull residual e_out X track Vs mu_in X track",250,-1.,1.);
-        residual_e_trk.at(3)=new TH1D("residual_e_trk3","Pull residual e_out Y track Vs mu_in Y track",250,-1.,1.);
+        residual_e_trk.at(2)=new TH1D("residual_e_trk2","Pull residual e_out X track Vs mu_in X track",300,-30.,30.);//250,-1.,1.);
+        residual_e_trk.at(3)=new TH1D("residual_e_trk3","Pull residual e_out Y track Vs mu_in Y track",300,-30.,30.);//250,-1.,1.);
 
         std::vector<TH1D*> error(6);
-	error.at(0)=new TH1D("errorXmuin","Error x0 for incoming muon", 100,0.02275, 0.02295);
-        error.at(1)=new TH1D("errorYmuin","Error y0 for incoming muon", 100,0.022, 0.0225);
-        error.at(2)=new TH1D("errorXmuout","Error x0 for outgoing muon", 100,0.0251, 0.0255);
-        error.at(3)=new TH1D("errorYmuout","Error y0 for outgoing muon", 100,0.0228, 0.02295);
-        error.at(4)=new TH1D("errorXel","Error x0 for outgoing electron", 100,0.0248, 0.026);
-        error.at(5)=new TH1D("errorYel","Error y0 for outgoing electron", 100,0.0224, 0.0234);
+	error.at(0)=new TH1D("errorXmuin","Error x0 for incoming muon", 100,-0.05, 0.05);
+        error.at(1)=new TH1D("errorYmuin","Error y0 for incoming muon", 100,-0.05, 0.05);
+        error.at(2)=new TH1D("errorXmuout","Error x0 for outgoing muon", 100,-0.05, 0.05);
+        error.at(3)=new TH1D("errorYmuout","Error y0 for outgoing muon", 100,-0.05, 0.05);
+        error.at(4)=new TH1D("errorXel","Error x0 for outgoing electron", 100,-0.05, 0.05);
+        error.at(5)=new TH1D("errorYel","Error y0 for outgoing electron", 100,-0.05, 0.05);
 
 
-TH2D *h_2d_mu=new TH2D("h_2dmu","Electron VS muone angle with aco, chi muon coordinate cut" ,700,0.,0.07,90,0.,0.003);
-TH2D *h_2d_all=new TH2D("h_2dall","Electron VS muone angle with aco, chi and mu, e coordinate cut" ,700,0.,0.07,90,0.,0.003);
-TH2D *h_2d_chi=new TH2D("h_2dchi","Electron VS muone angle with aco and chi2 cut" ,700,0.,0.07,90,0.,0.003);
-TH2D *h_2d_aco=new TH2D("h_2daco","Electron VS muone angle with aco cut" ,700,0.,0.07,90,0.,0.003);
-TH2D *h_2d=new TH2D("h_2d","Electron VS muone angle (1 reco in- 2 reco out)" ,700,0.,0.07,90,0.,0.003);
+TH2D *h_2d_mu=new TH2D("h_2dmu","Electron VS muone angle with aco, chi muon coordinate cut" ,350,0.,0.035,90,0.,0.003);
+TH2D *h_2d_all=new TH2D("h_2dall","Electron VS muone angle with aco, chi and mu, e coordinate cut" ,350,0.,0.035,90,0.,0.003);
+TH2D *h_2d_chi=new TH2D("h_2dchi","Electron VS muone angle with aco and chi2 cut" ,350,0.,0.035,90,0.,0.003);
+TH2D *h_2d_aco=new TH2D("h_2daco","Electron VS muone angle with aco cut" ,350,0.,0.035,90,0.,0.003);
+TH2D *h_2d=new TH2D("h_2d","Electron VS muone angle (1 reco in- 2 reco out)" ,350,0.,0.035,90,0.,0.003);
 
 TH2D *h_imp=new TH2D("h_imp", "Target impact point mu_in when there is an int", 500,-5.,5., 500,-5.,5.);
 
@@ -133,7 +135,8 @@ int stubs_e=0.;
 int stub_0=0.;
 int stub_1=0.;
 double x0_err_muin, y0_err_muin;
-
+ROOT::Math::SMatrix<Double_t, 4> cov_1;
+std::vector<ROOT::Math::SMatrix<Double_t, 4>> cov_2;
     for(int j=0; j<tracks.size();j++)
     {
 	std::vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
@@ -153,6 +156,7 @@ double x0_err_muin, y0_err_muin;
 	y0_err_muin=tracks.at(j).y0Error();
 	bx=hits_.at(0).bx();
 	sid=hits_.at(0).superID();
+	cov_1=tracks.at(j).linearFitCovarianceMatrix();
 	}
 
 	if(tracks.at(j).sector()==1 and sec1==2){
@@ -172,6 +176,8 @@ double x0_err_muin, y0_err_muin;
         y0_err[index]=tracks.at(j).y0Error();
 	stubs[index]=hits_.size();
 	index++;
+	cov_2.push_back(tracks.at(j).linearFitCovarianceMatrix());
+
 		 }
 
 	}
@@ -184,16 +190,19 @@ if(bx!=0 and sid!=0)
 double chi2_e,chi2_mu;
 int id_e,id_mu;
 double x0_err_mu, x0_err_e, y0_err_mu, y0_err_e;
+ROOT::Math::SMatrix<Double_t, 4> cov_mu,cov_e;
 
 if(sec0==1 and sec1==2 and stubs_muin==6 and chi2_muin<5){//stubs[0]==6 and stubs[1]==6 and stubs_muin==6){
 
 
 	if(theta.at(0)>theta.at(1)){id_e=1; id_mu=2; electron=thin2_v.at(0); muon=thin2_v.at(1); stubs_e=stubs[0]; stubs_mu=stubs[1];
 				    th_el=theta.at(0); th_mu=theta.at(1); chi2_e=chi_min.at(0); chi2_mu=chi_min.at(1);
-					x0_err_mu=x0_err[1]; x0_err_e=x0_err[0] ; y0_err_mu=y0_err[1] ; y0_err_e=y0_err[0];}
+					x0_err_mu=x0_err[1]; x0_err_e=x0_err[0] ; y0_err_mu=y0_err[1] ; y0_err_e=y0_err[0];
+					cov_mu=cov_2.at(1); cov_e=cov_2.at(0);}
 	else{id_e=2; id_mu=1; electron=thin2_v.at(1); muon=thin2_v.at(0);  stubs_e=stubs[1]; stubs_mu=stubs[0];
 	     th_el=theta.at(1); th_mu=theta.at(0); chi2_e=chi_min.at(1); chi2_mu=chi_min.at(0);
-                                        x0_err_mu=x0_err[0]; x0_err_e=x0_err[1] ; y0_err_mu=y0_err[0] ; y0_err_e=y0_err[1];}
+                                        x0_err_mu=x0_err[0]; x0_err_e=x0_err[1] ; y0_err_mu=y0_err[0] ; y0_err_e=y0_err[1];
+                                        cov_mu=cov_2.at(0); cov_e=cov_2.at(1);}
 
 						double dotProduct = muon.Dot(electron);
                                                 TVector3 crossProduct = muon.Cross(electron);
@@ -231,33 +240,42 @@ h_imp->Fill(x_t[0],y_t[0]);
 
       if(abs(acoplanarity)<1) h_2d_aco->Fill(th_el,th_mu);
 
-      if(abs(acoplanarity)<1 and chi2_e<10 and chi2_mu<5){// and th_mu>0.0002){//chi2_e<5
+      if(abs(acoplanarity)<1 and chi2_e<5 and chi2_mu<5 and th_el<0.032){// and th_mu>0.0002){//chi2_e<5
 
         h_2d_chi->Fill(th_el,th_mu);
 
         cout << "------ event " << i << " -------" << endl;
 
+	double err1_x,err1_y,err2_x,err2_y,err3_x,err3_y;
 
-			error.at(0)->Fill(x0_err_muin);
-                        error.at(1)->Fill(y0_err_muin);
+	err1_x=sqrt((z_v*z_v*cov_1[2][2]) + cov_1[0][0] + 2*z_v*cov_1[0][2]);
+        err1_y=sqrt((z_v*z_v*cov_1[3][3]) + cov_1[1][1] + 2*z_v*cov_1[1][3]);
 
-                        error.at(2)->Fill(x0_err_mu);
-                        error.at(3)->Fill(y0_err_mu);
+        err2_x=sqrt((z_v*z_v*cov_mu[2][2]) + cov_mu[0][0] + 2*z_v*cov_mu[0][2]);
+        err2_y=sqrt((z_v*z_v*cov_mu[3][3]) + cov_mu[1][1] + 2*z_v*cov_mu[1][3]);
 
-                        error.at(4)->Fill(x0_err_e);
-                        error.at(5)->Fill(y0_err_e);
+        err3_x=sqrt((z_v*z_v*cov_e[2][2]) + cov_e[0][0] + 2*z_v*cov_e[0][2]);
+        err3_y=sqrt((z_v*z_v*cov_e[3][3]) + cov_e[1][1] + 2*z_v*cov_e[1][3]);
+
+			error.at(0)->Fill(err1_x);
+                        error.at(1)->Fill(err1_y);
+
+                        error.at(2)->Fill(err2_x);
+                        error.at(3)->Fill(err2_y);
+
+                        error.at(4)->Fill(err3_x);
+                        error.at(5)->Fill(err3_y);
 
                         residual_mu_trk.at(0)->Fill(x_t[1]-x_t[0]);
                         residual_mu_trk.at(1)->Fill(y_t[1]-y_t[0]);
-                        residual_mu_trk.at(2)->Fill( (x_t[1]-x_t[0])/( sqrt(x0_err_mu*x0_err_mu + x0_err_muin*x0_err_muin) ) );
-                        residual_mu_trk.at(3)->Fill( (y_t[1]-y_t[0])/( sqrt(y0_err_mu*y0_err_mu + y0_err_muin*y0_err_muin) ) );
+                        residual_mu_trk.at(2)->Fill( (x_t[1]-x_t[0])/( sqrt(err2_x*err2_x + err1_x*err1_x) ) );
+                        residual_mu_trk.at(3)->Fill( (y_t[1]-y_t[0])/( sqrt(err2_y*err2_y + err1_y*err1_y) ) );
                         residual_e_trk.at(0)->Fill(x_t[2]-x_t[0]);
                         residual_e_trk.at(1)->Fill(y_t[2]-y_t[0]);
-                        residual_e_trk.at(2)->Fill( (x_t[2]-x_t[0])/( sqrt(x0_err_e*x0_err_e + x0_err_muin*x0_err_muin) ) );
-                        residual_e_trk.at(3)->Fill( (y_t[2]-y_t[0])/( sqrt(y0_err_e*y0_err_e + y0_err_muin*y0_err_muin) ) );
+                        residual_e_trk.at(2)->Fill( (x_t[2]-x_t[0])/( sqrt(err3_x*err3_x + err1_x*err1_x) ) );
+                        residual_e_trk.at(3)->Fill( (y_t[2]-y_t[0])/( sqrt(err3_y*err3_y + err1_y*err1_y) ) );
 
-if( abs(x_t[1]-x_t[0])<0.02 and abs(y_t[1]-y_t[0])<0.02 and th_mu>0.0002)h_2d_all->Fill(th_el,th_mu);
-//and abs(x_t[2]-x_t[0])<0.3 and abs(y_t[2]-y_t[0])<0.3 )h_2d_all->Fill(th_el,th_mu);
+if( abs(x_t[1]-x_t[0])<0.02 and abs(y_t[1]-y_t[0])<0.02 and abs(x_t[2]-x_t[0])<0.3 and abs(y_t[2]-y_t[0])<0.3) h_2d_all->Fill(th_el,th_mu);
 if( abs(x_t[1]-x_t[0])<0.02 and abs(y_t[1]-y_t[0])<0.02 )h_2d_mu->Fill(th_el,th_mu);
 
 			}//abs(acoplanarity)<1
@@ -283,7 +301,7 @@ if(stub_0>=5 and stub_1>=5 and (stub_1-stub_0)>=5){histo_nstubs_BX->Fill(stub_0+
     //histo_nstubs_BX->Draw();
     n.SaveAs("2D_studio.pdf");
 
-  /*  TCanvas n1("n1","n1",700,700);
+    TCanvas n1("n1","n1",700,700);
     n1.Divide(2,3);
    for(int m=0; m<6; m++){
     n1.cd(m+1);
@@ -319,7 +337,7 @@ residual_e_trk[3]->Draw();
 //gPad->SetLogy();
 
 n3.SaveAs("pull_res.pdf");
-*/
+
 
 TCanvas n4 ("n4","n4",700,700);
 h_imp->Draw();

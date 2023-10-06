@@ -18,7 +18,7 @@ using namespace std;
 void RealDataAnalyzer(int numb){
 
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_run3234_3235_1.root");
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new_straight.root");
 //TRMesmer_3cm.root");//dataReconstruction_try_sigma.root");//nrrowBP_20GeV_1shared.root");//trPoints,$
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
@@ -97,7 +97,7 @@ vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks(
 
 cout << "tracks.size() " << tracks.size() << endl;
 
- if(tracks.size()>2){
+ if(tracks.size()>=2){
 
     int sec0=0; int sec1=0;
 
@@ -166,7 +166,7 @@ qy_in.push_back(tracks.at(j).y0());
 my_in.push_back(tracks.at(j).ySlope());
 
         cout << "post vrtx: trackY in Z " << trackYatZ(mu_in.y0(),mu_in.ySlope(),0.) << " VS " << y << endl;
-        cout << "pre vrtx: trackY in Z " << trackYatZ(tracks.at(j).y0(),tracks.at(j).ySlope(),z) << " VS " << y << endl;
+        cout << "pre vrtx: trackY in Z " << trackYatZ(tracks.at(j).y0(),tracks.at(j).ySlope(),912.7) << " VS " << y << endl;
 
 }
 if(tracks.at(j).sector()==1 and sec1>0) //and tracks.at(0).processIDofLinkedTrack()==45 and tracks.at(0).linkedTrackID()!=tracks.at(1).linkedTrackID()){
@@ -284,7 +284,7 @@ if(qx_in.size()!=0 and mx_in.size()!=0)
 {
         for(int c=0; c<qx_in.size(); c++)
                {if(c==0)
-		{TLine* lx = new TLine(0, trackXatZ(qx_in.at(c),mx_in.at(c),810.), 5, trackXatZ(qx_in.at(c),mx_in.at(c), z));
+		{TLine* lx = new TLine(0, trackXatZ(qx_in.at(c),mx_in.at(c),810.), 5, trackXatZ(qx_in.at(c),mx_in.at(c), 912.7));
                  lx->SetLineColor(kBlue+c);
                  lx->Draw("same");
 		}
@@ -397,10 +397,10 @@ if(qy_in.size()!=0 and my_in.size()!=0)
 {
         for(int c=0; c<qy_in.size(); c++)
                {if(c==0)
-                {TLine* ly = new TLine(0, trackYatZ(qy_in.at(c),my_in.at(c), 811), 5, trackYatZ(qy_in.at(c),my_in.at(c), z));
+                {TLine* ly = new TLine(0, trackYatZ(qy_in.at(c),my_in.at(c), 811), 5, trackYatZ(qy_in.at(c),my_in.at(c), 912.7));
                  ly->SetLineColor(kBlue+c);
                  ly->Draw("same");
-	        cout << "pre vrtx: trackY in Z " << trackYatZ(qy_in.at(c),my_in.at(c),z) << " VS " << y << endl;
+	        cout << "pre vrtx: trackY in Z " << trackYatZ(qy_in.at(c),my_in.at(c),912.7) << " VS " << y << endl;
 
                 }
                 else if(c==1){ 
