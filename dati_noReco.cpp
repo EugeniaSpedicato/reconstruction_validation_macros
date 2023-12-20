@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/minbias_5M.root");
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new_1hit.root");
 
 //dataReconstruction_3234-3235_new12_st0_6_1shared_5M.root");
 //minbias_1shared_5M.root");
@@ -225,7 +225,7 @@ cout << "Su " << signal << " golden muons, " << reco3_6 << " sono ricostruiti co
 //cout << "Su " << signal << " eventi di segnale con piu tracce (stesso id), " << more_reco_6 << " sono ricostruiti, con un rapporto del " <<  more_reco_6/signal *100 << "%"<< endl;
 //cout << "Su " << signal << " eventi di segnale con 0 tracce di segnale reco, " << reco0_6<< ", con un rapporto del " << reco0_6/signal *100 << "%"<< endl;
 //cout << "Su " << signal << " eventi di con 1 sola traccia di segnale reco, " << reco1_6 << ", con un rapporto del " << reco1_6/signal *100 << "%"<< endl;
-/*
+
 TCanvas a("a","a",700,700);
 d_eff->Draw("E");
 a.SaveAs("d_eff_RD.pdf");
@@ -242,6 +242,6 @@ theta_mu->SaveAs("theta_mu_RD.root");
 TCanvas d("d","d",700,700);
 theta_e->Draw("E");
 theta_e->SaveAs("theta_e_RD.root");
-*/
+
 
 }

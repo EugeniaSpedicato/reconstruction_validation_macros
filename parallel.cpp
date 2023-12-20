@@ -45,7 +45,8 @@ ROOT::TThreadedObject<TH1D> thetaYg2("theta2g_large" , "theta Y of the muon for 
 
   // Create a TTreeProcessor: specify the file and the tree in it
  // ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_1M.root","cbmsim",nthreads);
-  ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_noBend_1hit_100k.root","cbmsim",nthreads);
+//  ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_noBend_1hit_100k.root","cbmsim",nthreads);
+	ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_new_1M_1hit_bend.root","cbmsim",nthreads);
         MUonERecoOutput *ReconstructionOutput = 0;
 
   auto myFunction = [&](TTreeReader &myReader) {
@@ -78,7 +79,7 @@ Double_t code_mu=-99;
          if(MCTrack.interactionID()==45 and MCTrack.pdgCode()==11) {code_e=i; p_e_MC.SetXYZ(MCTrack.px(),MCTrack.py(),MCTrack.pz()); p_e_MC.Unit(); the_gen=p_muin_MC.Angle(p_e_MC);
 									         theX_gen=MCTrack.ax();
 									         theY_gen=MCTrack.ay();}
-         if(MCTrack.interactionID()==45 and MCTrack.pdgCode()==-13) {code_mu=i; p_mu_MC.SetXYZ(MCTrack.px(),MCTrack.py(),MCTrack.pz()); p_mu_MC.Unit(); thmu_gen=p_muin_MC.Angle(p_mu_MC);
+         if(MCTrack.interactionID()==45 and MCTrack.pdgCode()==13) {code_mu=i; p_mu_MC.SetXYZ(MCTrack.px(),MCTrack.py(),MCTrack.pz()); p_mu_MC.Unit(); thmu_gen=p_muin_MC.Angle(p_mu_MC);
                                                                                  thmuX_gen=MCTrack.ax();
                                                                                  thmuY_gen=MCTrack.ay();}
 	 i++;

@@ -45,7 +45,7 @@ ROOT::TThreadedObject<TH1D> thetaYg2("theta2g_large" , "theta Y of the muon for 
 
   // Create a TTreeProcessor: specify the file and the tree in it
  ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_1M.root","cbmsim",nthreads);
-  //ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_noBend_1hit_100k.root","cbmsim",nthreads);
+  //ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_noBend_1hit_1M.root","cbmsim",nthreads);
         MUonERecoOutput *ReconstructionOutput = 0;
 
   auto myFunction = [&](TTreeReader &myReader) {

@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_1M.root");
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/Mesmer_new_1M_1hit_bend.root");
 //Mesmer_sample_1M.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
@@ -71,7 +71,7 @@ TH1D *h_res3=new TH1D("res3", "(the_rec-the_true) 15<theta_e<20 GeV",40,-0.01,0.
 TH1D *h_res4=new TH1D("res4", "(the_rec-the_true) 20<theta_e<25 GeV",40,-0.01,0.01);
 TH1D *h_res5=new TH1D("res5", "(the_rec-the_true) 25<theta_e<32 GeV",40,-0.01,0.01);
 
-for(Long64_t i = 0; i < 100000; i++) {//cbmsim->GetEntries(); i++) {
+for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 		cbmsim->GetEntry(i);
 		if(i%1000 == 0) cout<<"Entry "<<i<<endl;
 
@@ -334,7 +334,7 @@ r.cd(6);
 h_res5->Draw("hist");
 r.SaveAs("res_bend.pdf");
 
-/*TCanvas a("a","a",700,700);
+TCanvas a("a","a",700,700);
 d_eff->Draw("E");
 a.SaveAs("d_eff_MC.pdf");
 d_eff->SaveAs("d_eff_MC.root");
@@ -358,6 +358,6 @@ theta_mu_gen->SaveAs("theta_mu_gen_MC.root");
 TCanvas f("f","f",700,700);
 theta_e_gen->Draw("E");
 theta_e_gen->SaveAs("theta_e_gen_MC.root");
-*/
+
 
 }
