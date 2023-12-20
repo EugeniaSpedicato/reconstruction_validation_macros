@@ -22,7 +22,8 @@ TChain * cbmsim = new TChain("cbmsim");
 //cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_secondSample.root");
 //cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_thirdSample.root");
 
-cbmsim->Add("TRPP_minbias_1M_nobend_firstSample.root");
+//cbmsim->Add("TRPP_minbias_1M_nobend_firstSample.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_1shared_5M.root");
 
         MUonERecoOutput *ReconstructionOutput = 0;
         TClonesArray *MCTrack = 0;
@@ -105,7 +106,7 @@ vector<double> chi02_v;
 chi02_v.reserve(250);
 */
 
-for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
+for(Long64_t i = 0; i < 1000000; i++) {//cbmsim->GetEntries(); i++) {
 		cbmsim->GetEntry(i);
 		if(i%1000 == 0) cout<<"Entry "<<i<<endl;
 
@@ -125,13 +126,12 @@ double code_em, code_ep;
          if(MCTr->interactionID()==0 and MCTr->pdgCode()==-13) {pmu_in.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); pmu_in=pmu_in.Unit();}
 	 if(MCTr->interactionID()!=0) h_int->Fill(MCTr->interactionID());
 	 if(MCTr->interactionID()==5){
-cout << "INIZIO" << endl;
 	  if(MCTr->pdgCode()==-11) {yes++; Em=MCTr->energy();
 				   pem.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); code_em=n; pem=pem.Unit();
 				   them_gen=pmu_in.Angle(pem);}// h_them_gen->Fill(them_gen); cout << "them_gen " << them_gen << endl;}
           if(MCTr->pdgCode()==11) {yes++; Ep=MCTr->energy();
 				   pep.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); code_ep=n; pep=pep.Unit();
-				   thep_gen=pmu_in.Angle(pep);Z_ep=MCTr->startZ(); cout << "Z_ep " << Z_ep << endl;}// cout << "thep_gen " <<thep_gen << endl;}
+				   thep_gen=pmu_in.Angle(pep);Z_ep=MCTr->startZ(); }// cout << "thep_gen " <<thep_gen << endl;}
 
 	 }
          //if(MCTr->interactionID()==9){cout << "pdgCode "<< MCTr->pdgCode() << " and mum " << MCTr->motherID() << endl;}
@@ -147,8 +147,8 @@ energy_g->Fill(Ep);
 //Z_pp_gen->Fill(Z_ep);
 h_them_all->Fill(them_gen);
 h_thep_all->Fill(thep_gen);
-cout << "___________" << endl;
-cout << "code_em " << code_em << " code_ep " << code_ep << endl;
+//cout << "___________" << endl;
+//cout << "code_em " << code_em << " code_ep " << code_ep << endl;
 int yes_m=0; int yes_p=0; int yes_mu2=0;
 
 vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks();
@@ -174,7 +174,7 @@ if(st0_m==1) mult->Fill(tracks.size()-1);
 for(int j=0; j<tracks.size();j++)
 {
 
-cout << "int_ID " << tracks.at(j).processIDofLinkedTrack() << " sector " << tracks.at(j).sector() << " link " << tracks.at(j).linkedTrackID() << endl;
+//cout << "int_ID " << tracks.at(j).processIDofLinkedTrack() << " sector " << tracks.at(j).sector() << " link " << tracks.at(j).linkedTrackID() << endl;
 
 double th_inx,th_iny;
 if(tracks.at(j).processIDofLinkedTrack()==0 and tracks.at(j).sector()==0){
@@ -205,7 +205,6 @@ if(tracks.at(j).processIDofLinkedTrack()==5 and tracks.at(j).linkedTrackID()==co
  pem_rec_v.push_back(p);
  them_rec_vec.push_back(thin1.Angle(p)); //h_them_rec->Fill(them_rec);
  chi_min_m.push_back(tracks.at(j).chi2perDegreeOfFreedom());
- perc->Fill(tracks.at(j).percentageOfHitsSharedWithLinkedTrack());
 }
 
 if(tracks.at(j).processIDofLinkedTrack()==5 and tracks.at(j).linkedTrackID()==code_ep and tracks.at(j).sector()==1)
@@ -216,7 +215,6 @@ if(tracks.at(j).processIDofLinkedTrack()==5 and tracks.at(j).linkedTrackID()==co
  pep_rec_v.push_back(p);
  thep_rec_vec.push_back(thin1.Angle(p)); //h_thep_rec->Fill(thep_rec);
  chi_min_p.push_back(tracks.at(j).chi2perDegreeOfFreedom());
- perc->Fill(tracks.at(j).percentageOfHitsSharedWithLinkedTrack());
 }
 
 if(tracks.at(j).processIDofLinkedTrack()==9){TVector3 p; p.SetXYZ(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.);p=p.Unit();th_9=thin1.Angle(p);}

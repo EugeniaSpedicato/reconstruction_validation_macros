@@ -18,7 +18,8 @@ using namespace std;
 void RealDataAnalyzer(int numb){
 
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new_straight.root");
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new12_st0_6_1shared_5M.root");
+//("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new_straight.root");
 //TRMesmer_3cm.root");//dataReconstruction_try_sigma.root");//nrrowBP_20GeV_1shared.root");//trPoints,$
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
@@ -32,6 +33,8 @@ double signal=0; double reco=0; double reco1=0; double more_reco=0; double reco0
 
 auto gx = new TGraph();
 auto gy = new TGraph();
+auto gx_s = new TGraph();
+auto gy_s = new TGraph();
 auto gx_v1 = new TGraph();
 auto gy_v1 = new TGraph();
 
@@ -97,7 +100,7 @@ vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks(
 
 cout << "tracks.size() " << tracks.size() << endl;
 
- if(tracks.size()>=2){
+ if(tracks.size()>0){
 
     int sec0=0; int sec1=0;
 
@@ -146,9 +149,16 @@ my_v.push_back(e_out.ySlope());
 
 std::array<std::vector<double>,6> position;//={{{0.,0.},{0.,0.},{0.,0.},{0.,0.},{0.,0.},{0.,0.}}};
 std::array<std::vector<double>,6> position_in;//={{{0.,0.},{0.,0.},{0.,0.},{0.,0.},{0.,0.},{0.,0.}}};
-
+std::array<std::vector<double>,6> position_s;
+std::array<std::vector<double>,6> position_s1;
 double px0;
 double py0;
+
+vector<MUonERecoOutputHit> stubs_=ReconstructionOutput->reconstructedHits();
+for(int s=0; s<stubs_.size(); s++){
+if(stubs_.at(s).stationID()==0)position_s.at(stubs_.at(s).moduleID()).push_back(stubs_.at(s).positionPerpendicular());
+if(stubs_.at(s).stationID()==1)position_s1.at(stubs_.at(s).moduleID()).push_back(stubs_.at(s).positionPerpendicular());
+}
 
 for(int j=0; j<tracks.size();j++)
 {
@@ -169,7 +179,7 @@ my_in.push_back(tracks.at(j).ySlope());
         cout << "pre vrtx: trackY in Z " << trackYatZ(tracks.at(j).y0(),tracks.at(j).ySlope(),912.7) << " VS " << y << endl;
 
 }
-if(tracks.at(j).sector()==1 and sec1>0) //and tracks.at(0).processIDofLinkedTrack()==45 and tracks.at(0).linkedTrackID()!=tracks.at(1).linkedTrackID()){
+if(tracks.at(j).sector()==1 and sec1>=0) //and tracks.at(0).processIDofLinkedTrack()==45 and tracks.at(0).linkedTrackID()!=tracks.at(1).linkedTrackID()){
 {
 std::vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
 
@@ -184,6 +194,52 @@ cout << hits_.at(h).moduleID() << ") hits_.at(h).positionPerpendicular() " << hi
 		}
 	}
 }
+
+if(position_s.at(0).size()!=0){
+for(int h=0;h<position_s.at(0).size(); h++){ gx_s->SetPoint(gx_s->GetN(),0,position_s.at(0).at(h));} 
+}
+if(position_s.at(1).size()!=0){
+for(int h=0;h<position_s.at(1).size(); h++){ gy_s->SetPoint(gy_s->GetN(),0,position_s.at(1).at(h));} 
+}
+
+if(position_s.at(2).size()==position_s.at(3).size()!=0){
+for(int h=0;h<position_s.at(2).size(); h++){   gx_s->SetPoint(gx_s->GetN(),2,newX(45,-position_s.at(2).at(h),position_s.at(3).at(h)));
+                                                gy_s->SetPoint(gy_s->GetN(),2,newY(45,-position_s.at(2).at(h),position_s.at(3).at(h)));} 
+}
+
+if(position_s.at(4).size()!=0){
+for(int h=0;h<position_s.at(4).size(); h++){ gx_s->SetPoint(gx_s->GetN(),4,position_s.at(4).at(h));} 
+}
+if(position_s.at(5).size()!=0){
+for(int h=0;h<position_s.at(5).size(); h++){ gy_s->SetPoint(gy_s->GetN(),4,position_s.at(5).at(h));} 
+}
+
+
+
+if(position_s1.at(0).size()!=0){
+for(int h=0;h<position_s1.at(0).size(); h++){ gx_s->SetPoint(gx_s->GetN(),6,position_s1.at(0).at(h));} 
+}
+if(position_s1.at(1).size()!=0){
+for(int h=0;h<position_s1.at(1).size(); h++){ gy_s->SetPoint(gy_s->GetN(),6,position_s1.at(1).at(h));} 
+}
+
+if(position_s1.at(2).size()==position_s.at(3).size()!=0){
+for(int h=0;h<position_s1.at(2).size(); h++){   gx_s->SetPoint(gx_s->GetN(),8,newX(45,-position_s1.at(2).at(h),position_s1.at(3).at(h)));
+                                                gy_s->SetPoint(gy_s->GetN(),8,newY(45,-position_s1.at(2).at(h),position_s1.at(3).at(h)));} 
+}
+
+if(position_s1.at(4).size()!=0){
+for(int h=0;h<position_s1.at(4).size(); h++){ gx_s->SetPoint(gx_s->GetN(),10,position_s1.at(4).at(h));} 
+}
+if(position_s1.at(5).size()!=0){
+for(int h=0;h<position_s1.at(5).size(); h++){ gy_s->SetPoint(gy_s->GetN(),10,position_s1.at(5).at(h));} 
+}
+
+
+
+
+
+
 
 if(position_in.at(0).size()!=0){
 for(int h=0;h<position_in.at(0).size(); h++){ gx->SetPoint(gx->GetN(),0,position_in.at(0).at(h));} 
@@ -271,11 +327,16 @@ gx->SetMaximum(6);
 gx->SetMarkerColor(kRed);
 gx->SetTitle("sig track stubs");
 
+gx_s->SetMinimum(-6);
+gx_s->SetMaximum(6);
+gx_s->SetMarkerColor(kBlue);
+gx_s->SetTitle("stubs");
 
 TMultiGraph *mgx = new TMultiGraph();
 mgx->SetMinimum(-6);
 mgx->SetMaximum(6);
 mgx->Add(gx,"A*");
+mgx->Add(gx_s,"A*");
 mgx->Draw("A* ");
 mgx->SetTitle("X projection");
 
@@ -329,11 +390,17 @@ gx->SetMaximum(6);
 gx->SetMarkerColor(kRed);
 gx->SetTitle("sig track stubs");
 
+gx_s->SetMinimum(-6);
+gx_s->SetMaximum(6);
+gx_s->SetMarkerColor(kBlue);
+gx_s->SetTitle("stubs");
+
 TMultiGraph *mgx_v = new TMultiGraph();
 mgx_v->SetMinimum(-6);
 mgx_v->SetMaximum(6);
 mgx_v->Add(gx_v1,"A*");
 mgx_v->Add(gx,"A*");
+mgx_v->Add(gx_s,"A*");
 mgx_v->Draw("A* ");
 mgx_v->SetTitle("X projection vrtx fit");
 
@@ -383,13 +450,18 @@ a2.cd(3);
 gy->SetMinimum(-6);
 gy->SetMaximum(6);
 gy->SetMarkerColor(kRed);
-
 gy->SetTitle("sig track stubs");
+
+gy_s->SetMinimum(-6);
+gy_s->SetMaximum(6);
+gy_s->SetMarkerColor(kBlue);
+gy_s->SetTitle("stubs");
 
 TMultiGraph *mg = new TMultiGraph();
 mg->SetMinimum(-6);
 mg->SetMaximum(6);
 mg->Add(gy,"A*");
+mg->Add(gy_s,"A*");
 mg->Draw("A* ");
 mg->SetTitle("Y projection");
 
@@ -444,11 +516,17 @@ gy->SetMaximum(6);
 gy->SetMarkerColor(kRed);
 gy->SetTitle("sig track stubs");
 
+gy_s->SetMinimum(-6);
+gy_s->SetMaximum(6);
+gy_s->SetMarkerColor(kBlue);
+gy_s->SetTitle("stubs");
+
 TMultiGraph *mgy_v = new TMultiGraph();
 mgy_v->SetMinimum(-6);
 mgy_v->SetMaximum(6);
 mgy_v->Add(gy_v1,"A*");
 mgy_v->Add(gy,"A*");
+mgy_v->Add(gy_s,"A*");
 mgy_v->Draw("A* ");
 mgy_v->SetTitle("Y projection vrtx fit");
 

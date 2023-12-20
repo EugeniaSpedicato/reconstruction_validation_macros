@@ -21,7 +21,9 @@ TChain * cbmsim = new TChain("cbmsim");
 //cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_firstSample.root");
 //cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_secondSample.root");
 //cbmsim->Add("TRPP_minbias_offset/TRPP_minbias_1M_thirdSample.root");
-cbmsim->Add("TRPP_minbias_1M_nobend_firstSample.root");
+//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_1shared_5M.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_1shared_5M.root");
+///home/espedica/fair_install/instFairRoot/share/MUonE/macros/prova.root");
 
         MUonERecoOutput *ReconstructionOutput = 0;
         TClonesArray *MCTrack = 0;
@@ -98,7 +100,7 @@ double other=0;
 double other0=0;
 double danger_ghost02=0;
 double other02=0;
-for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
+for(Long64_t i = 0; i < 1000000; i++) {//cbmsim->GetEntries(); i++) {
 		cbmsim->GetEntry(i);
 		if(i%1000 == 0) cout<<"Entry "<<i<<endl;
 
@@ -120,7 +122,7 @@ int yes9=0;
          if(MCTr->interactionID()==0 and MCTr->pdgCode()==-13) {pmu_in.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); pmu_in=pmu_in.Unit();}
 	 if(MCTr->interactionID()==5) yes5=1;//h_int->Fill(MCTr->interactionID());
 	 if(MCTr->interactionID()==9){yes9=1;
-cout << "INIZIO" << endl;
+//cout << "INIZIO" << endl;
           if(MCTr->pdgCode()==11) {yes++; Ep=MCTr->energy();
 				   pep.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); code_ep=n; pep=pep.Unit();
 				   thep_gen=pmu_in.Angle(pep);Z_ep=MCTr->startZ();}// cout << "thep_gen " <<thep_gen << endl;}
@@ -139,8 +141,8 @@ energy_g->Fill(Ep);
 //Z_sig_gen->Fill(Z_ep);
 h_thep_all->Fill(thep_gen);
 
-cout << "___________" << endl;
-cout << "code_em " << code_em << " code_ep " << code_ep << endl;
+//cout << "___________" << endl;
+//cout << "code_em " << code_em << " code_ep " << code_ep << endl;
 int yes_m=0; int yes_p=0; int yes_mu2=0;
 
 vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks();
@@ -167,7 +169,7 @@ if(st0_m==1) mult->Fill(tracks.size()-1);
 for(int j=0; j<tracks.size();j++)
 {
 
-cout << "int_ID " << tracks.at(j).processIDofLinkedTrack() << " sector " << tracks.at(j).sector() << " link " << tracks.at(j).linkedTrackID() << endl;
+//cout << "int_ID " << tracks.at(j).processIDofLinkedTrack() << " sector " << tracks.at(j).sector() << " link " << tracks.at(j).linkedTrackID() << endl;
 
 double th_inx,th_iny;
 if(tracks.at(j).processIDofLinkedTrack()==0 and tracks.at(j).sector()==0){
@@ -199,7 +201,6 @@ if(tracks.at(j).processIDofLinkedTrack()==9 and tracks.at(j).linkedTrackID()==co
  pep_rec_v.push_back(p);
  thep_rec_vec.push_back(thin1.Angle(p)); //h_thep_rec->Fill(thep_rec);
  chi_min_p.push_back(tracks.at(j).chi2perDegreeOfFreedom());
- perc->Fill(tracks.at(j).percentageOfHitsSharedWithLinkedTrack());
 }
 
 if(tracks.at(j).processIDofLinkedTrack()==5){TVector3 p; p.SetXYZ(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.);p=p.Unit();th_9=thin1.Angle(p);}
@@ -522,7 +523,7 @@ h1_sm->SaveAs("vrtx_chi_sigminb_norm.root");
 htmp_sm->SaveAs("vrtx_chi_sigminb_norm_ovrflw.root");
 h2_sm->SaveAs("vrtx_chi_sigminb_norm_after02.root");
 htmp_sm2->SaveAs("vrtx_chi_sigminb_norm_after02_ovrflw.root");
-
+*/
 
 TCanvas ac("ac","ac",700,700);
 ac.Divide(1,2);
@@ -539,6 +540,7 @@ ac.SaveAs("h_aco_sig_min.pdf");
 h_acoN->SaveAs("h_aco_sig_min.root");
 h_acoN_02->SaveAs("h_aco_sig_min_after02.root");
 
+/*
 TCanvas b2("b2","b2",700,700);
 b2.Divide(2,2);
 b2.cd(1);

@@ -16,7 +16,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
- 	TFile *inputfile = new TFile("TRMesmer_box_offset_100k_2GeV_0.root");//TRMesmer_box_100k.root");
+ 	TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/TRMesmer_full.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
@@ -36,23 +36,23 @@ void RealDataAnalyzer(){
         cbmsim->SetBranchAddress("ReconstructionOutput", &ReconstructionOutput);
 
 
-TH2D *h_res=new TH2D("res", "(the_rec-the_true) VS energy Ee<5 GeV POST-VRTX",25,0,5,400,-0.04,0.04);
-TH2D *h_res1=new TH2D("res1", "(the_rec-the_true) VS energy 5<E<15 GeV POST-VRTX",20,5,15,80,-0.004,0.004);
-TH2D *h_res2=new TH2D("res2", "(the_rec-the_true) VS energy 15<E<25 GeV POST-VRTX",10,15,20,20,-0.001,0.001);
-TH2D *h_res3=new TH2D("res3", "(the_rec-the_true) VS energy Ee>25 GeV POST-VRTX",6,25,65,20,-0.001,0.001);
+TH1D *h_res=new TH1D("res", "(the_rec-the_true) energy Ee<5 GeV POST-VRTX",400,-0.04,0.04);
+TH1D *h_res1=new TH1D("res1", "(the_rec-the_true) energy 5<E<15 GeV POST-VRTX",80,-0.004,0.004);
+TH1D *h_res2=new TH1D("res2", "(the_rec-the_true) energy 15<E<25 GeV POST-VRTX",20,-0.001,0.001);
+TH1D *h_res3=new TH1D("res3", "(the_rec-the_true) energy Ee>25 GeV POST-VRTX",20,-0.001,0.001);
 
-TH2D *h_res_mu=new TH2D("h_res_mu", "(thmu_rec-thmu_true) VS energy Emu(GeV) POST-VRTX",60,157,160,22,-0.0006,0.0006);//30,140,170,22,-0.0006,0.0006);
-TH2D *h_res_mu_in=new TH2D("h_res_mu_in", "(thmu_in_rec-thmu_in_true) VS energy Emu(GeV) POST-VRTX",4,160,160.2,22,-0.0006,0.0006);
+TH1D *h_res_mu=new TH1D("h_res_mu", "(thmu_rec-thmu_true) POST-VRTX",22,-0.0006,0.0006);//30,140,170,22,-0.0006,0.0006);
+TH1D *h_res_mu_in=new TH1D("h_res_mu_in", "(thmu_in_rec-thmu_in_true) POST-VRTX",22,-0.0006,0.0006);
 
 
 
-TH2D *h_resTR=new TH2D("resTR", "(the_rec-the_true) VS energy Ee<5 GeV PRE-VRTX",25,0,5,400,-0.04,0.04);
-TH2D *h_res1TR=new TH2D("res1TR", "(the_rec-the_true) VS energy 5<E<15 GeV PRE-VRTX",20,5,15,80,-0.004,0.004);
-TH2D *h_res2TR=new TH2D("res2TR", "(the_rec-the_true) VS energy 15<E<25 GeV PRE-VRTX",10,15,20,20,-0.001,0.001);
-TH2D *h_res3TR=new TH2D("res3TR", "(the_rec-the_true) VS energy Ee>25 GeV PRE-VRTX",6,25,65,20,-0.001,0.001);
+TH1D *h_resTR=new TH1D("resTR", "(the_rec-the_true) energy Ee<5 GeV PRE-VRTX",400,-0.04,0.04);
+TH1D *h_res1TR=new TH1D("res1TR", "(the_rec-the_true) energy 5<E<15 GeV PRE-VRTX",80,-0.004,0.004);
+TH1D *h_res2TR=new TH1D("res2TR", "(the_rec-the_true) energy 15<E<25 GeV PRE-VRTX",20,-0.001,0.001);
+TH1D *h_res3TR=new TH1D("res3TR", "(the_rec-the_true) energy Ee>25 GeV PRE-VRTX",20,-0.001,0.001);
 
-TH2D *h_res_muTR=new TH2D("h_res_muTR", "(thmu_rec-thmu_true) VS energy Emu(GeV) PRE-VRTX",40,150,165,22,-0.0006,0.0006);
-TH2D *h_res_mu_inTR=new TH2D("h_res_mu_inTR", "(thmu_in_rec-thmu_in_true) VS energy Emu(GeV) PRE-VRTX",4,160,160.2,22,-0.0006,0.0006);
+TH1D *h_res_muTR=new TH1D("h_res_muTR", "(thmu_rec-thmu_true) PRE-VRTX",22,-0.0006,0.0006);
+TH1D *h_res_mu_inTR=new TH1D("h_res_mu_inTR", "(thmu_in_rec-thmu_in_true) PRE-VRTX",22,-0.0006,0.0006);
 
 
 TH2D *h_echi_e=new TH2D("h_chidoe", "chi2 per dof vs energy electron Ee<5 GeV POST-VRTX",50,0,5,300,0,100);
@@ -134,7 +134,7 @@ int TrackIdreco=-99;
 
 for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 		cbmsim->GetEntry(i);
-		if(i%1000 == 0) cout<<"Entry "<<i<<endl;
+		if(i%100 == 0) cout<<"Entry "<<i<<endl;
 	TVector3 pmuin,pe,pmu;
 
 	double Emu_in=0;
@@ -148,7 +148,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 
 	for(int n = 0; n < MCTrack->GetEntries(); n++) {
 	 const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
-	 if(MCTr->interactionID()==0 and MCTr->pdgCode()==-13){
+	 if(MCTr->interactionID()==0 and MCTr->pdgCode()==13){
 	 pmuin.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz());
 	 th_in_gen = pmuin.Theta();
 	 Emu_in = MCTr->energy();
@@ -158,7 +158,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 	 }
 
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) {code_e=n;}
-         if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {code_mu=n;}
+         if(MCTr->interactionID()==45 and MCTr->pdgCode()==13) {code_mu=n;}
 	}
 
 	for(int n = 0; n < SignalTracks->GetEntries(); n++) {
@@ -175,7 +175,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
                                                                                                  if(TrackerPt->moduleID()==4) last_modXe++;
                                                                                                  if(TrackerPt->moduleID()==5) last_modYe++;
 												 if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_e++;}
-                          if(TrackerPt->trackPDGCode()==-13 and SigTracks->pdgCode()==-13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1){ point_mu++;
+                          if(TrackerPt->trackPDGCode()==13 and SigTracks->pdgCode()==13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1){ point_mu++;
 												 if(TrackerPt->moduleID()==4) last_modXmu++;
                                                                                                  if(TrackerPt->moduleID()==5) last_modYmu++;
 												 if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_mu++;}
@@ -191,7 +191,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
                 the_sdr=muin.Angle(e);
 		//the_sdr=acos(pmuin_dir.Dot(pe_dir));
 		yes_e_g=1;}
- 	   if(SigTracks->pdgCode()==-13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){
+ 	   if(SigTracks->pdgCode()==13 and last_modXmu==2 and last_modYmu==2 and stereo_mu>1){
 		Emu=SigTracks->energy();
 		pmu.SetXYZ(SigTracks->px(),SigTracks->py(),SigTracks->pz());
 		//thmu_gen=pmu.Theta();
@@ -206,10 +206,10 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 	 }
 	}
 
- if(yes_e_g!=1 or yes_mu_g!=1) cout << "NOT RECONSTRUCTIBLE" << endl;
+// if(yes_e_g!=1 or yes_mu_g!=1) cout << "NOT RECONSTRUCTIBLE" << endl;
 
  if(yes_e_g==1 and yes_mu_g==1){
-cout << "RECONSTRUCTIBLE" << endl;
+//cout << "RECONSTRUCTIBLE" << endl;
 
 	   signal+=MesmerEvent->wgt_full;
 
@@ -227,17 +227,17 @@ if(vrtx.at(j).stationIndex()==1)
  MUonERecoOutputTrack e_out = vrtx.at(j).outgoingElectron();
 
 TVector3 in1(mu_in.xSlope(),mu_in.ySlope(),1.0);
-th_in_rec_vrtx=in1.Theta();
 
 
 // scelgo il vertice con miglior chi^2
  if(j==0){
+th_in_rec_vrtx=in1.Theta();
 // quante volte sbaglio associazione ID traccia vertice con ID traccia MC?
 if(code_e!=e_out.linkedTrackID()) {e+=MesmerEvent->wgt_full;
-					cout << "el " << code_e << ", " << e_out.linkedTrackID() << " on process id " << e_out.processIDofLinkedTrack() << endl;
+					//cout << "el " << code_e << ", " << e_out.linkedTrackID() << " on process id " << e_out.processIDofLinkedTrack() << endl;
 				  }
 if(code_mu!=mu_out.linkedTrackID()) {mu+=MesmerEvent->wgt_full;
-					cout << "mu " << code_mu << ", " << mu_out.linkedTrackID() << " on process id " << mu_out.processIDofLinkedTrack() << endl;
+					//cout << "mu " << code_mu << ", " << mu_out.linkedTrackID() << " on process id " << mu_out.processIDofLinkedTrack() << endl;
 				  }
 
 //associazione corretta e un certo numero di tracce riscostruite
@@ -248,11 +248,11 @@ TVector3 mu1(mu_out.xSlope(),mu_out.ySlope(),1.0);
 TVector3 e1(e_out.xSlope(),e_out.ySlope(),1.0);
 
 
-	the_rec_vrtx = e1.Theta();
-        thmu_rec_vrtx = mu1.Theta();
+	the_rec_vrtx = vrtx.at(j).electronTheta();//in1.Angle(e1);
+        thmu_rec_vrtx = vrtx.at(j).muonTheta();//in1.Theta(mu1);
 
 
-	if( Ee<5 ){
+/*	if( Ee<5 ){
 	h_echi_e->Fill(Ee,e_out.chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
         h_echi_mu->Fill(Ee,mu_out.chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
 
@@ -280,7 +280,7 @@ TVector3 e1(e_out.xSlope(),e_out.ySlope(),1.0);
 	h_chi_e3->Fill(e_out.chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
         h_chi_mu3->Fill(mu_out.chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
 	}
-
+*/
 		}
 
 // quante volte sbaglia contemporaneamente l'associazione, quindi scambia e per mu?
@@ -307,20 +307,20 @@ int yes_mur=0;
 for(int j=0; j<tracks.size();j++)
 {
 
-if(tracks.at(j).sector()==1 and tracks.at(j).processIDofLinkedTrack()==0) cout << "c'e' un muone 0!! " << endl;
+//if(tracks.at(j).sector()==1 and tracks.at(j).processIDofLinkedTrack()==0) cout << "c'e' un muone 0!! " << endl;
 if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.at(j).sector()==1) TrackIdreco=tracks.at(j).linkedTrackID();
-if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1 and tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=0) 
-{ yes2++; cout << "tracks.size " << tracks.size() << endl;
+if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(j).sector()==1)
+{ yes2++;
 
- int sum = tracks.at(j).numberOfXProjectionHits() + tracks.at(j).numberOfYProjectionHits() + tracks.at(j).numberOfStereoHits();
+ /*int sum = tracks.at(j).numberOfXProjectionHits() + tracks.at(j).numberOfYProjectionHits() + tracks.at(j).numberOfStereoHits();
  cout << "TrackerStubs " << TrackerStubs->GetEntries() << endl;
  cout << "TrackID " << tracks.at(j).linkedTrackID() << endl;
  cout << "#%hitsshared " <<tracks.at(j).percentageOfHitsSharedWithLinkedTrack() << " and sum of hits " << sum << endl;
- cout << "chi2perDegreeOfFreedom " << tracks.at(j).chi2perDegreeOfFreedom() << endl;
+ cout << "chi2perDegreeOfFreedom " << tracks.at(j).chi2perDegreeOfFreedom() << endl;*/
 
 //if(tracks.size()==3)
 //{
-        if( Ee<5 ){
+       /* if( Ee<5 ){
         if(code_e==tracks.at(j).linkedTrackID()) {        h_echi_eTR->Fill(Ee,tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
 							  h_chi_eTR->Fill(tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);}
         if(code_mu==tracks.at(j).linkedTrackID()) {       h_echi_muTR->Fill(Ee,tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
@@ -343,20 +343,20 @@ if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()>=3 and tracks.at(
                                                           h_chi_e3TR->Fill(tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);}
         if(code_mu==tracks.at(j).linkedTrackID()) {       h_echi_mu3TR->Fill(Ee,tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);
                                                           h_chi_mu3TR->Fill(tracks.at(j).chi2perDegreeOfFreedom(),MesmerEvent->wgt_full);}
-        }
+        }*/
 
 if(code_e==tracks.at(j).linkedTrackID()) {
 	yes_er++;
 	h_chi_eTOT->Fill(tracks.at(j).chi2(),MesmerEvent->wgt_full);
 	TVector3 e_outv(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0);
-        the_rec_tracks=e_outv.Theta();
+        the_rec_tracks=in.Angle(e_outv);//e_outv.Theta();
 					}
 
 if(code_mu==tracks.at(j).linkedTrackID()) {
         yes_mur++;
 	h_chi_muTOT->Fill(tracks.at(j).chi2(),MesmerEvent->wgt_full);
 	TVector3 mu_outv(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0);
-	thmu_rec_tracks=mu_outv.Theta();
+	thmu_rec_tracks=in.Angle(mu_outv);//mu_outv.Theta();
 					}
 //}
 
@@ -364,40 +364,39 @@ if(code_mu==tracks.at(j).linkedTrackID()) {
 	}
 }
 
-cout << "Numero elettroni " << yes_er << ", numero muoni " << yes_mur << endl;
+//cout << "Numero elettroni " << yes_er << ", numero muoni " << yes_mur << endl;
 
-if(yes_er==1 and yes_mur==1 and tracks.size()==3) {reco3+=MesmerEvent->wgt_full; cout << "reco3" << endl;}
+if(yes_er==1 and yes_mur==1 and tracks.size()==3) {reco3+=MesmerEvent->wgt_full;}
 //and tracks.size()==3){reco3+=MesmerEvent->wgt_full; cout << "reco3" << endl;}
 
-  for(int j=0; j<vrtx.size();j++)
-        {cout << "vrtx chi2 <" << vrtx.at(j).chi2perDegreeOfFreedom() << endl;}
+/*  for(int j=0; j<vrtx.size();j++)
+        {cout << "vrtx chi2 <" << vrtx.at(j).chi2perDegreeOfFreedom() << endl;}*/
 
 if(yes_er>=1 and yes_mur>=1){reco+=MesmerEvent->wgt_full;
- cout << "reco" << endl;
 if(yes_v>=1){
-double res = the_rec_vrtx-the_gen;
-double res_mu = thmu_rec_vrtx-thmu_gen;
+double res = the_rec_vrtx-the_sdr;
+double res_mu = thmu_rec_vrtx-thmu_sdr;
 double res_muin = th_in_rec_vrtx-th_in_gen;
 
-double resTR = the_rec_tracks-the_gen;
-double res_muTR = thmu_rec_tracks-thmu_gen;
+double resTR = the_rec_tracks-the_sdr;
+double res_muTR = thmu_rec_tracks-thmu_sdr;
 double res_muinTR = th_in_rec_tracks-th_in_gen;
 
-if( Ee<5 )h_res->Fill(Ee,res,MesmerEvent->wgt_full);
-if( Ee<15 and Ee>5)h_res1->Fill(Ee,res,MesmerEvent->wgt_full);
-if( Ee<25 and Ee>15)h_res2->Fill(Ee,res,MesmerEvent->wgt_full);
-if( Ee>25)h_res3->Fill(Ee,res,MesmerEvent->wgt_full);
-h_res_mu->Fill(Emu,res_mu,MesmerEvent->wgt_full);
-h_res_mu_in->Fill(Emu_in,res_muin,MesmerEvent->wgt_full);
+if( Ee<5 )h_res->Fill(res,MesmerEvent->wgt_full);
+if( Ee<15 and Ee>5)h_res1->Fill(res,MesmerEvent->wgt_full);
+if( Ee<25 and Ee>15)h_res2->Fill(res,MesmerEvent->wgt_full);
+if( Ee>25)h_res3->Fill(res,MesmerEvent->wgt_full);
+h_res_mu->Fill(res_mu,MesmerEvent->wgt_full);
+h_res_mu_in->Fill(res_muin,MesmerEvent->wgt_full);
 
 
-if( Ee<5 )h_resTR->Fill(Ee,resTR,MesmerEvent->wgt_full);
-if( Ee<15 and Ee>5)h_res1TR->Fill(Ee,resTR,MesmerEvent->wgt_full);
-if( Ee<25 and Ee>15)h_res2TR->Fill(Ee,resTR,MesmerEvent->wgt_full);
-if( Ee>25)h_res3TR->Fill(Ee,resTR,MesmerEvent->wgt_full);
+if( Ee<5 )h_resTR->Fill(resTR,MesmerEvent->wgt_full);
+if( Ee<15 and Ee>5)h_res1TR->Fill(resTR,MesmerEvent->wgt_full);
+if( Ee<25 and Ee>15)h_res2TR->Fill(resTR,MesmerEvent->wgt_full);
+if( Ee>25)h_res3TR->Fill(resTR,MesmerEvent->wgt_full);
 
-h_res_muTR->Fill(Emu,res_muTR,MesmerEvent->wgt_full);
-h_res_mu_inTR->Fill(Emu_in,res_muinTR,MesmerEvent->wgt_full);
+h_res_muTR->Fill(res_muTR,MesmerEvent->wgt_full);
+h_res_mu_inTR->Fill(res_muinTR,MesmerEvent->wgt_full);
 
 
  }
@@ -416,7 +415,7 @@ if(yes2>2){more_reco+=MesmerEvent->wgt_full;}
 //	}
 
 if(yes2<2 and TrackIdreco!=-99){reco1+=MesmerEvent->wgt_full;
-cout <<"NOT RECONSTRUCTED"<<endl;
+//cout <<"NOT RECONSTRUCTED"<<endl;
 	}
 
 if(yes_v>=1){reco_v+=MesmerEvent->wgt_full;
@@ -426,13 +425,12 @@ if(yes_v>1){more_reco_v+=MesmerEvent->wgt_full;
         }
 
 if(yes_v<1){reco0_v+=MesmerEvent->wgt_full;
-cout <<"NOT RECONSTRUCTED vertex"<<endl;
+//cout <<"NOT RECONSTRUCTED vertex"<<endl;
         }
 
 
 
 }
-cout << "---------------------"<<endl;
 yes_e_g=0;yes_mu_g=0;
 code_e=-99;code_mu=-99;
 point_el=0;point_mu=0;
@@ -671,6 +669,7 @@ for (Int_t i=1; i<nxTh12TR+1; i++) {
 for (Int_t j=1; j<nyTh12TR+1; j++) {
 if (h_res_mu_inTR->GetBinContent(i,j)<1) h_res_mu_inTR->SetBinContent(i,j,0);}}
 
+
 TCanvas a("pa","p",700,700);
 a.Divide(2,4);
 a.cd(1);
@@ -738,115 +737,35 @@ p8->Draw();
 p8TR->Draw("same");
 
 a.SaveAs("chiVSen.pdf");
-
+*/
 
 TCanvas b("b","b",700,700);
-b.Divide(3,4);
+b.Divide(2,2);
 b.cd(1);
-h_res->Draw("COLZ");
+h_res->Draw();
 b.cd(2);
-TObjArray aSlices;
-h_res->SetLineColor(40);
-auto q2 = h_res->ProfileX();
-q2->SetLineColor(40);
-q2->Draw();
-h_res->FitSlicesY(0,0,-1,0,"QLW", &aSlices);
+h_res1->Draw();
 b.cd(3);
-//aSlices[2]->SetLineColor(40);
-aSlices[2]->Draw();
-
+h_res2->Draw();
 b.cd(4);
-h_res1->Draw("COLZ");
-b.cd(5);
-TObjArray aSlices1;
-auto q3 = h_res1->ProfileX();
-h_res1->FitSlicesY(0,0,-1,0,"QLW", &aSlices1);
-q3->SetLineColor(46);
-q3->Draw();
-b.cd(6);
-//aSlices1[2]->SetLineColor(46);
-aSlices1[2]->Draw();
-
-b.cd(7);
-h_res2->Draw("COLZ");
-b.cd(8);
-TObjArray aSlices2;
-auto q4 = h_res2->ProfileX();
- h_res2->FitSlicesY(0,0,-1,0,"QLW", &aSlices2);
-q4->SetLineColor(42);
-q4->Draw();
-b.cd(9);
-//aSlices2[2]->SetLineColor(42);
-aSlices2[2]->Draw();
-
-b.cd(10);
-h_res3->Draw("COLZ");
-b.cd(11);
-TObjArray aSlices3;
-auto q1 = h_res3->ProfileX();
-h_res3->FitSlicesY(0,0,-1,0,"QLW", &aSlices3);
-q1->SetLineColor(30);
-q1->Draw();
-b.cd(12);
-//aSlices3[2]->SetLineColor(30);
-aSlices3[2]->Draw();
+h_res3->Draw();
 
 b.SaveAs("res_postVrtx.pdf");
 
 
 TCanvas b1("b1","b1",700,700);
-b1.Divide(3,4);
+b1.Divide(2,2);
 b1.cd(1);
-h_resTR->Draw("COLZ");
+h_resTR->Draw();
 b1.cd(2);
-TObjArray aSlicesTR;
-h_resTR->SetLineColor(40);
-auto q2TR = h_resTR->ProfileX();
-q2TR->SetLineColor(40);
-q2TR->Draw();
-h_resTR->FitSlicesY(0,0,-1,0,"QLW", &aSlicesTR);
+h_res1TR->Draw();
 b1.cd(3);
-//aSlices[2]->SetLineColor(40);
-aSlicesTR[2]->Draw();
-
+h_res2TR->Draw();
 b1.cd(4);
-h_res1TR->Draw("COLZ");
-b1.cd(5);
-TObjArray aSlices1TR;
-auto q3TR = h_res1TR->ProfileX();
-h_res1TR->FitSlicesY(0,0,-1,0,"QLW", &aSlices1TR);
-q3TR->SetLineColor(46);
-q3TR->Draw();
-b1.cd(6);
-//aSlices1[2]->SetLineColor(46);
-aSlices1TR[2]->Draw();
-
-b1.cd(7);
-h_res2TR->Draw("COLZ");
-b1.cd(8);
-TObjArray aSlices2TR;
-auto q4TR = h_res2TR->ProfileX();
- h_res2TR->FitSlicesY(0,0,-1,0,"QLW", &aSlices2TR);
-q4TR->SetLineColor(42);
-q4TR->Draw();
-b1.cd(9);
-//aSlices2[2]->SetLineColor(42);
-aSlices2TR[2]->Draw();
-
-b1.cd(10);
-h_res3TR->Draw("COLZ");
-b1.cd(11);
-TObjArray aSlices3TR;
-auto q1TR = h_res3TR->ProfileX();
-h_res3TR->FitSlicesY(0,0,-1,0,"QLW", &aSlices3TR);
-q1TR->SetLineColor(30);
-q1TR->Draw();
-b1.cd(12);
-//aSlices3[2]->SetLineColor(30);
-aSlices3TR[2]->Draw();
-
+h_res3TR->Draw();
 b1.SaveAs("res_preVrtx.pdf");
 
+/*
 TCanvas a1("pa1","p",700,700);
 a1.Divide(2,5);
 a1.cd(1);
@@ -886,64 +805,25 @@ h_chi_eTOT->Draw("hist");
 a1.cd(10);
 h_chi_muTOT->Draw("hist");
 a1.SaveAs("chi.pdf");
-
+*/
 
 TCanvas d("d","d",700,700);
-d.Divide(2,3);
+d.Divide(1,2);
 d.cd(1);
-h_res_mu->Draw("COLZ");
-d.cd(3);
-TObjArray aSlices_mu;
-auto m1 = h_res_mu->ProfileX();
-h_res_mu->FitSlicesY(0,0,-1,0,"QLW", &aSlices_mu);
-m1->SetLineColor(30);
-m1->Draw();
-d.cd(5);
-//aSlices3[2]->SetLineColor(30);
-aSlices_mu[2]->Draw();
-
+h_res_mu->Draw();
 d.cd(2);
-h_res_mu_in->Draw("COLZ");
-d.cd(4);
-TObjArray aSlices_mu_in;
-auto m1_in = h_res_mu_in->ProfileX();
-h_res_mu_in->FitSlicesY(0,0,-1,0,"QLW", &aSlices_mu_in);
-m1_in->SetLineColor(35);
-m1_in->Draw();
-d.cd(6);
-//aSlices3[2]->SetLineColor(30);
-aSlices_mu_in[2]->Draw();
-
+h_res_mu_in->Draw();
 d.SaveAs("res_mu_POSTvrtx.pdf");
 
 
 TCanvas d1("d1","d1",700,700);
-d1.Divide(2,3);
+d1.Divide(1,2);
 d1.cd(1);
-h_res_muTR->Draw("COLZ");
-d1.cd(3);
-TObjArray aSlices_muTR;
-auto m1TR = h_res_muTR->ProfileX();
-h_res_muTR->FitSlicesY(0,0,-1,0,"QLW", &aSlices_muTR);
-m1TR->SetLineColor(30);
-m1TR->Draw();
-d1.cd(5);
-//aSlices3[2]->SetLineColor(30);
-aSlices_muTR[2]->Draw();
+h_res_muTR->Draw();
 d1.cd(2);
-h_res_mu_inTR->Draw("COLZ");
-d1.cd(4);
-TObjArray aSlices_mu_inTR;
-auto m1_inTR = h_res_mu_inTR->ProfileX();
-h_res_mu_inTR->FitSlicesY(0,0,-1,0,"QLW", &aSlices_mu_inTR);
-m1_inTR->SetLineColor(35);
-m1_inTR->Draw();
-d1.cd(6);
-//aSlices3[2]->SetLineColor(30);
-aSlices_mu_inTR[2]->Draw();
-
+h_res_mu_inTR->Draw();
 d1.SaveAs("res_mu_PREvrtx.pdf");
-*/
+
 
 }
 

@@ -21,12 +21,13 @@ void RealDataAnalyzer(){
 	//TFile *inputfile = new TFile("TRMesmer_box_nobend_parallel_20k_2GeV_0.root");
         //TFile *inputfile = new TFile("TRMesmer_box_nobend_30k_2GeV_0.root");
         //TFile *inputfile = new TFile("TRMesmer_box_nobend_parallel_30k_0.root");
-	TFile *inputfile = new TFile("TRMesmer_box_nobend_parallel_10k_2GeV_2.root");//TRMesmer_box_offset/TRMesmer_box_offset_100k_2GeV_0.root");
+	TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_noBend_1hit_100k.root");
+//Mesmer_sample_noBend_1hit_100k.root");
+//Mesmer_sample_1M.root");
 
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
-        TClonesArray *SignalTracks = 0;
         TClonesArray *TrackerStripDigis = 0;
         TClonesArray *TrackerPoints = 0;
         TClonesArray *TrackerStubs = 0;
@@ -34,7 +35,6 @@ void RealDataAnalyzer(){
         MUonERecoOutput *ReconstructionOutput = 0;
 
         cbmsim->SetBranchAddress("MCTrack", &MCTrack);
-        cbmsim->SetBranchAddress("SignalTracks", &SignalTracks);
         cbmsim->SetBranchAddress("TrackerPoints", &TrackerPoints);
         cbmsim->SetBranchAddress("TrackerStripDigis", &TrackerStripDigis);
         cbmsim->SetBranchAddress("TrackerStubs", &TrackerStubs);
@@ -140,9 +140,9 @@ double phie=0;
 double phi_in=0.;
 
 
-for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
+for(Long64_t i = 0; i < 50000; i++) {//GetEntries(); i++) {
 		cbmsim->GetEntry(i);
-		if(i%1000 == 0) cout<<"Entry "<<i<<endl;
+		if(i%100 == 0) cout<<"Entry "<<i<<endl;
 	TVector3 pmuin,pe,pmu;
 
 	double Emu_in=0;
@@ -156,7 +156,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 
 	for(int n = 0; n < MCTrack->GetEntries(); n++) {
 	 const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
-	 if(MCTr->interactionID()==0 and MCTr->pdgCode()==-13){
+	 if(MCTr->interactionID()==0 and MCTr->pdgCode()==13){
 	 pmuin.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz());
 	 pmuin=pmuin.Unit();
 //	TVector3 z (0.,0.,1.);
@@ -172,9 +172,10 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {code_mu=n;}
 	}
 
-	for(int n = 0; n < SignalTracks->GetEntries(); n++) {
-	const MUonETrack *SigTracks = static_cast<const MUonETrack*>(SignalTracks->At(n));
-	 if(SignalTracks->GetEntries()>1 and SigTracks->interactionID()==45 )
+
+	for(int n = 0; n < MCTrack->GetEntries(); n++) {
+	const MUonETrack *SigTracks = static_cast<const MUonETrack*>(MCTrack->At(n));
+	 if(MCTrack->GetEntries()>1 and SigTracks->interactionID()==45 )
 	 {
            int last_modXmu=0; int last_modXe=0;
            int last_modYmu=0; int last_modYe=0;
@@ -197,7 +198,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
            if(SigTracks->pdgCode()==11 and last_modXe==2 and last_modYe==2 and stereo_e>1){
 		pe.SetXYZ(SigTracks->px(),SigTracks->py(),SigTracks->pz());
 		pe=pe.Unit();
-		the_gen=pe.Theta();//pmuin.Angle(pe);//acos(pmuin.Dot(pe));//pe.Theta();
+		the_gen=pmuin.Angle(pe);//acos(pmuin.Dot(pe));//pe.Theta();
 		Ee=SigTracks->energy();
 		pe=pe.Unit();
 		TVector3 z(0.,0.,1.);
@@ -214,7 +215,7 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 		pmu.SetXYZ(SigTracks->px(),SigTracks->py(),SigTracks->pz());
 	        TVector3 z(0.,0.,1.);
 		pmu=pmu.Unit();
-		thmu_gen=pmu.Theta();//pmuin.Angle(pmu);//acos(pmuin.Dot(pmu));//acos(pmuin.Dot(pmu));//pmu.Theta();
+		thmu_gen=pmuin.Angle(pmu);//acos(pmuin.Dot(pmu));//acos(pmuin.Dot(pmu));//pmu.Theta();
          double mx=SigTracks->ax();
          double my=SigTracks->ay();
                 thmu_gen_x=mx;
@@ -225,11 +226,12 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 	 }
 	}
 
-	// if(yes_e!=1 or yes_mu!=1) cout << "NOT RECONSTRUCTIBLE" << endl;
+	 //if(yes_e_g!=1 or yes_mu_g!=1) cout << "NOT RECONSTRUCTIBLE" << endl;
 
 	if(yes_e_g==1 and yes_mu_g==1){
 	  //cout << "RECONSTRUCTIBLE" << endl;
 	   signal+=MesmerEvent->wgt_full;
+
 
 double opening = pe.Angle(pmu);
 
@@ -258,13 +260,13 @@ double thmu_sdr=0;
 double chi =0;
 for(int j=0; j<tracks.size();j++)
 {
- if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()==3 and tracks.at(j).sector()==1 and tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=100)
+ if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()==3 and tracks.at(j).sector()==1)//and tracks.at(j).fractionOfHitsSharedWithLinkedTrack()>=100)
 	{yes2++;
 
 	 	 if(code_e==tracks.at(j).linkedTrackID()) { yes_e=1;
 	 	 TVector3 e_outv(tracks.at(j).xSlope(),tracks.at(j).ySlope(),1.0);
 		 e_outv=e_outv.Unit();
-        	 the_rec_tracks=e_outv.Theta();//in.Angle(e_outv);//acos(in.Dot(e_outv));//e_outv.Theta();
+        	 the_rec_tracks=in.Angle(e_outv);//acos(in.Dot(e_outv));//e_outv.Theta();
 
 					}
 
@@ -275,9 +277,9 @@ for(int j=0; j<tracks.size();j++)
                 //thmu_rec_tracks=acos(mu_outv.Dot(z));
 		thmu_rec_x=tracks.at(j).xSlope();
                 thmu_rec_y=tracks.at(j).ySlope();
-thmu_sdr=mu_outv.Theta();
+		thmu_sdr=mu_outv.Theta();
                  //thmu_rec_tracks=sqrt(thmu_rec_x*thmu_rec_x+thmu_rec_y*thmu_rec_y);
-		 thmu_rec_tracks=mu_outv.Theta();//in.Angle(mu_outv);//acos(in.Dot(mu_outv));//acos(in.Dot(mu_outv));//mu_outv.Theta();
+		 thmu_rec_tracks=in.Angle(mu_outv);//acos(in.Dot(mu_outv));//acos(in.Dot(mu_outv));//mu_outv.Theta();
 					}
 	}
 }
@@ -321,10 +323,10 @@ if(abs(res_muTR)<0.1e-03) {theta1->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);t
 if(abs(res_muTR)>0.1e-03){theta2->Fill(thmu_rec_tracks,MesmerEvent->wgt_full);theta2g->Fill(thmu_gen,MesmerEvent->wgt_full);
                           h_angle1->Fill(the_gen,thmu_gen,MesmerEvent->wgt_full);
                           h_angle1_r->Fill(the_rec_tracks,thmu_rec_tracks,MesmerEvent->wgt_full);
-				cout << "track quality " << chi << endl;
+				/*cout << "track quality " << chi << endl;
 				cout << "thmu_rec_tracks " << thmu_rec_tracks << ", thmu_gen " << thmu_gen << endl;
 				cout << "thmu_sdr " << thmu_sdr << ", pmu.Theta() " <<  pmu.Theta() << endl;
-				cout << "th_mu_in_rec " << in.Theta() << ", thmu_in_gen " << pmuin.Theta() << endl;}
+				cout << "th_mu_in_rec " << in.Theta() << ", thmu_in_gen " << pmuin.Theta() << endl;*/}
 
 
 if(abs(resx)<0.1e-03) peakx+=MesmerEvent->wgt_full;
@@ -382,7 +384,7 @@ if (h_thphi->GetBinContent(i,j)<1) h_thphi->SetBinContent(i,j,0);}}
 
 //TCanvas b1("b1","b1",700,700);
 //h_phiin->Draw("hist");
-//b1.SaveAs("phi_in.pdf");
+//b1.SaveAs("phi_in_NObend.pdf");
 
 
 
@@ -410,7 +412,7 @@ b1.cd(6);
 h_phie->SetLineColor(kRed);
 gStyle->SetOptStat(222001111);
 h_phie->Draw("hist");
-b1.SaveAs("phi.pdf");
+b1.SaveAs("phi_NObend.pdf");
 
 
 
@@ -432,7 +434,7 @@ gStyle->SetOptStat(222001111);
 b2.cd(4);
 h_op0->Draw("hist");
 gStyle->SetOptStat(222001111);
-b2.SaveAs("2Dth_phi.pdf");
+b2.SaveAs("2Dth_phi_NObend.pdf");
 */
 
 TF1 *a1 = new TF1("a1", "[2]*TMath::Gaus(x,[0],[1])");
@@ -468,7 +470,7 @@ h_res3TR->Draw("hist same");
 gStyle->SetOptFit(1111);
 gStyle->SetOptStat(222001111);
 //gPad->SetLogy();
-d1.SaveAs("electron_res.pdf");
+d1.SaveAs("electron_res_NObend.pdf");
 
 TF1 *f1 = new TF1("f1", "[2]*TMath::Gaus(x,[0],[1])");
 f1->SetParameters(7.7e-06,30e-06,1);
@@ -513,9 +515,9 @@ h_res_mu_inTR1->Draw("hist same");
 gStyle->SetOptFit(1111);
 gStyle->SetOptStat(222001111);
 //gPad->SetLogy();
-d2.SaveAs("mu_out_peren_GA.pdf");
+d2.SaveAs("mu_out_peren_GA_NObend.pdf");
 
-/*
+
 TF1 *f4 = new TF1("f4", "[2]*TMath::Gaus(x,[0],[1])");
 f4->SetParameters(-1.9e-05,30e-06,1);
 
@@ -553,10 +555,10 @@ h_res_muTR1y->Fit("f5","R","",-0.0001,+0.0001);
 gStyle->SetOptFit(1111);
 gStyle->SetOptStat(222001111);
 //gPad->SetLogy();
-d3.SaveAs("proj_mu_GA.pdf");
+d3.SaveAs("proj_mu_GA_NObend.pdf");
 
 
-TCanvas d3a("d3a","d3a",700,700);
+/*TCanvas d3a("d3a","d3a",700,700);
 d3a.Divide(2,3);
 d3a.cd(1);
 theta1gx->SetLineColor(kOrange);
@@ -578,8 +580,8 @@ theta2gy->SetLineColor(kOrange);
 theta2gy->Draw("hist");
 theta2y->Draw("hist same");
 gStyle->SetOptStat(222001111);
-d3a.SaveAs("th_proj_mu_GA.pdf");
-*/
+d3a.SaveAs("th_proj_mu_GA_NObend.pdf");
+
 
 Int_t nxTh1 = h_angle1->GetNbinsX();
 Int_t nyTh1 = h_angle1->GetNbinsY();
@@ -599,7 +601,8 @@ sa2.cd(1);
 h_angle1->Draw("COLZ");
 sa2.cd(2);
 h_angle1_r->Draw("COLZ");
-sa2.SaveAs("2Dplots.pdf");
+sa2.SaveAs("2Dplots_NObend.pdf");
+*/
 }
 
 

@@ -19,7 +19,7 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
- 	TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3220-3221_notar_straight.root");
+ 	TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new12_st0_6.root");
 ///mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_try_shift.root");
 //TRMesmer_noInt_10k.root");
 //dataReconstruction_3234-3235_new_straight.root");
@@ -41,8 +41,8 @@ void RealDataAnalyzer(){
     TH2D *h_2d_2=new TH2D("h_2d_1","XY impact point station 0 (black) and station 1 (red)" ,800,-5.,5.,800,-5.,5.);
 
 	std::vector<TH1D*> h_dif(2);
-h_dif.at(0)=new TH1D("h_div0","deltaX station 0 - station 1 at Z=921",100,-0.5,0.5);//100,0.,0.2);
-h_dif.at(1)=new TH1D("h_div1","deltaY station 0 - station 1 at Z=921",100,-0.5,0.5);//100,0.2,0.5);
+h_dif.at(0)=new TH1D("h_div0","deltaX station 0 - station 1 at Z=921",100,-0.01,0.01);//100,0.,0.2);
+h_dif.at(1)=new TH1D("h_div1","deltaY station 0 - station 1 at Z=921",100,-0.01,0.01);//100,0.2,0.5);
 
         std::vector<TH1D*> h_imp(4);
 h_imp.at(0)=new TH1D("h_imp0","X profile station 0 ",800,-5.,5.);
@@ -52,8 +52,8 @@ h_imp.at(3)=new TH1D("h_imp3","Y profile station 1 ",800,-5.,5.);
 
 
         std::vector<TH1D*> h_m(2);
-h_m.at(0)=new TH1D("h_m0","Delta mx1-mx0",200,-0.006,0.006);//-0.005,0.);
-h_m.at(1)=new TH1D("h_m1","Delta my1-my0",200,-0.006,0.006);//-0.006,0.);
+h_m.at(0)=new TH1D("h_m0","Delta mx1-mx0",200,-0.001,0.001);//-0.005,0.);
+h_m.at(1)=new TH1D("h_m1","Delta my1-my0",200,-0.001,0.001);//-0.006,0.);
 
 
 
@@ -87,7 +87,7 @@ for(int m=0; m<6; m++){
 for(int m=0; m<6; m++){
                 string name="local2_"+to_string(m);
                 string title="Residual of stub in station2 and expected position from track station1 of module "+to_string(m);
-                localX2.at(m)=new TH1D(name.c_str(),title.c_str(),600,-0.06,0.06);}//500,-5.,5.);}
+                localX2.at(m)=new TH1D(name.c_str(),title.c_str(),400,-0.4,0.4);}//500,-5.,5.);}
 
 
 TH1D *h_nstubs_1=new TH1D("h_nstubs_1", "number of stubs for a track in station1", 13,0,13);
@@ -100,7 +100,7 @@ TH1D *h_nstubs_2=new TH1D("h_nstubs_2", "number of stubs for a track in station1
 
 
                 //interface to parse the alignment parameters from FairMUonE (yaml file)
-                YAML::Node alignmentFile = YAML::LoadFile("/home/espedica/fair_install/instFairRoot/share/MUonE/common/alignment/TR_3220-3221_separate.yaml");//TR_alin.yaml");
+                YAML::Node alignmentFile = YAML::LoadFile("/home/espedica/fair_install/instFairRoot/share/MUonE/common/alignment/TR_alin.yaml");//TR_3234-3235_new6.yaml");//TR_alin.yaml");
 
                 for(int station_index = 0; station_index < alignmentFile.size(); station_index++) {
                         auto const& station = alignmentFile[station_index];
@@ -219,11 +219,12 @@ cout << "staz 1: error con correlazini mod " << hits_.at(h).moduleID() << ": "
  }
 
    	if(tracks.at(j).sector()==1 and sec1==1 and sec0==1){
+
+
 std::vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
 h_nstubs_2->Fill(hits_.size());
   for(int h=0;h<hits_.size();h++)
   {
-cout << "staz 2: error mod " << hits_.at(h).moduleID() << ": " << sqrt(((hits_.at(h).z())*mx1)*((hits_.at(h).z())*mx1) + qx1*qx1) << endl;
 	if(sec0==1 and hits_.at(h).stationID()==1) residual2.at(hits_.at(h).moduleID())->Fill(hits_.at(h).perpendicularResiduum());
 localX2.at(hits_.at(h).moduleID())->Fill(-hits_.at(h).positionPerpendicular()+(pos_on_track(qx0,mx0,hits_.at(h).z())-XOFFSET[hits_.at(h).moduleID()+6])*COSALPHA[hits_.at(h).moduleID()+6]+(pos_on_track(qy0,my0,hits_.at(h).z())-YOFFSET[hits_.at(h).moduleID()+6])*SINALPHA[hits_.at(h).moduleID()+6]);
 	//if(hits_.at(h).moduleID()%2!=0)localX2.at(hits_.at(h).moduleID())->Fill(-hits_.at(h).positionPerpendicular()+(pos_on_track(qy0,my0,hits_.at(h).z())-YOFFSET[hits_.at(h).moduleID()+6])*SINALPHA[hits_.at(h).moduleID()+6]);
@@ -238,6 +239,7 @@ h_mult1->Fill(sec1);
 
 
 if(x0!=99 and x1!=99 and sec0==1 and sec1==1 and y0!=99 and y1!=99 and sec0==1 and sec1==1){
+cout << "event "<< i << endl;
 h_imp[0]->Fill(x0);h_imp[1]->Fill(y0);h_dif[0]->Fill(x0-x1);
 h_imp[2]->Fill(x1);h_imp[3]->Fill(y1);h_dif[1]->Fill(y0-y1);
 h_2d_1->Fill(x0,y0);

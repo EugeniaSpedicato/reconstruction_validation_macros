@@ -40,7 +40,7 @@ TH1D* h_chi_tr0=new TH1D("h_chi0","chi2 of track2 mu in", 100,0,100);
 
 void RealDataAnalyzer(){
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_try_shift.root");
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new12.root");
 //TRMesmer_3cm.root");
 //dataReconstruction_3234-3235_filtered.root");//dataReconstruction_try_sigma.root");
 //TRMesmer_3cm.root");
@@ -218,20 +218,20 @@ if(th_el<0.032){
  h_chi_mu_vrtx->Fill(chi2_mu_vrtx);
 
 
-all++;
+/*all++;
 if(chi>20)v++;
 if(chi2_e_vrtx>20)e_c++;
 if(chi2_muin_vrtx>20)mu_in_c++;
 if(chi2_mu_vrtx>20)mu_c++;
-
-cout << "--------New event--------" << endl;
+*/
+/*cout << "--------New event--------" << endl;
 cout << "Incoming Muon chi2 before vrtx and after vrtxing: " << endl;
 cout << "	" << chi2_muin << "  ->   " << chi2_muin_vrtx << endl;
 cout << "Outgoing Muon before vrtx and after vrtxing : "  << endl;
 cout << "       " << chi2_mu <<  "  ->   " << chi2_mu_vrtx << endl;
 cout << "Outgoing Electron before vrtx and after vrtxing : "  << endl;
 cout << "       " << chi2_e <<  "  ->   " << chi2_e_vrtx << endl;
-
+*/
 
 double deltaX[3];
 double deltaY[3];
@@ -268,12 +268,20 @@ double deltaY[3];
  }
 
 //th_mu>0.0002
-	if(abs(acoplanarity)<1){/*and deltaX[0]<0.129 and deltaX[0]>-0.071
+	if(abs(acoplanarity)<1 and chi<20){/* and deltaX[0]<0.129 and deltaX[0]>-0.071
 						and deltaX[1]<0.129 and deltaX[1]>-0.071
 						and deltaX[2]<0.2 and deltaX[2]>-0.17
 						and deltaY[0]<0.3 and deltaY[0]>0.
 						and deltaY[1]<0.3 and deltaY[1]>0.
 						and deltaY[2]<0.4 and deltaY[2]>-0.1){*/
+
+cout << "Z " << Z << endl;
+all++;
+if(chi>20)v++;
+if(chi2_e_vrtx>20)e_c++;
+if(chi2_muin_vrtx>20)mu_in_c++;
+if(chi2_mu_vrtx>20)mu_c++;
+
 
 	//if(th_el>0.01 and th_mu>0.0004) cout << "event " << i << endl;
                         h_2d->Fill(th_el,th_mu);
