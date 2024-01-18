@@ -32,20 +32,47 @@ int IDparallel()
   ROOT::TThreadedObject<TH1D> h_res4("res4", "(the_rec-the_true) 20<theta_e<25 GeV",250,-0.04,0.04);
   ROOT::TThreadedObject<TH1D> h_res5("res5", "(the_rec-the_true) 25<theta_e<32 GeV",250,-0.04,0.04);
 
-ROOT::TThreadedObject<TH1D> thetaX("theta1" , "theta X of the muon for events in the tail of angular residuum theta<5mrad" , 100,-0.01,0.01);
-ROOT::TThreadedObject<TH1D> thetaY("theta2" , "theta Y of the muon for events in the tail of angular residuum theta<5mrad" , 100,-0.01,0.01);
-ROOT::TThreadedObject<TH1D> thetaXg("theta1g" , "theta X of the muon for events in the tail of angular residuum theta<5mrad" , 100,-0.01,0.01);
-ROOT::TThreadedObject<TH1D> thetaYg("theta2g" , "theta Y of the muon for events in the tail of angular residuum theta<5mrad" , 100,-0.01,0.01);
+ROOT::TThreadedObject<TH1D> thetaX("theta1" , "theta X of the electron for events in the tail of angular residuum theta<5mrad" , 150,-0.1,0.1);//100,-0.01,0.01
+ROOT::TThreadedObject<TH1D> thetaY("theta2" , "theta Y of the electron for events in the tail of angular residuum theta<5mrad" , 150,-0.1,0.1);
+ROOT::TThreadedObject<TH1D> thetaXg("theta1g" , "theta X of the electron for events in the tail of angular residuum theta<5mrad" , 150,-0.1,0.1);
+ROOT::TThreadedObject<TH1D> thetaYg("theta2g" , "theta Y of the electron for events in the tail of angular residuum theta<5mrad" , 150,-0.1,0.1);
 
-ROOT::TThreadedObject<TH1D> thetaX2("theta1_large" , "theta X of the muon for events in the tail of angular residuum theta>5mrad" , 150,-0.1,0.1);
-ROOT::TThreadedObject<TH1D> thetaY2("theta2_large" , "theta Y of the muon for events in the tail of angular residuum theta>5mrad" , 150,-0.1,0.1);
-ROOT::TThreadedObject<TH1D> thetaXg2("theta1g_large" , "theta X of the muon for events in the tail of angular residuum theta>5mrad" , 150,-0.1,0.1);
-ROOT::TThreadedObject<TH1D> thetaYg2("theta2g_large" , "theta Y of the muon for events in the tail of angular residuum theta>5mrad" , 150,-0.1,0.1);
+ROOT::TThreadedObject<TH1D> thetaX2("theta1_large" , "theta X of the electron for events in the tail of angular residuum theta>5mrad" , 150,-0.1,0.1);
+ROOT::TThreadedObject<TH1D> thetaY2("theta2_large" , "theta Y of the electron for events in the tail of angular residuum theta>5mrad" , 150,-0.1,0.1);
+ROOT::TThreadedObject<TH1D> thetaXg2("theta1g_large" , "theta X of the electron for events in the tail of angular residuum theta>5mrad" , 150,-0.1,0.1);
+ROOT::TThreadedObject<TH1D> thetaYg2("theta2g_large" , "theta Y of the electron for events in the tail of angular residuum theta>5mrad" , 150,-0.1,0.1);
+
+
+
+  ROOT::TThreadedObject<TH1D> h_res_mu("res_mu", "(thmu_rec-thmu_true) 0<theta_e<5 GeV",100,-0.001,0.001);
+  ROOT::TThreadedObject<TH1D> h_res1_mu("res1_mu", "(thmu_rec-thmu_true) 5<theta_e<10 GeV",100,-0.001,0.001);
+  ROOT::TThreadedObject<TH1D> h_res2_mu("res2_mu", "(thmu_rec-thmu_true) 10<theta_e<15 GeV",100,-0.001,0.001);
+  ROOT::TThreadedObject<TH1D> h_res3_mu("res3_mu", "(thmu_rec-thmu_true) 15<theta_e<20 GeV",100,-0.001,0.001);
+  ROOT::TThreadedObject<TH1D> h_res4_mu("res4_mu", "(thmu_rec-thmu_true) 20<theta_e<25 GeV",100,-0.001,0.001);
+  ROOT::TThreadedObject<TH1D> h_res5_mu("res5_mu", "(thmu_rec-thmu_true) 25<theta_e<32 GeV",100,-0.001,0.001);
+
+ROOT::TThreadedObject<TH1D> thetaX_mu("theta1_mu" , "theta X of the muon for events in the tail of angular residuum theta<5mrad" , 100,-0.0045,0.0045);//100,-0.01,0.01
+ROOT::TThreadedObject<TH1D> thetaY_mu("theta2_mu" , "theta Y of the muon for events in the tail of angular residuum theta<5mrad" , 100,-0.0045,0.0045);
+ROOT::TThreadedObject<TH1D> thetaXg_mu("theta1g_mu" , "theta X of the muon for events in the tail of angular residuum theta<5mrad" , 100,-0.0045,0.0045);
+ROOT::TThreadedObject<TH1D> thetaYg_mu("theta2g_mu" , "theta Y of the muon for events in the tail of angular residuum theta<5mrad" , 100,-0.0045,0.0045);
+
+ROOT::TThreadedObject<TH1D> thetaX2_mu("theta1_large_mu" , "theta X of the muon for events in the tail of angular residuum theta>5mrad" , 100,-0.0045,0.0045);
+ROOT::TThreadedObject<TH1D> thetaY2_mu("theta2_large_mu" , "theta Y of the muon for events in the tail of angular residuum theta>5mrad" , 100,-0.0045,0.0045);
+ROOT::TThreadedObject<TH1D> thetaXg2_mu("theta1g_large_mu" , "theta X of the muon for events in the tail of angular residuum theta>5mrad" , 100,-0.0045,0.0045);
+ROOT::TThreadedObject<TH1D> thetaYg2_mu("theta2g_large_mu" , "theta Y of the muon for events in the tail of angular residuum theta>5mrad" , 100,-0.0045,0.0045);
 
 
   // Create a TTreeProcessor: specify the file and the tree in it
- ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_1M.root","cbmsim",nthreads);
-  //ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_noBend_1hit_1M.root","cbmsim",nthreads);
+// ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_new_1M_1hit_bend.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp1("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_0-5mrad_100k_1hit.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp2("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_5-10mrad_100k_1hit.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp3("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_10-15mrad_100k_1hit.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp4("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_15-20mrad_100k_1hit.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp5("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_20-25mrad_100k_1hit.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp6("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_25-32mrad_100k_1hit.root","cbmsim",nthreads);
+
+  //ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_sample_1M.root","cbmsim",nthreads);
+
         MUonERecoOutput *ReconstructionOutput = 0;
 
   auto myFunction = [&](TTreeReader &myReader) {
@@ -78,14 +105,13 @@ Double_t code_mu=-99;
          if(MCTrack.interactionID()==45 and MCTrack.pdgCode()==11) {code_e=i; p_e_MC.SetXYZ(MCTrack.px(),MCTrack.py(),MCTrack.pz()); p_e_MC.Unit(); the_gen=p_muin_MC.Angle(p_e_MC);
 									         theX_gen=MCTrack.ax();
 									         theY_gen=MCTrack.ay();}
-         if(MCTrack.interactionID()==45 and MCTrack.pdgCode()==-13) {code_mu=i; p_mu_MC.SetXYZ(MCTrack.px(),MCTrack.py(),MCTrack.pz()); p_mu_MC.Unit(); thmu_gen=p_muin_MC.Angle(p_mu_MC);
+         if(MCTrack.interactionID()==45 and MCTrack.pdgCode()==13) {code_mu=i; p_mu_MC.SetXYZ(MCTrack.px(),MCTrack.py(),MCTrack.pz()); p_mu_MC.Unit(); thmu_gen=p_muin_MC.Angle(p_mu_MC);
                                                                                  thmuX_gen=MCTrack.ax();
                                                                                  thmuY_gen=MCTrack.ay();}
 	 i++;
         }
 
 	if(code_mu_in!=-99 and code_e!=-99 and code_mu!=-99){
-
 Int_t yes_mu=0;
 Int_t yes_e=0;
 Int_t yes2=0;
@@ -134,23 +160,34 @@ if(stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<2){
                                                 T_v = T_v>0? 1:-1;
                                                 Double_t acoplanarity_v= T_v*(TMath::Pi()- acos( ((im_v).Dot(ie_v))/(im_v.Mag()*ie_v.Mag()) ));
 
- if(abs(acoplanarity_v)<=1 and chi<20 and thmu_rec>0.0002){
-	if(the_rec>0.0 and the_rec<=0.005){h_res->Fill(the_rec-the_gen,mesmerEvent->wgt_full);
-									if(the_rec-the_gen>0.001){thetaX->Fill(theX_rec,mesmerEvent->wgt_full);
+ if(thmu_rec>0.0002){//if(abs(acoplanarity_v)<=1 and chi<20 and thmu_rec>0.0002){
+	if(the_gen>0.0 and the_gen<=0.010){h_res->Fill(the_rec-the_gen,mesmerEvent->wgt_full); h_res_mu->Fill(thmu_rec-thmu_gen,mesmerEvent->wgt_full);
+									if(the_rec-the_gen>0.004){thetaX->Fill(theX_rec,mesmerEvent->wgt_full);
 									thetaY->Fill(theY_rec,mesmerEvent->wgt_full);
                                                                         thetaXg->Fill(theX_gen,mesmerEvent->wgt_full);
                                                                         thetaYg->Fill(theY_gen,mesmerEvent->wgt_full);}
 	}
-	else{                                                           if(the_rec-the_gen<-0.01 ){thetaX2->Fill(theX_rec,mesmerEvent->wgt_full);
+	else{                                                           //if(the_rec-the_gen<-0.01 ){thetaX2->Fill(thmuX_rec,mesmerEvent->wgt_full);
+                                                                        if(the_rec-the_gen>0.008){thetaX2->Fill(theX_rec,mesmerEvent->wgt_full);
                                                                         thetaY2->Fill(theY_rec,mesmerEvent->wgt_full);
                                                                         thetaXg2->Fill(theX_gen,mesmerEvent->wgt_full);
                                                                         thetaYg2->Fill(theY_gen,mesmerEvent->wgt_full);}
+                                                                        if(thmu_rec-thmu_gen>0.0001){thetaX2_mu->Fill(thmuX_rec,mesmerEvent->wgt_full);
+                                                                        thetaY2_mu->Fill(thmuY_rec,mesmerEvent->wgt_full);
+                                                                        thetaXg2_mu->Fill(thmuX_gen,mesmerEvent->wgt_full);
+                                                                        thetaYg2_mu->Fill(thmuY_gen,mesmerEvent->wgt_full);}
 	}
-	if(the_rec>0.005 and the_rec<=0.01){h_res1->Fill(the_rec-the_gen,mesmerEvent->wgt_full);}
-	if(the_rec>0.01 and the_rec<=0.015){h_res2->Fill(the_rec-the_gen,mesmerEvent->wgt_full);}
-	if(the_rec>0.015 and the_rec<=0.02){h_res3->Fill(the_rec-the_gen,mesmerEvent->wgt_full);}
-	if(the_rec>0.02 and the_rec<=0.025){h_res4->Fill(the_rec-the_gen,mesmerEvent->wgt_full);}
-	if(the_rec>0.025 and the_rec<=0.032){h_res5->Fill(the_rec-the_gen,mesmerEvent->wgt_full);}
+	if(the_gen>0.005 and the_gen<=0.01){h_res1->Fill(the_rec-the_gen,mesmerEvent->wgt_full);h_res1_mu->Fill(thmu_rec-thmu_gen,mesmerEvent->wgt_full);}
+	if(the_gen>0.01 and the_gen<=0.015){h_res2->Fill(the_rec-the_gen,mesmerEvent->wgt_full);h_res2_mu->Fill(thmu_rec-thmu_gen,mesmerEvent->wgt_full);}
+	if(the_gen>0.015 and the_gen<=0.02){h_res3->Fill(the_rec-the_gen,mesmerEvent->wgt_full);h_res3_mu->Fill(thmu_rec-thmu_gen,mesmerEvent->wgt_full);}
+	if(the_gen>0.02 and the_gen<=0.025){h_res4->Fill(the_rec-the_gen,mesmerEvent->wgt_full);h_res4_mu->Fill(thmu_rec-thmu_gen,mesmerEvent->wgt_full);}
+	if(the_gen>0.025 and the_gen<=0.032){h_res5->Fill(the_rec-the_gen,mesmerEvent->wgt_full);h_res5_mu->Fill(thmu_rec-thmu_gen,mesmerEvent->wgt_full);}
+
+                                                                        if(thmu_rec-thmu_gen>0.0001){thetaX_mu->Fill(thmuX_rec,mesmerEvent->wgt_full);
+                                                                        thetaY_mu->Fill(thmuY_rec,mesmerEvent->wgt_full);
+                                                                        thetaXg_mu->Fill(thmuX_gen,mesmerEvent->wgt_full);
+                                                                        thetaYg_mu->Fill(thmuY_gen,mesmerEvent->wgt_full);}
+
 		  }// if out particles
 		 }//if chi!=0
 		}//if mu_in
@@ -163,7 +200,13 @@ if(stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<2){
 
 
   // Launch the parallel processing of the tree
-  tp.Process(myFunction);
+  tp1.Process(myFunction);
+  tp2.Process(myFunction);
+  tp3.Process(myFunction);
+  tp4.Process(myFunction);
+  tp5.Process(myFunction);
+  tp6.Process(myFunction);
+
   // Use the ROOT::TThreadedObject::Merge method to merge the thread private histograms
   // into the final result
   auto h_resMerged   = h_res.Merge();
@@ -183,65 +226,147 @@ if(stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<2){
   auto thetaXg2Merged = thetaXg2.Merge();
   auto thetaYg2Merged = thetaYg2.Merge();
 
+
+  auto h_resMerged_mu   = h_res_mu.Merge();
+  auto h_res1Merged_mu   = h_res1_mu.Merge();
+  auto h_res2Merged_mu   = h_res2_mu.Merge();
+  auto h_res3Merged_mu   = h_res3_mu.Merge();
+  auto h_res4Merged_mu   = h_res4_mu.Merge();
+  auto h_res5Merged_mu   = h_res5_mu.Merge();
+
+  auto thetaXMerged_mu = thetaX_mu.Merge();
+  auto thetaYMerged_mu = thetaY_mu.Merge();
+  auto thetaXgMerged_mu = thetaXg_mu.Merge();
+  auto thetaYgMerged_mu = thetaYg_mu.Merge();
+
+  auto thetaX2Merged_mu = thetaX2_mu.Merge();
+  auto thetaY2Merged_mu = thetaY2_mu.Merge();
+  auto thetaXg2Merged_mu = thetaXg2_mu.Merge();
+  auto thetaYg2Merged_mu = thetaYg2_mu.Merge();
+
 TCanvas a("a","a",700,700);
 a.Divide(2,3);
 a.cd(1);
+h_resMerged_mu->SetMinimum(1.);
+h_resMerged_mu->Draw("hist");
+gPad->SetLogy();
+a.cd(2);
+h_res1Merged_mu->SetMinimum(1.);
+h_res1Merged_mu->Draw("hist");
+gPad->SetLogy();
+a.cd(3);
+h_res2Merged_mu->SetMinimum(1.);
+h_res2Merged_mu->Draw("hist");
+gPad->SetLogy();
+a.cd(4);
+h_res3Merged_mu->SetMinimum(1.);
+h_res3Merged_mu->Draw("hist");
+gPad->SetLogy();
+a.cd(5);
+h_res4Merged_mu->SetMinimum(1.);
+h_res4Merged_mu->Draw("hist");
+gPad->SetLogy();
+a.cd(6);
+h_res5Merged_mu->SetMinimum(1.);
+h_res5Merged_mu->Draw("hist");
+gPad->SetLogy();
+a.SaveAs("res_ID_mu.pdf");
+
+
+TCanvas a0("a0","a0",700,700);
+a0.Divide(2,3);
+a0.cd(1);
 h_resMerged->SetMinimum(1.);
 h_resMerged->Draw("hist");
 gPad->SetLogy();
-a.cd(2);
+a0.cd(2);
 h_res1Merged->SetMinimum(1.);
 h_res1Merged->Draw("hist");
 gPad->SetLogy();
-a.cd(3);
+a0.cd(3);
 h_res2Merged->SetMinimum(1.);
 h_res2Merged->Draw("hist");
 gPad->SetLogy();
-a.cd(4);
+a0.cd(4);
 h_res3Merged->SetMinimum(1.);
 h_res3Merged->Draw("hist");
 gPad->SetLogy();
-a.cd(5);
+a0.cd(5);
 h_res4Merged->SetMinimum(1.);
 h_res4Merged->Draw("hist");
 gPad->SetLogy();
-a.cd(6);
+a0.cd(6);
 h_res5Merged->SetMinimum(1.);
 h_res5Merged->Draw("hist");
 gPad->SetLogy();
-a.SaveAs("res_bend_ID.pdf");
+a0.SaveAs("res_ID.pdf");
+
 
 TCanvas b("b","b",1000,700);
 b.Divide(2,2);
 b.cd(1);
+thetaXMerged_mu->SetLineColor(kBlue);
+thetaXgMerged_mu->SetLineColor(kPink);
+thetaXgMerged_mu->Draw("hist");
+thetaXMerged_mu->Draw("hist same");
+//gPad->SetLogy();
+
+b.cd(2);
+thetaYMerged_mu->SetLineColor(kBlue);
+thetaYgMerged_mu->SetLineColor(kPink);
+thetaYgMerged_mu->Draw("hist");
+thetaYMerged_mu->Draw("hist same"); 
+//gPad->SetLogy();
+
+b.cd(3);
+thetaX2Merged_mu->SetLineColor(kBlue);
+thetaXg2Merged_mu->SetLineColor(kPink);
+thetaX2Merged_mu->Draw("hist");
+thetaXg2Merged_mu->Draw("hist same"); 
+//gPad->SetLogy();
+
+b.cd(4);
+thetaY2Merged_mu->SetLineColor(kBlue);
+thetaYg2Merged_mu->SetLineColor(kPink);
+thetaY2Merged_mu->Draw("hist");
+thetaYg2Merged_mu->Draw("hist same"); 
+//gPad->SetLogy();
+
+b.SaveAs("projections_ID_mu.pdf");
+
+
+
+TCanvas b0("b0","b0",1000,700);
+b0.Divide(2,2);
+b0.cd(1);
 thetaXMerged->SetLineColor(kBlue);
 thetaXgMerged->SetLineColor(kPink);
 thetaXgMerged->Draw("hist");
 thetaXMerged->Draw("hist same");
 //gPad->SetLogy();
 
-b.cd(2);
+b0.cd(2);
 thetaYMerged->SetLineColor(kBlue);
 thetaYgMerged->SetLineColor(kPink);
 thetaYgMerged->Draw("hist");
 thetaYMerged->Draw("hist same"); 
 //gPad->SetLogy();
 
-b.cd(3);
+b0.cd(3);
 thetaX2Merged->SetLineColor(kBlue);
 thetaXg2Merged->SetLineColor(kPink);
 thetaX2Merged->Draw("hist");
 thetaXg2Merged->Draw("hist same"); 
 //gPad->SetLogy();
 
-b.cd(4);
+b0.cd(4);
 thetaY2Merged->SetLineColor(kBlue);
 thetaYg2Merged->SetLineColor(kPink);
 thetaY2Merged->Draw("hist");
 thetaYg2Merged->Draw("hist same"); 
 //gPad->SetLogy();
 
-b.SaveAs("projections_bend_ID.pdf");
+b0.SaveAs("projections_ID.pdf");
 
   return 0;
 }

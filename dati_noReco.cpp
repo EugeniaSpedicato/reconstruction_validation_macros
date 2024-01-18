@@ -16,12 +16,17 @@ using namespace std;
 
 void RealDataAnalyzer(){
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new_1hit.root");
+//        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new_1hit.root");
+TChain * cbmsim = new TChain("cbmsim");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_run6.root");
+//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new_1hit_skimGA.root");
+//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new_1hit_skimGA_1.root");
 
 //dataReconstruction_3234-3235_new12_st0_6_1shared_5M.root");
 //minbias_1shared_5M.root");
 //dataReconstruction_3234-3235_new12_st0_6_1shared_5M.root");
-        TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
+
+//        TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         TClonesArray *MCTrack = 0;
         MuE::Event *MesmerEvent = 0;
@@ -102,7 +107,12 @@ double posyIN=pos_on_track(y0_in,th_iny,z_fix);
 
 h_xy->Fill(posxIN,posyIN);
 
- if(sec0==1 and stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<2){
+std::vector<MUonERecoOutputHit> stubs=ReconstructionOutput->ReconstructedHits();
+int stub0 = 0;
+for(int s=0; s<stubs.size(); s++){
+if(stubs.at(s).stationID()==0)stub0++;
+}
+ if(sec0==1 and stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<2 and stubs0==6){
  signal++;
 
 if(chi!=0){

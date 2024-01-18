@@ -17,7 +17,7 @@ using namespace std;
 
 int p_notReco(){
 
-  int nthreads = 4;
+  int nthreads = 8;
   ROOT::EnableImplicitMT(nthreads);
 
   //ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_new_100k_1hit_bend.root","cbmsim",nthreads);
@@ -205,7 +205,8 @@ yes2=0;yes_v=0;
   auto theta_e_genMerged = theta_e_gen.Merge();
   auto signalM = signal.Merge();
 
-cout << "sum of weights " << signalM->Integral(0,3) << endl;
+//cout << "sum of weights " << signalM->Integral(0,3) << endl;
+cout << "sum of weights " << signalM->Integral() << endl;
 
 TCanvas r("r","r",700,700);
 r.Divide(2,3);
