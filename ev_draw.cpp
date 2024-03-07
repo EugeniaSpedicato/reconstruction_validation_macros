@@ -18,7 +18,8 @@ using namespace std;
 void RealDataAnalyzer(int numb){
 
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new12_st0_6_1shared_5M.root");
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-32mrad_1M_1hit.root");
+///mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new12_st0_6_1shared_5M.root");
 //("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new_straight.root");
 //TRMesmer_3cm.root");//dataReconstruction_try_sigma.root");//nrrowBP_20GeV_1shared.root");//trPoints,$
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
@@ -26,6 +27,8 @@ void RealDataAnalyzer(int numb){
 
         MUonERecoOutput *ReconstructionOutput = 0;
         cbmsim->SetBranchAddress("ReconstructionOutput", &ReconstructionOutput);
+       TClonesArray *MCTrack = 0;
+        cbmsim->SetBranchAddress("MCTrack", &MCTrack);
 
 
 double thmu=0; double the=0;
@@ -87,6 +90,7 @@ std::vector<double> my_v;
                 auto newV=[](double angle, auto X, auto Y){return sin(angle)*X + cos(angle)*Y;};
 
 double x=0.;double y=0.;double z=0.;
+//std::array<double,6>={912.7+18.0218,912.7+21.8693,912.7+55.3635,912.7+56.6205,912.7+89.9218,912.7+93.7693};
 
 for(Long64_t i = numb; i < numb+1; i++) {
 //for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
@@ -95,6 +99,11 @@ for(Long64_t i = numb; i < numb+1; i++) {
 		if(i%1000 == 0) cout<<"Entry "<<i<<endl;
 
 cout<<"Entry "<< cbmsim->GetEntry(i)<<endl;
+
+           int hit_modXmu=0; int hit_modXe=0;
+           int hit_modYmu=0; int hit_modYe=0;
+           int stereo_mu=0; int stereo_e=0;
+
 
 vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks();
 
@@ -116,9 +125,9 @@ cout << "Track size 3 and " << sec0 << ", " << sec1 << endl;
 
 MUonERecoOutputVertex vrtx = ReconstructionOutput->bestVertex();
 
-x=vrtx.x();
-y=vrtx.y();
-z=vrtx.z();
+x=vrtx.xKinematicFit();
+y=vrtx.yKinematicFit();
+z=vrtx.zKinematicFit();
 
  MUonERecoOutputTrack mu_in = vrtx.incomingMuon();
  MUonERecoOutputTrack mu_out = vrtx.outgoingMuon();
@@ -126,8 +135,8 @@ z=vrtx.z();
 
 cout << "vrtx chi2 " << vrtx.chi2perDegreeOfFreedom() << endl;
 
-        gx_v1->SetPoint(gx_v1->GetN(),5,vrtx.x());
-        gy_v1->SetPoint(gy_v1->GetN(),5,vrtx.y());
+        gx_v1->SetPoint(gx_v1->GetN(),5,vrtx.xKinematicFit());
+        gy_v1->SetPoint(gy_v1->GetN(),5,vrtx.yKinematicFit());
 
 qx_in_v.push_back(mu_in.x0());
 mx_in_v.push_back(mu_in.xSlope());
@@ -154,11 +163,11 @@ std::array<std::vector<double>,6> position_s1;
 double px0;
 double py0;
 
-vector<MUonERecoOutputHit> stubs_=ReconstructionOutput->reconstructedHits();
+/*vector<MUonERecoOutputHit> stubs_=ReconstructionOutput->reconstructedHits();
 for(int s=0; s<stubs_.size(); s++){
 if(stubs_.at(s).stationID()==0)position_s.at(stubs_.at(s).moduleID()).push_back(stubs_.at(s).positionPerpendicular());
 if(stubs_.at(s).stationID()==1)position_s1.at(stubs_.at(s).moduleID()).push_back(stubs_.at(s).positionPerpendicular());
-}
+}*/
 
 for(int j=0; j<tracks.size();j++)
 {
@@ -366,6 +375,18 @@ if(qx.size()!=0 and mx.size()!=0)
                 lx->Draw("same");
         }
 }
+        for(int n = 0; n < MCTrack->GetEntries(); n++) {
+         const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
+
+         if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) {
+                                                                TLine* lxe = new TLine(5, trackXatZ(MCTr->bx(),MCTr->ax(), 912.7), 10, trackXatZ(MCTr->bx(),MCTr->ax(), 912.7+89.9218));
+                                                                lxe->SetLineColor(kOrange);
+                                                                lxe->Draw("same");}
+         if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {
+                                                                TLine* lxmu = new TLine(5, trackXatZ(MCTr->bx(),MCTr->ax(), 912.7), 10, trackXatZ(MCTr->bx(),MCTr->ax(), 912.7+89.9218));
+                                                                lxmu->SetLineColor(kOrange);
+                                                                lxmu->Draw("same");}
+        }
 
 gPad->BuildLegend(0.25,0.15,0.25,0.15);
 l0->Draw("same");
@@ -435,6 +456,8 @@ if(qx_v.size()!=0 and mx_v.size()!=0)
         }
 }
 
+
+
 gPad->BuildLegend(0.25,0.15,0.25,0.15);
 
 l0->Draw("same");
@@ -492,6 +515,21 @@ if(qy.size()!=0 and my.size()!=0)
                 ly->Draw("same");
 	}
 }
+
+
+        for(int n = 0; n < MCTrack->GetEntries(); n++) {
+         const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
+
+         if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) {
+                                                                TLine* lye = new TLine(5, trackYatZ(MCTr->by(),MCTr->ay(), 912.7), 10, trackYatZ(MCTr->by(),MCTr->ay(), 912.7+89.9218));
+								lye->SetLineColor(kOrange);
+								lye->Draw("same");}
+         if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {
+                                                                TLine* lymu = new TLine(5, trackYatZ(MCTr->by(),MCTr->ay(), 912.7), 10, trackYatZ(MCTr->by(),MCTr->ay(), 912.7+89.9218));
+                                                                lymu->SetLineColor(kOrange);
+                                                                lymu->Draw("same");}
+	}
+
 
 gPad->BuildLegend(0.25,0.15,0.25,0.15);
 l0->Draw("same");

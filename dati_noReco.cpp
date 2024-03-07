@@ -108,6 +108,7 @@ double posyIN=pos_on_track(y0_in,th_iny,z_fix);
 h_xy->Fill(posxIN,posyIN);
 
 std::vector<MUonERecoOutputHit> stubs=ReconstructionOutput->ReconstructedHits();
+
 int stub0 = 0;
 for(int s=0; s<stubs.size(); s++){
 if(stubs.at(s).stationID()==0)stub0++;

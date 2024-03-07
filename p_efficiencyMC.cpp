@@ -43,15 +43,16 @@ TH1::SetDefaultSumw2(kTRUE);
   // Create a TTreeProcessor: specify the file and the tree in it
 // ROOT::TTreeProcessorMT tp("/mnt/raid10/DATA/espedica/fairmu/Mesmer_new_1M_1hit_bend.root","cbmsim",nthreads);
 
-//  ROOT::TTreeProcessorMT tp1("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_0-5mrad_100k_1hit.root","cbmsim",nthreads);
-  ROOT::TTreeProcessorMT tp2("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_5-10mrad_100k_1hit.root","cbmsim",nthreads);
-/*  ROOT::TTreeProcessorMT tp3("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_10-15mrad_100k_1hit.root","cbmsim",nthreads);
-  ROOT::TTreeProcessorMT tp4("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_15-20mrad_100k_1hit.root","cbmsim",nthreads);
-  ROOT::TTreeProcessorMT tp5("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_20-25mrad_100k_1hit.root","cbmsim",nthreads);
-  ROOT::TTreeProcessorMT tp6("/mnt/raid10/DATA/espedica/fairmu/efficiency/theta_25-32mrad_100k_1hit.root","cbmsim",nthreads);
-*/
+  ROOT::TTreeProcessorMT tp1("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_100k_1hit.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp2("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_100k_1hit.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp3("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_100k_1hit.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp4("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_100k_1hit.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp5("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_100k_1hit.root","cbmsim",nthreads);
+  ROOT::TTreeProcessorMT tp6("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_100k_1hit.root","cbmsim",nthreads);
 
         MUonERecoOutput *ReconstructionOutput = 0;
+
+double r_wnorm[6]={21.522863161260670,38.514215499428630,41.710050452754516,49.388519620534474,61.328951873440843,105.50015224118995};
 
   auto myFunction = [&](TTreeReader &myReader) {
      //TTreeReaderValue<std::vector<MUonERecoOutputTrack>> tracksRV(myReader, "ReconstructionOutput");
@@ -82,13 +83,23 @@ Double_t code_mu=-99;
          if(MCTrack.interactionID()==45 and MCTrack.pdgCode()==11) {code_e=i; p_e_MC.SetXYZ(MCTrack.px(),MCTrack.py(),MCTrack.pz()); p_e_MC.Unit(); the_gen=p_muin_MC.Angle(p_e_MC);
 									         theX_gen=MCTrack.ax();
 									         theY_gen=MCTrack.ay();}
-         if(MCTrack.interactionID()==45 and MCTrack.pdgCode()==13) {code_mu=i; p_mu_MC.SetXYZ(MCTrack.px(),MCTrack.py(),MCTrack.pz()); p_mu_MC.Unit(); thmu_gen=p_muin_MC.Angle(p_mu_MC);
+         if(MCTrack.interactionID()==45 and MCTrack.pdgCode()==-13) {code_mu=i; p_mu_MC.SetXYZ(MCTrack.px(),MCTrack.py(),MCTrack.pz()); p_mu_MC.Unit(); thmu_gen=p_muin_MC.Angle(p_mu_MC);
                                                                                  thmuX_gen=MCTrack.ax();
                                                                                  thmuY_gen=MCTrack.ay();}
 	 i++;
         }
 
 	if(code_mu_in!=-99 and code_e!=-99 and code_mu!=-99){
+
+double wnorm=1.;
+
+if(the_gen>=0 and the_gen<0.005)wnorm=r_wnorm[0];
+if(the_gen>=0.005 and the_gen<0.010)wnorm=r_wnorm[1];
+if(the_gen>=0.010 and the_gen<0.015)wnorm=r_wnorm[2];
+if(the_gen>=0.015 and the_gen<0.020)wnorm=r_wnorm[3];
+if(the_gen>=0.020 and the_gen<0.025)wnorm=r_wnorm[4];
+if(the_gen>=0.025 and the_gen<0.032)wnorm=r_wnorm[5];
+
 
 Int_t yes_mu=0;
 Int_t yes_e=0;
@@ -129,8 +140,8 @@ Double_t posyIN=pos_on_track(y0_in,th_iny,912.7);
 
 if(stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<2){//and thmu_gen>0.0002){
 
-theta_mu_gen->Fill(thmu_gen,mesmerEvent->wgt_full);
-theta_e_gen->Fill(the_gen,mesmerEvent->wgt_full);
+theta_mu_gen->Fill(thmu_gen,mesmerEvent->wgt_full*wnorm);
+theta_e_gen->Fill(the_gen,mesmerEvent->wgt_full*wnorm);
 
  if(chi!=0){
 
@@ -144,8 +155,8 @@ theta_e_gen->Fill(the_gen,mesmerEvent->wgt_full);
 
 //if(abs(acoplanarity_v)<=1 and chi<20 and thmu_rec>0.0002){
 
-theta_mu->Fill(thmu_gen,mesmerEvent->wgt_full);
-theta_e->Fill(the_gen,mesmerEvent->wgt_full);
+theta_mu->Fill(thmu_gen,mesmerEvent->wgt_full*wnorm);
+theta_e->Fill(the_gen,mesmerEvent->wgt_full*wnorm);
 
 //		  }		// if out particles
 //else{h_2d_gen->Fill(the_gen,thmu_gen,mesmerEvent->wgt_full);}
@@ -160,12 +171,12 @@ theta_e->Fill(the_gen,mesmerEvent->wgt_full);
 
 
   // Launch the parallel processing of the tree
-  //tp1.Process(myFunction);
+  tp1.Process(myFunction);
   tp2.Process(myFunction);
-  //tp3.Process(myFunction);
-  //tp4.Process(myFunction);
-  //tp5.Process(myFunction);
-  //tp6.Process(myFunction);
+  tp3.Process(myFunction);
+  tp4.Process(myFunction);
+  tp5.Process(myFunction);
+  tp6.Process(myFunction);
 
   // Use the ROOT::TThreadedObject::Merge method to merge the thread private histograms
   // into the final result
