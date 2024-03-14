@@ -8,14 +8,14 @@
 using namespace std;
 
 
-void fourth_new_skim_eff97(){
+void fourth_new_skim_eff97_1hitallowed(){
 int NMODULES = 12;
 int iskim = 41;
 
 ///////
   string filelist = "runs/";
   string inputdir = "inputs/";
-  string n_mult="fourth_ALLPUmu_eff97";
+  string n_mult="fourth_ALLPUmu_eff97_1hitallowed";
   string outdir = "outputs/";
 
     filelist = filelist  + "files.txt";
@@ -153,7 +153,30 @@ if (iskim > 0) {
   TH2D *h2_nStubs_fired12_plus_single_clean = new TH2D("h2_nStubs_fired12_plus_single_clean","N stubs on S1 vs S0 (fired12_plus_single_clean events)",nb,0,nmax,nb,0,nmax);
   TH1D *h_nStubs_0_fired12_plus_single_clean = new TH1D("h_nStubs_0_fired12_plus_single_clean","Tot N stubs First Station - S0 (fired12_plus_single_clean events)",nb,0,nmax);
   TH1D *h_nStubs_1_fired12_plus_single_clean = new TH1D("h_nStubs_1_fired12_plus_single_clean","Tot N stubs Second Station - S1 (fired12_plus_single_clean events)",nb,0,nmax);
-  
+
+
+  TH1D *h_reco_tracks = new TH1D("h_reco_tracks","number of reco tracks", 20,0,20);
+  TH1D *h_reco_tracks_no = new TH1D("h_reco_tracks_no","number of reco tracks no vrtx", 20,0,20);
+
+  TH1D *h_reco_tracks_0 = new TH1D("h_reco_tracks_0","number of reco tracks station0", 20,0,20);
+  TH1D *h_reco_tracks_1 = new TH1D("h_reco_tracks_1","number of reco tracks station1", 20,0,20);
+
+  TH1D *h_reco_tracks_0_no = new TH1D("h_reco_tracks_0_no","number of reco tracks station0 no vrtx", 20,0,20);
+  TH1D *h_reco_tracks_1_no = new TH1D("h_reco_tracks_1_no","number of reco tracks station1 no vrtx", 20,0,20);
+
+  TH1D *h_th1=new TH1D("h_th1","Angle single particle when not correctly reconstructed",200,0.,0.001);
+  TH1D *h_linkedID=new TH1D("h_linkedID","Linked track ID when not correctly reconstructed",20,0,20);
+
+  TH2D *h_reco_tracks_2d = new TH2D("h_reco_tracks_2d","number of reco tracks station0 VS station1", 20,0,20, 20,0,20);
+  TH2D *h_reco_tracks_2d_no = new TH2D("h_reco_tracks_2d_no","number of reco tracks station0 VS station1 no vrtx", 20,0,20, 20,0,20);
+
+  TH1D *h_nStubs_0_ALLPUmu_no = new TH1D("h_nStubs_0_ALLPUmu_no","number stubs station 0 no vrtx",30,0,30);
+  TH1D *h_nStubs_1_ALLPUmu_no = new TH1D("h_nStubs_1_ALLPUmu_no","number stubs station 1 no vrtx",30,0,30);
+
+  TH1D *h_nStubs_0_ALLPUmu = new TH1D("h_nStubs_0_ALLPUmu","number stubs station 0",30,0,30);
+  TH1D *h_nStubs_1_ALLPUmu = new TH1D("h_nStubs_1_ALLPUmu","number stubs station 1",30,0,30);
+
+
   // FOR STATION EFFICIENCIES (efficiency of Trackable Track pattern)
 
 array<TH1D*,12> stub_per_mod;
@@ -524,9 +547,8 @@ if(mu_gen>0){
     if (is_passing_clean_1) N_passing_clean_1++;
    
 
-
-bool is_2nd_pattern_1 = (S_1.multifired_xy_modules>1 && S_1.nhits_uv >1) ||
-                            (S_1.multifired_xy_modules>2 && S_1.nhits_uv >0);
+    bool is_2nd_pattern_1 = (S_1.multifired_xy_modules>=3 && S_1.nhits_uv >1) ||
+                            (S_1.multifired_xy_modules==4 && S_1.nhits_uv >0);
     bool is_2tracks_1 = is_trackable_1 && is_2nd_pattern_1;
     if (is_2tracks_1) N_2tracks_1++;
 
@@ -841,6 +863,32 @@ bool is_2nd_pattern_1 = (S_1.multifired_xy_modules>1 && S_1.nhits_uv >1) ||
 
 for(int s=0; s<12; s++){ stub_per_mod_single_clean.at(s)->Fill(nstubs.at(s));}
 
+vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks();
+int n_0=0;
+int n_1=0;
+
+for(int t=0; t<tracks.size(); t++){
+if(tracks.at(t).sector()==0)n_0++;
+if(tracks.at(t).sector()==1)n_1++;
+}
+
+TVector3 p_muin,p1;
+double th1=-99.;
+int link1=-99;
+for(int t=0; t<tracks.size(); t++){
+if(n_0==1 and n_1==1 and ReconstructionOutput->reconstructedVertices().size()==0){
+        if(tracks.at(t).sector()==0){p_muin.SetXYZ(tracks.at(t).xSlope(),tracks.at(t).ySlope(),1.0); p_muin=p_muin.Unit();}
+        else{p1.SetXYZ(tracks.at(t).xSlope(),tracks.at(t).ySlope(),1.0); p1=p1.Unit();th1=p1.Angle(p_muin); link1=tracks.at(t).linkedTrackID();}
+  }
+}
+
+if(ReconstructionOutput->reconstructedVertices().size()!=0){h_reco_tracks_0->Fill(n_0);h_reco_tracks_1->Fill(n_1);h_reco_tracks->Fill(tracks.size());
+                                                                h_nStubs_0_ALLPUmu->Fill(nStubs_0);h_nStubs_1_ALLPUmu->Fill(nStubs_1);h_reco_tracks_2d->Fill(n_0,n_1);}
+else{h_reco_tracks_0_no->Fill(n_0);h_reco_tracks_1_no->Fill(n_1);h_th1->Fill(th1); h_linkedID->Fill(link1);h_reco_tracks_no->Fill(tracks.size());
+                                                                h_nStubs_0_ALLPUmu_no->Fill(nStubs_0);h_nStubs_1_ALLPUmu_no->Fill(nStubs_1);h_reco_tracks_2d_no->Fill(n_0,n_1);}
+
+
+
       h_nStubs_0_single_clean->Fill(nStubs_0);
       h_nStubs_1_single_clean->Fill(nStubs_1);
       h2_nStubs_single_clean->Fill(nStubs_0, nStubs_1);
@@ -958,6 +1006,8 @@ for(int s=0; s<12; s++){ stub_per_mod_pileup234.at(s)->Fill(nstubs.at(s));}
 //h_nTotStubs_after_ALLPUmu->Fill(TrackerStubs->GetEntries());
 
 for(int s=0; s<12; s++){ stub_per_mod.at(s)->Fill(nstubs.at(s));}
+
+
 
       N_stubs_skim += nTotStubs;
     }
@@ -1308,6 +1358,47 @@ for(int s=0; s<12; s++){ stub_per_mod.at(s)->Fill(nstubs.at(s));}
     cout<<"\n Number of output skimmed events          = "<<o_nevt<<endl;
     cout<<" Number of stubs in output skimmed events = "<<N_stubs_skim<<endl;
   }
+TCanvas a("a","a",1000,700);
+a.Divide(3,2);
+a.cd(1);
+h_reco_tracks_0_no->SetLineColor(kRed);
+h_reco_tracks_0->Draw("hist");
+h_reco_tracks_0_no->Draw("hist same");
+a.cd(2);
+h_reco_tracks_1_no->SetLineColor(kRed);
+h_reco_tracks_1->Draw("hist");
+h_reco_tracks_1_no->Draw("hist same");
+a.cd(3);
+h_linkedID->Draw("hist");
+gPad->SetLogy();
+a.cd(4);
+h_th1->Draw("hist");
+a.cd(5);
+h_reco_tracks_no->SetLineColor(kRed);
+h_reco_tracks->Draw("hist");
+h_reco_tracks_no->Draw("hist same");
+a.SaveAs("minbias_singlemuclean/h_reco_tracks_ALLPUmu_minbias_1hitallowed.pdf");
+
+TCanvas b("b","b",1000,700);
+b.Divide(2,2);
+b.cd(1);
+h_reco_tracks_2d->SetXTitle("n_reco_tracks station0");
+h_reco_tracks_2d->SetYTitle("n_reco_tracks station1");
+h_reco_tracks_2d->Draw("COLZ");
+b.cd(2);
+h_reco_tracks_2d_no->SetXTitle("n_reco_tracks station0");
+h_reco_tracks_2d_no->SetYTitle("n_reco_tracks station1");
+h_reco_tracks_2d_no->Draw("COLZ");
+b.cd(3);
+h_nStubs_0_ALLPUmu_no->SetLineColor(kRed);
+h_nStubs_0_ALLPUmu->Draw("hist");
+h_nStubs_0_ALLPUmu_no->Draw("hist same");
+b.cd(4);
+h_nStubs_1_ALLPUmu_no->SetLineColor(kRed);
+h_nStubs_1_ALLPUmu->Draw("hist");
+h_nStubs_1_ALLPUmu_no->Draw("hist same");
+b.SaveAs("minbias_singlemuclean/stubs_tracks_ALLPUmu_minbias_1hitallowed.pdf");
+
 
   return 0;
 }
