@@ -1,3 +1,12 @@
+#include <array>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
+#include "TFile.h"
+#include "TTree.h"
+#include "TChain.h"
 #include "TH1D.h"
 #include "TH2D.h"
 #include "TCanvas.h"
@@ -8,14 +17,14 @@
 using namespace std;
 
 
-void fourth_new_skim_eff97(){
+void fifth_new_skim_eff97(){
 int NMODULES = 12;
 int iskim = 61;
 
 ///////
   string filelist = "runs/";
   string inputdir = "inputs/";
-  string n_mult="fourth_ALLPUmu_eff97";
+  string n_mult="fifth_ALLPUmu_eff97";
   string outdir = "outputs/";
 
     filelist = filelist  + "files.txt";
@@ -54,7 +63,6 @@ if (iskim > 0) {
     o_file = TFile::Open((outdir+n_mult+".root").c_str(), "recreate");
     if (!o_file) {cout << "Error opening file" << std::endl; exit(-1);}
     o_tree = new TTree("cbmsim", "");
-
     o_tree->Branch("MCTrack", &o_MCTrack);
     o_tree->Branch("TrackerStubs", &o_TrackerStubs);
     o_tree->Branch("ReconstructionOutput", &o_ReconstructionOutput);
@@ -153,14 +161,13 @@ if (iskim > 0) {
   TH2D *h2_nStubs_fired12_plus_single_clean = new TH2D("h2_nStubs_fired12_plus_single_clean","N stubs on S1 vs S0 (fired12_plus_single_clean events)",nb,0,nmax,nb,0,nmax);
   TH1D *h_nStubs_0_fired12_plus_single_clean = new TH1D("h_nStubs_0_fired12_plus_single_clean","Tot N stubs First Station - S0 (fired12_plus_single_clean events)",nb,0,nmax);
   TH1D *h_nStubs_1_fired12_plus_single_clean = new TH1D("h_nStubs_1_fired12_plus_single_clean","Tot N stubs Second Station - S1 (fired12_plus_single_clean events)",nb,0,nmax);
-  
-  // FOR STATION EFFICIENCIES (efficiency of Trackable Track pattern)
 
-array<TH1D*,12> stub_per_mod;
+
+array<TH1D*,12> stub_per_mod_trackable;
 for(int m=0; m<12; m++){
-string name="stub_per_mod"+to_string(m);
+string name="stub_per_mod_trackable"+to_string(m);
 string title="Number of stubs when N_stubs<15 per module "+to_string(m);
-stub_per_mod.at(m)=new TH1D(name.c_str(),title.c_str(),20,0,20);
+stub_per_mod_trackable.at(m)=new TH1D(name.c_str(),title.c_str(),20,0,20);
 }
 
 array<TH1D*,12> stub_per_mod_single_clean;
@@ -318,8 +325,10 @@ stub_per_mod_pileup234.at(m)=new TH1D(name.c_str(),title.c_str(),20,0,20);
   Long64_t N_fired6_1 = 0;
   Long64_t N_fired12_events = 0;
   Long64_t N_fired12_plus_single_clean_events = 0;
-  
-for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
+
+
+  for(Long64_t i = 0; i < n_entries; i++) {
+  //  for(Long64_t i = 0; i < 100001; i++) {
 
  cbmsim->GetEntry(i);
  if(i%100 == 0) cout<<"Entry "<<i<<endl;
@@ -347,7 +356,6 @@ double yz_mu=10.;
 if(mu_gen>0){
 
     N_input_events++;
-
     std::array<int,12> nstubs = {0,0,0,0,0,0,0,0,0,0,0,0};
     int nTotStubs = 0;  
     int nStubs_0 = 0;
@@ -358,16 +366,24 @@ if(mu_gen>0){
    {const MUonETrackerStub *stubs = static_cast<const MUonETrackerStub*>(TrackerStubs->At(t));
 
         int imod = stubs->moduleID()+stubs->stationID()*6;
+      int a=1;
+
+//      if(imod == 0 or imod == 4 or imod==6 or imod==10) a=-1;
+      float local=a*(stubs->seedClusterCenterStrip() + 0.5 + 0.5 * stubs->bend()) * 9.144 / 1016 - 0.5 * 9.144;
+
         bool hit= (rand()%100) <= 97;
+
+         if (imod <6 and abs(local)<3 ) {
         nstubs.at(imod)+=static_cast<int>(hit);
         nTotStubs+=static_cast<int>(hit);
-        //nstubs.at(imod)++;
-         if(static_cast<int>(hit)==1)h_nstubsPerModule->Fill(imod);
-         if (imod <6) {
           nStubs_0+=static_cast<int>(hit);
+         if(static_cast<int>(hit)==1)h_nstubsPerModule->Fill(imod);
           if(static_cast<int>(hit)==1)h_nstubsPerModule_S0->Fill(imod);}
-         else {
+         else if(imod>=6){
+        nstubs.at(imod)+=static_cast<int>(hit);
+        nTotStubs+=static_cast<int>(hit);
           nStubs_1+=static_cast<int>(hit);
+         if(static_cast<int>(hit)==1)h_nstubsPerModule->Fill(imod);
           if(static_cast<int>(hit)==1)h_nstubsPerModule_S1->Fill(imod);
             }
 	}
@@ -384,7 +400,6 @@ if(mu_gen>0){
     h_nStubs_0->Fill(nStubs_0);
     h_nStubs_1->Fill(nStubs_1);
     h2_nStubs->Fill(nStubs_0, nStubs_1);
-
 
     //////////////////////////////////////////////////////////////
     // DEFINE the structures specifying the stations' hit patterns
@@ -523,10 +538,8 @@ if(mu_gen>0){
     bool is_passing_clean_1 = is_passing_cand_1 && nStubs_1 <8;
     if (is_passing_clean_1) N_passing_clean_1++;
    
-
-
-bool is_2nd_pattern_1 = (S_1.multifired_xy_modules>1 && S_1.nhits_uv >1) ||
-                            (S_1.multifired_xy_modules>2 && S_1.nhits_uv >0);
+    bool is_2nd_pattern_1 = (S_1.multifired_xy_modules>1 && S_1.nhits_uv >1) ||
+                            (S_1.multifired_xy_modules>2 && S_1.nhits_uv >0);   
     bool is_2tracks_1 = is_trackable_1 && is_2nd_pattern_1;
     if (is_2tracks_1) N_2tracks_1++;
 
@@ -657,6 +670,7 @@ bool is_2nd_pattern_1 = (S_1.multifired_xy_modules>1 && S_1.nhits_uv >1) ||
 
       for (int k=0; k<NMODULES; k++) {
 	h_nstubsPerModule_trackable->Fill(k, nstubs[k]);
+        stub_per_mod_trackable.at(k)->Fill(nstubs.at(k));
       }
     }
     
@@ -827,6 +841,7 @@ bool is_2nd_pattern_1 = (S_1.multifired_xy_modules>1 && S_1.nhits_uv >1) ||
     if (is_single_cand_event) {
       N_single_cand_events++;
       h_nTotStubs_single_cand->Fill(nTotStubs);
+
     }
 
     bool is_single_clean_event = is_single_clean_0 && is_2tracks_1;
@@ -839,7 +854,6 @@ bool is_2nd_pattern_1 = (S_1.multifired_xy_modules>1 && S_1.nhits_uv >1) ||
       N_single_clean_stubs_0 += nStubs_0;
       N_single_clean_stubs_1 += nStubs_1;
 
-for(int s=0; s<12; s++){ stub_per_mod_single_clean.at(s)->Fill(nstubs.at(s));}
 
       h_nStubs_0_single_clean->Fill(nStubs_0);
       h_nStubs_1_single_clean->Fill(nStubs_1);
@@ -848,6 +862,7 @@ for(int s=0; s<12; s++){ stub_per_mod_single_clean.at(s)->Fill(nstubs.at(s));}
 
       for (int k=0; k<NMODULES; k++) {
 	h_nstubsPerModule_single_clean->Fill(k, nstubs[k]);
+	stub_per_mod_single_clean.at(k)->Fill(nstubs.at(k));
       }
     }
 
@@ -933,12 +948,11 @@ for(int s=0; s<12; s++){ stub_per_mod_single_clean.at(s)->Fill(nstubs.at(s));}
       h_nStubs_1_pileup234_skim->Fill(nStubs_1);
       h2_nStubs_pileup234_skim->Fill(nStubs_0, nStubs_1);
 
-for(int s=0; s<12; s++){ stub_per_mod_pileup234.at(s)->Fill(nstubs.at(s));}
-
 
 
       for (int k=0; k<NMODULES; k++) {
 	h_nstubsPerModule_pileup234_skim->Fill(k, nstubs[k]);
+	stub_per_mod_pileup234.at(k)->Fill(nstubs.at(k));
       }
     }
 
@@ -955,14 +969,11 @@ for(int s=0; s<12; s++){ stub_per_mod_pileup234.at(s)->Fill(nstubs.at(s));}
     }
 
     if (ok_skim) {
-//h_nTotStubs_after_ALLPUmu->Fill(TrackerStubs->GetEntries());
-
-for(int s=0; s<12; s++){ stub_per_mod.at(s)->Fill(nstubs.at(s));}
-
       N_stubs_skim += nTotStubs;
     }
-   }// if mu in
+   }//mu_in
   } //  for(Long64_t i = 0; i < n_entries; i++)
+
 
 
   cout <<"\n"<<"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<<endl;
@@ -1304,7 +1315,6 @@ for(int s=0; s<12; s++){ stub_per_mod.at(s)->Fill(nstubs.at(s));}
   hfile->Write();
 
   if (iskim > 0) {
-
     cout<<"\n Number of output skimmed events          = "<<o_nevt<<endl;
     cout<<" Number of stubs in output skimmed events = "<<N_stubs_skim<<endl;
   }

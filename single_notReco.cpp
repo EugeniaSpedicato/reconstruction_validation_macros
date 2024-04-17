@@ -14,18 +14,12 @@
 
 using namespace std;
 
-void notReco(){
+void single_notReco(){
 
-        //TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/Mesmer_new_1M_1hit_bend.root");
+        //TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/Mesmer_new_1M_1hit_bend_single_15.root");
 
 TChain * cbmsim = new TChain("cbmsim");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/theta_32-inf_mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/theta_theta_1M_2hitFirstModules_NOoutchi2_reassign.root");//theta_theta_0-32mrad_6M_2hitFirstModules_NOoutchi2_reassign.root");
 
 
         TClonesArray *MCTrack = 0;
@@ -48,7 +42,7 @@ double reco_4=0.; double reco1_4=0.; double more_reco_4=0.; double reco0_4=0.;do
 double reco_5=0.; double reco1_5=0.; double more_reco_5=0.; double reco0_5=0.;double reco3_5=0.;
 double reco_6=0.; double reco1_6=0.; double more_reco_6=0.; double reco0_6=0.;double reco3_6=0.;
 
-double bin[7]={0.};
+double bin[6]={0.};
 
 double error=0; double error1=0.;double error2=0.;double error3=0.;double error4=0.;double error5=0.;double error6=0.;
 
@@ -60,29 +54,20 @@ int code_mu=-99; int code_e=-99; int code_mu_in=-99;
 int TrackIdreco=-99;
 double z_fix=912.7;
 
-
-
-TH1::SetDefaultSumw2(kTRUE);
-   const Int_t NBINS = 7;
-   Double_t edges[NBINS + 1] = {0.0, 0.005, 0.010, 0.015, 0.020, 0.025, 0.032, 0.100};
-
-
+TH2D* h_xy=new TH2D("h_xy","Beam Spot Z=target",100,-5.,5.,100,-5.,5.);
    const Int_t NBINS2 = 9;
    Double_t edges2[NBINS2 + 1] = {0.,0.0002,0.0004,0.0006,0.0008,0.001,0.002,0.003,0.004,0.005};
 
-        std::vector<TH2D*> h_2d(NBINS);
+TH2D* h_2d=new TH2D("h2D","theta mu vs theta E with all cuts", 16, 0.,0.032,NBINS2,edges2);
 
-                for(int m=0; m<NBINS; m++)
-        {	string name="h2D"+to_string(m);
-                string title="theta mu vs theta E with all cuts"+to_string(m);
-                h_2d.at(m)=new TH2D(name.c_str(),title.c_str(), 16, 0.,0.032,NBINS2,edges2);}
-
-
+TH1::SetDefaultSumw2(kTRUE);
+   const Int_t NBINS = 6;
+   Double_t edges[NBINS + 1] = {0.0, 0.005, 0.010, 0.015, 0.020, 0.025, 0.032};
    TH1D* d_eff = new TH1D("d_eff_MC", "Efficiency as a function of the electron's angle",NBINS,edges);
    TH1D* theta_e_all = new TH1D("theta_e", "Electron scattering reco angles from MESMER",10,0.,0.035);
    TH1D* theta_mu_all = new TH1D("theta_mu", "Muon scattering reco angles from MESMER",20,0.,0.005);
 
-	std::vector<TH1D*>  theta_e(NBINS),theta_mu(NBINS),h_opening(NBINS);
+	std::vector<TH1D*>  theta_e(NBINS),theta_mu(NBINS);
 
         for(int m=0; m<NBINS; m++)
         {	string name="theta_e"+to_string(m);
@@ -92,11 +77,6 @@ TH1::SetDefaultSumw2(kTRUE);
 		string name_mu="theta_mu"+to_string(m);
                 string title_mu="Muon scattering reco angles from MESMER bin"+to_string(m);
                 theta_mu.at(m)=new TH1D(name_mu.c_str(),title_mu.c_str(),20,0.,0.005);
-
-                string name_op="h_opening"+to_string(m);
-                string title_op="Opening angle reco events from MESMER"+to_string(m);
-		h_opening.at(m)=new TH1D(name_op.c_str(),title_op.c_str(),35,0.,0.035);
-
         }
 
 
@@ -111,11 +91,7 @@ TH1D *h_res3=new TH1D("res3", "(the_rec-the_true) 15<theta_e<20 GeV",40,-0.01,0.
 TH1D *h_res4=new TH1D("res4", "(the_rec-the_true) 20<theta_e<25 GeV",40,-0.01,0.01);
 TH1D *h_res5=new TH1D("res5", "(the_rec-the_true) 25<theta_e<32 GeV",40,-0.01,0.01);
 
-   TH1D* th_in=new TH1D("th_in","Incoming muon theta",100,0.,0.01);
 
-
-//        double r_wnorm[6]={20.786765103274643,33.313091221576336,42.396733790329876,50.584815206143652,61.828110400735824,106.88513370134392};
-        double r_wnorm[7]={1.,1.,1.,1.,1.,1.,1.};//20.786765103274643,33.313091221576336,42.396733790329876,50.584815206143652,61.828110400735824,106.88513370134392};
 
 for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 		cbmsim->GetEntry(i);
@@ -127,16 +103,6 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 	double the_gen, thmu_gen;
 double emu=0.;
 
-
-double wnorm=99.;
-int index=99;
-if(the_gen>=0 and the_gen<0.005){index=0; wnorm=r_wnorm[0];}
-if(the_gen>=0.005 and the_gen<0.010){index=1; wnorm=r_wnorm[1];}
-if(the_gen>=0.010 and the_gen<0.015){index=2; wnorm=r_wnorm[2];}
-if(the_gen>=0.015 and the_gen<0.020){index=3; wnorm=r_wnorm[3];}
-if(the_gen>=0.020 and the_gen<0.025){index=4; wnorm=r_wnorm[4];}
-if(the_gen>=0.025 and the_gen<=0.032){index=5; wnorm=r_wnorm[5];}
-if(the_gen>0.032){index=6; wnorm=r_wnorm[6];}
 
 
 
@@ -159,9 +125,6 @@ int yes_e=0;
 double th_inx,th_iny,x0_in,y0_in;
 double chi2_muin;
 double stubs_muin;
-
-double th_muin=0.;
-
 for(int j=0; j<tracks.size();j++)
 {
 
@@ -175,26 +138,21 @@ if(code_mu_in==tracks.at(j).linkedTrackID() and tracks.at(j).sector()==0){
         chi2_muin=tracks.at(j).chi2perDegreeOfFreedom();
         std::vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
         stubs_muin=hits_.size();
-        TVector3 p_muin(th_inx,th_iny,1.0);
-        p_muin=p_muin.Unit();
-	th_muin=p_muin.Theta();
                         }
-if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.at(j).sector()==1)
+if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.at(j).sector()==1)//tracks.size()==3
 {yes2++;
                  if(code_e==tracks.at(j).linkedTrackID()) yes_e++;
                  if(code_mu==tracks.at(j).linkedTrackID()) yes_mu++;
 	}
 }
 
-
 //estrapolo posizione negli ultimi due moduli della seconda stazione
 /*double posxIN=pos_on_track(x0_in,th_inx,899.92180);
 double posyIN=pos_on_track(y0_in,th_iny,903.76930);*/
 
 // posizione locale negli ultimi due moduli della seconda stazione
-
-double posxIN=99.;//pos_on_track(x0_in,th_inx,z_fix);
-double posyIN=99.;//pos_on_track(y0_in,th_iny,z_fix);
+double posxIN=99.;
+double posyIN=99.;
 
 //h_xy->Fill(posxIN,posyIN);
 std::vector<MUonERecoOutputHit> stubs=ReconstructionOutput->reconstructedHits();
@@ -207,12 +165,8 @@ if(stubs.at(s).stationID()==0){stub0++; if(stubs.at(s).moduleID()==4){posxIN=stu
 if(stubs.at(s).stationID()==1)stub1++;
 }
 
-if(stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<=2 and stub0==6) th_in->Fill(th_muin,MesmerEvent->wgt_full);
+if(stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<=5 and stub0==6){//and stub1<=15){
 
-if(stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<=2 and stub0==6 and th_muin<0.004){//and stub1<=15){
-
-
-bin[index]+=MesmerEvent->wgt_full;
 signal+=MesmerEvent->wgt_full;
 
 
@@ -237,7 +191,6 @@ if(chi!=0){
         TVector3 p_muin(mu_in.xSlope(),mu_in.ySlope(),1.0);
         TVector3 p_mu(mu_out.xSlope(),mu_out.ySlope(),1.0);
         TVector3 p_e(e_out.xSlope(),e_out.ySlope(),1.0);
-        p_e.Unit();p_mu.Unit();p_muin.Unit();
 
                                                 double dotProduct_v = p_mu.Dot(p_e);
                                                 TVector3 crossProduct_v = p_mu.Cross(p_e);
@@ -248,23 +201,15 @@ if(chi!=0){
                                                 double acoplanarity_v= T_v*(TMath::Pi()- acos( ((im_v).Dot(ie_v))/(im_v.Mag()*ie_v.Mag()) ));
 
 
-
- if(abs(acoplanarity_v)<=1 and chi<20 and vrtx.muonTheta()>=0.0002 and stub1<=15 and vrtx.zKinematicFit()<915. and vrtx.zKinematicFit()>907.){//and vrtx.electronTheta()<=0.032 and stub1<=15){// and vrtx.electronThea()>=0.0005 and vrtx.electronTheta()<=0.02){//vrtx.electronTheta()<=0.032){
-//first
+ if(abs(acoplanarity_v)<=1 and chi<20 and vrtx.muonTheta()>=0.0002){//and stub1<=15){//first
 
 
  reco+=MesmerEvent->wgt_full; error+=MesmerEvent->wgt_full*MesmerEvent->wgt_full;
 
  d_eff->Fill(vrtx.electronTheta(),MesmerEvent->wgt_full);
- h_2d[index]->Fill(vrtx.electronTheta(),vrtx.muonTheta(),MesmerEvent->wgt_full);
+ h_2d->Fill(vrtx.electronTheta(),vrtx.muonTheta(),MesmerEvent->wgt_full);
 theta_mu_all->Fill(vrtx.muonTheta(),MesmerEvent->wgt_full);
 theta_e_all->Fill(vrtx.electronTheta(),MesmerEvent->wgt_full);
-
-theta_mu[index]->Fill(vrtx.muonTheta(),MesmerEvent->wgt_full);
-theta_e[index]->Fill(vrtx.electronTheta(),MesmerEvent->wgt_full);
-h_opening[index]->Fill(p_mu.Angle(p_e),MesmerEvent->wgt_full);
-
-//bin[index]+=MesmerEvent->wgt_full;
 
 if(vrtx.electronTheta()>=0.0 and vrtx.electronTheta()<0.005){h_res->Fill(vrtx.electronTheta()-the_gen,MesmerEvent->wgt_full);}
 
@@ -301,7 +246,7 @@ cout << "bin2 " << bin[2] << endl;
 cout << "bin3 " << bin[3] << endl;
 cout << "bin4 " << bin[4] << endl;
 cout << "bin5 " << bin[5] << endl;
-cout << "bin6 " << bin[6] << endl;
+
 
 cout << "ALL" << endl;
 cout << "Su " << signal << " eventi di segnale, " << reco << " +- " << sqrt(error) << " sono ricostruiti, con un rapporto del " << reco/signal*100 << "%"<< endl;
@@ -366,46 +311,35 @@ h_res5->Draw("hist");
 r.SaveAs("comparison_RDMC/res_bend.pdf");
 
 TCanvas a("a","a",700,700);
-th_in->Draw("E");
-a.SaveAs("comparison_RDMC/th_in_MC.pdf");
+d_eff->Draw("E");
+a.SaveAs("comparison_RDMC/d_eff_MC.pdf");
+d_eff->SaveAs("comparison_RDMC/d_eff_MC_single_15.root");
 
-d_eff->SaveAs("comparison_RDMC/d_eff_MC_z.root");
-
-TCanvas z("z","z",200,300);
-z.Divide(2,3);
-for(int m=0;m<NBINS;m++){
-Int_t nx = h_2d.at(m)->GetNbinsX();
-Int_t ny = h_2d.at(m)->GetNbinsY();
-for (Int_t i=1; i<nx+1; i++) {
-for (Int_t j=1; j<ny+1; j++) {
-if (h_2d.at(m)->GetBinContent(i,j)<=20) h_2d.at(m)->SetBinContent(i,j,0);}}
-h_2d.at(m)->SaveAs(Form("comparison_RDMC/2D_MC_%d_z.root",static_cast<char>(m)));
-z.cd(m+1);
-h_2d.at(m)->Draw("COLZ");
-}
-z.SaveAs("comparison_RDMC/h_2D_MC.pdf");
+TCanvas b("b","b",700,700);
+h_2d->Draw();
+h_2d->SaveAs("comparison_RDMC/2D_MC_single_15.root");
 
 TCanvas c("c","c",700,700);
 theta_mu_all->Draw("E");
 c.SaveAs("comparison_RDMC/theta_mu_all.pdf");
-theta_mu_all->SaveAs("comparison_RDMC/theta_mu_MC_z.root");
+theta_mu_all->SaveAs("comparison_RDMC/theta_mu_MC_single_15.root");
 
 TCanvas d("d","d",700,700);
 theta_e_all->Draw("E");
 d.SaveAs("comparison_RDMC/theta_e_all.pdf");
-theta_e_all->SaveAs("comparison_RDMC/theta_e_MC_z.root");
+theta_e_all->SaveAs("comparison_RDMC/theta_e_MC_single_15.root");
 
 TCanvas e("e","e",700,700);
 theta_mu_gen->Draw("E");
-theta_mu_gen->SaveAs("comparison_RDMC/theta_mu_gen_MC_z.root");
+theta_mu_gen->SaveAs("comparison_RDMC/theta_mu_gen_MC_single_15.root");
 
 TCanvas f("f","f",700,700);
 theta_e_gen->Draw("E");
-theta_e_gen->SaveAs("comparison_RDMC/theta_e_gen_MC_z.root");
+theta_e_gen->SaveAs("comparison_RDMC/theta_e_gen_MC_single_15.root");
 
- for(int m=0;m<NBINS;m++){
-theta_e[m]->SaveAs(Form("comparison_RDMC/theta_e_MC_%d_z.root",static_cast<char>(m)));
-theta_mu[m]->SaveAs(Form("comparison_RDMC/theta_mu_MC_%d_z.root",static_cast<char>(m)));
-h_opening[m]->SaveAs(Form("comparison_RDMC/opening_MC_%d_z.root",static_cast<char>(m)));}
+ for(int m=0;m<6;m++){
+theta_e[m]->SaveAs(Form("comparison_RDMC/theta_e_MC_%d_single_15.root",static_cast<char>(m)));
+theta_mu[m]->SaveAs(Form("comparison_RDMC/theta_mu_MC_%d_single_15.root",static_cast<char>(m)));
+}
 
 }
