@@ -17,8 +17,14 @@ using namespace std;
 void dati_notReco(){
 
 TChain * cbmsim = new TChain("cbmsim");
+
+/*cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_2hit.root");
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_2hit_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_2hit_2.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_2hit_2.root");*/
+
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_skim_run_6_v2_2hits_nochi2_MCcorr.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_skim_run_6_v2_2hits_nochi2_MCcorr_1.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_skim_run_6_v2_2hits_nochi2_MCcorr_2.root");
 
 
         TClonesArray *MCTrack = 0;
@@ -152,7 +158,8 @@ if(chi!=0){
                                                 T_v = T_v>0? 1:-1;
                                                 double acoplanarity_v= T_v*(TMath::Pi()- acos( ((im_v).Dot(ie_v))/(im_v.Mag()*ie_v.Mag()) ));
 
-  if(abs(acoplanarity_v)<=1 and chi<20 and vrtx.muonTheta()>=0.0002 and stub1<=15 and vrtx.zKinematicFit()<915. and vrtx.zKinematicFit()>907.){//vrtx.electronTheta()>=0.0005 and vrtx.electronTheta()<=0.02){//vrtx.electronTheta()<=0.032){
+  if(abs(acoplanarity_v)<=1 and chi<20 and vrtx.muonTheta()>0.0002 and stub1<=15){// and vrtx.zKinematicFit()<915. and vrtx.zKinematicFit()>907.){//vrtx.electronTheta()>=0.0005 and vrtx.electronTheta()<=0.02){//vrtx.electronTheta()<=0.032){
+
 //first
  if(yes2>=2){d_eff->Fill(vrtx.electronTheta());
 
@@ -272,20 +279,20 @@ th_in->Draw("E");
 a.SaveAs("comparison_RDMC/th_in_RD.pdf");*/
 
 
-d_eff->SaveAs("comparison_RDMC/d_eff_RD_z.root");
+d_eff->SaveAs("comparison_RDMC/d_eff_RD_new.root");
 
 //TCanvas b("b","b",700,700);
 //h_2d->Draw();
-h_2d->SaveAs("comparison_RDMC/2D_RD_z.root");
+h_2d->SaveAs("comparison_RDMC/2D_RD_new.root");
 
 //TCanvas c("c","c",700,700);
 //theta_mu->Draw("E");
-theta_mu->SaveAs("comparison_RDMC/theta_mu_RD_z.root");
+theta_mu->SaveAs("comparison_RDMC/theta_mu_RD_new.root");
 
 //TCanvas d("d","d",700,700);
 //theta_e->Draw("E");
-theta_e->SaveAs("comparison_RDMC/theta_e_RD_z.root");
+theta_e->SaveAs("comparison_RDMC/theta_e_RD_new.root");
 
-h_opening->SaveAs("comparison_RDMC/opening_RD_z.root");
+h_opening->SaveAs("comparison_RDMC/opening_RD_new.root");
 
 }

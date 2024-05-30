@@ -19,6 +19,8 @@ void notReco(){
         //TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/Mesmer_new_1M_1hit_bend.root");
 
 TChain * cbmsim = new TChain("cbmsim");
+
+
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
@@ -26,6 +28,22 @@ cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_1M_
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/theta_32-inf_mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
+
+/*
+   TFile *f1 = new TFile("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-inf_mrad_2hitFirstModules_NOoutchi2_MCcorrections.root");
+   TFile *f2 = new TFile("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/old_forRDMC_2hitFirstModules.root");
+
+   TTree *cbmsim = (TTree*)f1->Get("cbmsim");
+   TTree *t2 = (TTree*)f2->Get("cbmsim");
+
+
+   cbmsim->AddFriend(t2);
+   cout << t2->GetEntries() << endl;
+   cout << cbmsim->GetEntries() << endl;
+   cbmsim->Print();
+*/
+
+
 
 
         TClonesArray *MCTrack = 0;
@@ -130,12 +148,12 @@ double emu=0.;
 
 double wnorm=99.;
 int index=99;
-if(the_gen>=0 and the_gen<0.005){index=0; wnorm=r_wnorm[0];}
-if(the_gen>=0.005 and the_gen<0.010){index=1; wnorm=r_wnorm[1];}
-if(the_gen>=0.010 and the_gen<0.015){index=2; wnorm=r_wnorm[2];}
-if(the_gen>=0.015 and the_gen<0.020){index=3; wnorm=r_wnorm[3];}
-if(the_gen>=0.020 and the_gen<0.025){index=4; wnorm=r_wnorm[4];}
-if(the_gen>=0.025 and the_gen<=0.032){index=5; wnorm=r_wnorm[5];}
+if(the_gen>=0 and the_gen<=0.005){index=0; wnorm=r_wnorm[0];}
+if(the_gen>0.005 and the_gen<=0.010){index=1; wnorm=r_wnorm[1];}
+if(the_gen>0.010 and the_gen<=0.015){index=2; wnorm=r_wnorm[2];}
+if(the_gen>0.015 and the_gen<=0.020){index=3; wnorm=r_wnorm[3];}
+if(the_gen>0.020 and the_gen<=0.025){index=4; wnorm=r_wnorm[4];}
+if(the_gen>0.025 and the_gen<=0.032){index=5; wnorm=r_wnorm[5];}
 if(the_gen>0.032){index=6; wnorm=r_wnorm[6];}
 
 
@@ -249,7 +267,7 @@ if(chi!=0){
 
 
 
- if(abs(acoplanarity_v)<=1 and chi<20 and vrtx.muonTheta()>=0.0002 and stub1<=15 and vrtx.zKinematicFit()<915. and vrtx.zKinematicFit()>907.){//and vrtx.electronTheta()<=0.032 and stub1<=15){// and vrtx.electronThea()>=0.0005 and vrtx.electronTheta()<=0.02){//vrtx.electronTheta()<=0.032){
+ if(abs(acoplanarity_v)<=1 and chi<20 and vrtx.muonTheta()>0.0002 and stub1<=15){// and vrtx.zKinematicFit()<915. and vrtx.zKinematicFit()>907.){//and vrtx.electronTheta()<=0.032 and stub1<=15){// and vrtx.electronThea()>=0.0005 and vrtx.electronTheta()<=0.02){//vrtx.electronTheta()<=0.032){
 //first
 
 
@@ -369,7 +387,7 @@ TCanvas a("a","a",700,700);
 th_in->Draw("E");
 a.SaveAs("comparison_RDMC/th_in_MC.pdf");
 
-d_eff->SaveAs("comparison_RDMC/d_eff_MC_z.root");
+d_eff->SaveAs("comparison_RDMC/d_eff_MC_new.root");
 
 TCanvas z("z","z",200,300);
 z.Divide(2,3);
@@ -379,7 +397,7 @@ Int_t ny = h_2d.at(m)->GetNbinsY();
 for (Int_t i=1; i<nx+1; i++) {
 for (Int_t j=1; j<ny+1; j++) {
 if (h_2d.at(m)->GetBinContent(i,j)<=20) h_2d.at(m)->SetBinContent(i,j,0);}}
-h_2d.at(m)->SaveAs(Form("comparison_RDMC/2D_MC_%d_z.root",static_cast<char>(m)));
+h_2d.at(m)->SaveAs(Form("comparison_RDMC/2D_MC_%d_new.root",static_cast<char>(m)));
 z.cd(m+1);
 h_2d.at(m)->Draw("COLZ");
 }
@@ -388,24 +406,24 @@ z.SaveAs("comparison_RDMC/h_2D_MC.pdf");
 TCanvas c("c","c",700,700);
 theta_mu_all->Draw("E");
 c.SaveAs("comparison_RDMC/theta_mu_all.pdf");
-theta_mu_all->SaveAs("comparison_RDMC/theta_mu_MC_z.root");
+theta_mu_all->SaveAs("comparison_RDMC/theta_mu_MC_new.root");
 
 TCanvas d("d","d",700,700);
 theta_e_all->Draw("E");
 d.SaveAs("comparison_RDMC/theta_e_all.pdf");
-theta_e_all->SaveAs("comparison_RDMC/theta_e_MC_z.root");
+theta_e_all->SaveAs("comparison_RDMC/theta_e_MC_new.root");
 
 TCanvas e("e","e",700,700);
 theta_mu_gen->Draw("E");
-theta_mu_gen->SaveAs("comparison_RDMC/theta_mu_gen_MC_z.root");
+theta_mu_gen->SaveAs("comparison_RDMC/theta_mu_gen_MC_new.root");
 
 TCanvas f("f","f",700,700);
 theta_e_gen->Draw("E");
-theta_e_gen->SaveAs("comparison_RDMC/theta_e_gen_MC_z.root");
+theta_e_gen->SaveAs("comparison_RDMC/theta_e_gen_MC_new.root");
 
  for(int m=0;m<NBINS;m++){
-theta_e[m]->SaveAs(Form("comparison_RDMC/theta_e_MC_%d_z.root",static_cast<char>(m)));
-theta_mu[m]->SaveAs(Form("comparison_RDMC/theta_mu_MC_%d_z.root",static_cast<char>(m)));
-h_opening[m]->SaveAs(Form("comparison_RDMC/opening_MC_%d_z.root",static_cast<char>(m)));}
+theta_e[m]->SaveAs(Form("comparison_RDMC/theta_e_MC_%d_new.root",static_cast<char>(m)));
+theta_mu[m]->SaveAs(Form("comparison_RDMC/theta_mu_MC_%d_new.root",static_cast<char>(m)));
+h_opening[m]->SaveAs(Form("comparison_RDMC/opening_MC_%d_new.root",static_cast<char>(m)));}
 
 }
