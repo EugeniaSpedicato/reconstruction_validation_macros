@@ -17,9 +17,7 @@ using namespace std;
 void study_data(){
 
 TChain * cbmsim = new TChain("cbmsim");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_2hit_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_2hit_2.root");
-
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_skim_run_6_v2_2hits_nochi2_MCcorr_gioskim_saskia.root");
 
         TClonesArray *MCTrack = 0;
         MuE::Event *MesmerEvent = 0;
@@ -30,13 +28,6 @@ cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruc
                 auto pos_on_track = [](double q, double m, double z){return (q + m*z);};
 
 double signal=0.;
-
-double reco_1=0.; double reco1_1=0.; double more_reco_1=0.; double reco0_1=0.;double reco3_1=0.;
-double reco_2=0.; double reco1_2=0.; double more_reco_2=0.; double reco0_2=0.;double reco3_2=0.;
-double reco_3=0.; double reco1_3=0.; double more_reco_3=0.; double reco0_3=0.;double reco3_3=0.;
-double reco_4=0.; double reco1_4=0.; double more_reco_4=0.; double reco0_4=0.;double reco3_4=0.;
-double reco_5=0.; double reco1_5=0.; double more_reco_5=0.; double reco0_5=0.;double reco3_5=0.;
-double reco_6=0.; double reco1_6=0.; double more_reco_6=0.; double reco0_6=0.;double reco3_6=0.;
 
 double error1=0.;double error2=0.;double error3=0.;double error4=0.;double error5=0.;double error6=0.;
 
@@ -92,7 +83,7 @@ for(int j=0; j<tracks.size();j++)
         p_muin=p_muin.Unit();
         th_muin=p_muin.Theta();
                         }
-	if(tracks.at(j).sector()==1 and sec1==2)
+	if(tracks.at(j).sector()==1)
 	{yes2++;}
 }
 
@@ -151,53 +142,6 @@ if(chi!=0){
 	h_z_kin->Fill(vrtx.zKinematicFit());
 	h_z_pos->Fill(vrtx.zPositionFit());
 
-
-}
-
-if(vrtx.electronTheta()>0.0 and vrtx.electronTheta()<=0.005){
-if(yes2>=2){reco_1++;}
-
-if(yes2==2 and tracks.size()==3) {reco3_1++;}
-
-}
-
-//second
-if(vrtx.electronTheta()>0.005 and vrtx.electronTheta()<=0.01){
-if(yes2>=2){reco_2++;}
-
-if(yes2==2 and tracks.size()==3) {reco3_2++;}
-
-}
-
-//third
-if(vrtx.electronTheta()>0.01 and vrtx.electronTheta()<=0.015){
-if(yes2>=2){reco_3++;}
-
-if(yes2==2 and tracks.size()==3) {reco3_3++;}
-
-}
-
-//fourth
-if(vrtx.electronTheta()>0.015 and vrtx.electronTheta()<=0.02){
-if(yes2>=2){reco_4++;}
-
-if(yes2==2 and tracks.size()==3) {reco3_4++;}
-
-}
-
-//fifth
-if(vrtx.electronTheta()>0.02 and vrtx.electronTheta()<=0.025){
-if(yes2>=2){reco_5++;}
-
-if(yes2==2 and tracks.size()==3) {reco3_5++;}
-
-}
-
-//sixth
-if(vrtx.electronTheta()>0.025 and vrtx.electronTheta()<=0.032){
-if(yes2>=2){reco_6++;}
-
-if(yes2==2 and tracks.size()==3) {reco3_6++;}
 
 }
 

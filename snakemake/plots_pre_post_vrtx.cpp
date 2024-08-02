@@ -9,41 +9,47 @@
 #include <TStyle.h>
 
 
-void plots_pre_post_vrtx(string info){
+void plots_pre_post_vrtx(string path,string param){
 
 
 array<TFile*,84> f_pre_1hit_el, f_post_1hit_el, f_pre_2hit_el, f_post_2hit_el;
 array<TFile*,84> f_pre_1hit_mu, f_post_1hit_mu, f_pre_2hit_mu, f_post_2hit_mu;
 
+string el_pre="res_prevrtx_clones_el_";
+string el_post="res_vrtx_clones_el_";
+
+string mu_pre="res_prevrtx_clones_mu_";
+string mu_post="res_vrtx_clones_mu_";
+
 for(int m=0; m<14; m++){
  for(int id=0; id<6; id++){
+
 string range;
-if(id==0)range = "0_5";
-else if(id==1)range = "5_10";
-else if(id==2)range = "10_15";
-else if(id==3)range = "15_20";
-else if(id==4)range = "20_25";
-else if(id==5)range = "25_32";
-//f_pre_1hit_el.at(6*m+id)=TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/res_prevrtx_clones_el_%d_1hit_LO_index%s_258faf6b.root",static_cast<char>(m),range.c_str(),info.c_str()));
-//f_post_1hit_el.at(6*m+id)=TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/res_vrtx_clones_el_%d_1hit_LO_index%s_258faf6b.root",static_cast<char>(m),range.c_str(),info.c_str()));
-f_pre_2hit_el.at(6*m+id)=TFile::Open(Form("/home/espedica/macros_fairmu/snakemake/plots/res_prevrtx_clones_el_%d_2hit_LO_index%s_%s.root",static_cast<char>(m),range.c_str(),info.c_str()));
-f_post_2hit_el.at(6*m+id)=TFile::Open(Form("/home/espedica/macros_fairmu/snakemake/plots/res_vrtx_clones_el_%d_2hit_LO_index%s_%s.root",static_cast<char>(m),range.c_str(),info.c_str()));
+if(id==0)range = "_2hit_LO_index0_5";
+else if(id==1)range = "_2hit_LO_index5_10";
+else if(id==2)range = "_2hit_LO_index10_15";
+else if(id==3)range = "_2hit_LO_index15_20";
+else if(id==4)range = "_2hit_LO_index20_25";
+else if(id==5)range = "_2hit_LO_index25_32";
+
+f_pre_2hit_el.at(6*m+id)=TFile::Open((path+el_pre+std::to_string(m)+range+"_"+param+".root").c_str());//Form("/home/espedica/macros_fairmu/snakemake/plots/res_prevrtx_clones_el_%d_2hit_LO_index%s.root",static_cast<char>(m),range));
+f_post_2hit_el.at(6*m+id)=TFile::Open((path+el_post+std::to_string(m)+range+"_"+param+".root").c_str());//Form("/home/espedica/macros_fairmu/snakemake/plots/res_vrtx_clones_el_%d_2hit_LO_index%s.root",static_cast<char>(m),range));
  }
 }
 
 for(int m=0; m<14; m++){
  for(int id=0; id<6; id++){
+
 string range;
-if(id==0)range = "0_5";
-else if(id==1)range = "5_10";
-else if(id==2)range = "10_15";
-else if(id==3)range = "15_20";
-else if(id==4)range = "20_25";
-else if(id==5)range = "25_32";
-//f_pre_1hit_mu.at(6*m+id)=TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/res_prevrtx_clones_mu_%d_1hit_LO_index%s_258faf6b_%s.root",static_cast<char>(m),range.c_str(),info.c_str()));
-//f_post_1hit_mu.at(6*m+id)=TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/res_vrtx_clones_mu_%d_1hit_LO_index%s_258faf6b_%s.root",static_cast<char>(m),range.c_str(),info.c_str()));
-f_pre_2hit_mu.at(6*m+id)=TFile::Open(Form("/home/espedica/macros_fairmu/snakemake/plots/res_prevrtx_clones_mu_%d_2hit_LO_index%s_%s.root",static_cast<char>(m),range.c_str(),info.c_str()));
-f_post_2hit_mu.at(6*m+id)=TFile::Open(Form("/home/espedica/macros_fairmu/snakemake/plots/res_vrtx_clones_mu_%d_2hit_LO_index%s_%s.root",static_cast<char>(m),range.c_str(),info.c_str()));
+if(id==0)range = "_2hit_LO_index0_5";
+else if(id==1)range = "_2hit_LO_index5_10";
+else if(id==2)range = "_2hit_LO_index10_15";
+else if(id==3)range = "_2hit_LO_index15_20";
+else if(id==4)range = "_2hit_LO_index20_25";
+else if(id==5)range = "_2hit_LO_index25_32";
+
+f_pre_2hit_mu.at(6*m+id)=TFile::Open((path+mu_pre+std::to_string(m)+range+"_"+param+".root").c_str());//Form("/home/espedica/macros_fairmu/snakemake/plots/res_prevrtx_clones_mu_%d_2hit_LO_index%s.root",static_cast<char>(m),range));
+f_post_2hit_mu.at(6*m+id)=TFile::Open((path+mu_post+std::to_string(m)+range+"_"+param+".root").c_str());//Form("/home/espedica/macros_fairmu/snakemake/plots/res_vrtx_clones_mu_%d_2hit_LO_index%s.root",static_cast<char>(m),range));
  }
 }
 
@@ -156,7 +162,7 @@ gStyle->SetStatH(0.1);
 gStyle->SetOptFit(0001);
 gStyle->SetOptStat(1101);
 }
-n.SaveAs("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/res_el_pre_1hit_%s.pdf");
+n.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_el_pre_1hit_first2.pdf");
 
 
 TCanvas n1("n1","n1",2800,2800);
@@ -175,7 +181,7 @@ gStyle->SetStatH(0.1);
 gStyle->SetOptFit(0001);
 gStyle->SetOptStat(1101);
 }
-n1.SaveAs("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/res_el_post_1hit_%s.pdf");
+n1.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_el_post_1hit_first2.pdf");
 */
 
 TCanvas n2("n2","n2",2800,2800);
@@ -193,7 +199,7 @@ gStyle->SetStatH(0.1);
 gStyle->SetOptFit(0001);
 gStyle->SetOptStat(1101);
 }
-n2.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_el_pre_2hit_%s.pdf");
+//n2.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_el_pre_2hit_first2.pdf");
 
 
 TCanvas n3("n3","n3",1400,1400);
@@ -224,7 +230,7 @@ gStyle->SetStatH(0.1);
 gStyle->SetOptFit(0001);
 gStyle->SetOptStat(1101);
 
-//n3.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_el_pre_2hit_%s.pdf");
+//n3.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_el_pre_2hit_first2.pdf");
 
 
 
@@ -246,7 +252,7 @@ gStyle->SetStatH(0.1);
 gStyle->SetOptFit(0001);
 gStyle->SetOptStat(1101);
 }
-n4.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_el_post_2hit_%s.pdf");
+//n4.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_el_post_2hit_first2.pdf");
 
 
 
@@ -267,7 +273,7 @@ h_sigma_mu_pre_1hit_clones->SetPoint(m,edges_mu[m]*1000,g1->GetParameter(2)*1000
 h_sigma_mu_pre_1hit_clones->SetPointError(m,0.,g1->GetParError(2)*1000);
 sigma_pre_mu1[m]=g1->GetParameter(2)*1000;
 }
-n5.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_mu_pre_1hit_%s.pdf");
+n5.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_mu_pre_1hit_first2.pdf");
 
 
 TCanvas n6("n6","n6",2800,2800);
@@ -281,7 +287,7 @@ h_sigma_mu_post_1hit_clones->SetPoint(m,edges_mu[m]*1000,g1->GetParameter(2)*100
 h_sigma_mu_post_1hit_clones->SetPointError(m,0.,g1->GetParError(2)*1000);
 sigma_post_mu1[m]=g1->GetParameter(2)*1000;
 }
-n6.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_mu_post_1hit_%s.pdf");
+n6.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_mu_post_1hit_first2.pdf");
 */
 
 
@@ -295,7 +301,7 @@ h_sigma_mu_pre_2hit_clones->SetPoint(m,edges_mu[m]*1000,g1->GetParameter(2)*1000
 h_sigma_mu_pre_2hit_clones->SetPointError(m,0.,g1->GetParError(2)*1000);
 sigma_pre_mu2[m]=g1->GetParameter(2)*1000;
 }
-n7.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_mu_pre_2hit_%s.pdf");
+//n7.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_mu_pre_2hit_first2.pdf");
 
 
 TCanvas n2_mu("n2_mu","n2_mu",1400,1400);
@@ -329,7 +335,7 @@ gStyle->SetStatH(0.1);
 gStyle->SetOptFit(0001);
 gStyle->SetOptStat(1101);
 
-//n2_mu.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_pre_mu_2hit_%s.pdf");
+//n2_mu.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_pre_mu_2hit_first2.pdf");
 
 
 TCanvas n8("n8","n8",2800,2800);
@@ -343,7 +349,7 @@ h_sigma_mu_post_2hit_clones->SetPoint(m,edges_mu[m]*1000,g1->GetParameter(2)*100
 h_sigma_mu_post_2hit_clones->SetPointError(m,0.,g1->GetParError(2)*1000);
 sigma_post_mu2[m]=g1->GetParameter(2)*1000;
 }
-n8.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_mu_post_2hit_%s.pdf");
+//n8.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/res_mu_post_2hit_first2.pdf");
 
 
 h_sigma_mu_pre_2hit_clones->SetName("mu_pre");
@@ -351,11 +357,55 @@ h_sigma_el_pre_2hit_clones->SetName("el_pre");
 h_sigma_mu_post_2hit_clones->SetName("mu_post");
 h_sigma_el_post_2hit_clones->SetName("el_post");
 
+TCanvas s2("s2","s2",2100,1400);
+s2.Divide(2,2);
 
-h_sigma_el_pre_2hit_clones->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_el_pre_2hit_%s.root",info.c_str()));
-h_sigma_el_post_2hit_clones->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_el_post_2hit_%s.root",info.c_str()));
-h_sigma_mu_pre_2hit_clones->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_mu_pre_2hit_%s.root",info.c_str()));
-h_sigma_mu_post_2hit_clones->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_mu_post_2hit_%s.root",info.c_str()));
+s2.cd(1);
+TMultiGraph *mu_2hit = new TMultiGraph();
+
+
+h_sigma_mu_pre_2hit_clones->SetMarkerColor(kAzure+7);
+h_sigma_mu_post_2hit_clones->SetMarkerColor(kBlack);
+
+mu_2hit->Add(h_sigma_mu_pre_2hit_clones,"AP*");
+mu_2hit->Add(h_sigma_mu_post_2hit_clones,"AP*");
+
+mu_2hit->Draw("AP*");
+mu_2hit->SetMinimum(0.008);
+mu_2hit->SetMaximum(0.2);
+mu_2hit->SetTitle("Muon angular resolution 2 hit shared");
+mu_2hit->GetXaxis()->SetTitle("Scattering angle (mrad)");
+mu_2hit->GetYaxis()->SetTitle("#sigma(#theta) (mrad)");
+mu_2hit->GetHistogram()->GetXaxis()->SetLimits(0.,5.);
+//gPad->SetLogy();
+
+s2.cd(2);
+
+TMultiGraph *el_2hit = new TMultiGraph();
+
+h_sigma_el_pre_2hit_clones->SetMarkerColor(kAzure+7);
+h_sigma_el_post_2hit_clones->SetMarkerColor(kBlack);
+
+
+el_2hit->Add(h_sigma_el_pre_2hit_clones,"AP*");
+el_2hit->Add(h_sigma_el_post_2hit_clones,"AP*");
+
+el_2hit->Draw("AP*");
+el_2hit->SetMinimum(0.008);
+el_2hit->SetMaximum(5.);
+el_2hit->SetTitle("Electron angular resolution 2 hit shared");
+el_2hit->GetXaxis()->SetTitle("Scattering angle (mrad)");
+el_2hit->GetYaxis()->SetTitle("#sigma(#theta) (mrad)");
+el_2hit->GetXaxis()->SetLimits(0.,32.);
+//gPad->SetLogy();
+s2.SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_prepost_first2.pdf");
+
+
+
+h_sigma_el_pre_2hit_clones->SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_el_pre_2hit.root");
+h_sigma_el_post_2hit_clones->SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_el_post_2hit_first2.root");
+h_sigma_mu_pre_2hit_clones->SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_mu_pre_2hit_first2.root");
+h_sigma_mu_post_2hit_clones->SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_mu_post_2hit_first2.root");
 
 
 
@@ -382,10 +432,10 @@ sigma_mu_diff_2hit->GetYaxis()->SetTitle("(#sigma_post - #sigma_pre)/#sigma_pre"
 sigma_mu_diff_2hit->GetXaxis()->SetTitle("#theta_#mu (mrad)");
 
 
-//sigma_el_diff_1hit->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/results/el_1.root"); 
-//sigma_mu_diff_1hit->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/results/mu_1.root"); 
-sigma_el_diff_2hit->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/results/el_2_%s.root",info.c_str())); 
-sigma_mu_diff_2hit->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/results/mu_2_%s.root",info.c_str()));
+//sigma_el_diff_1hit->SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/el_1.root"); 
+//sigma_mu_diff_1hit->SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/mu_1.root"); 
+sigma_el_diff_2hit->SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/el_2_first2.root"); 
+sigma_mu_diff_2hit->SaveAs("/home/espedica/macros_fairmu/snakemake/plots/results/mu_2_first2.root");
 
 }
 

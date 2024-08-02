@@ -23,16 +23,16 @@ TFile *f_el_2 = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/v
 TFile *f_mu_2 = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/mu_2.root");
 */
 
-TFile * f_el_pre_MCcorr = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/sigma_el_pre_2hit.root");
-TFile * f_el_post_MCcorr = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/sigma_el_post_2hit.root");
-TFile * f_mu_pre_MCcorr = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/sigma_mu_pre_2hit.root");
-TFile * f_mu_post_MCcorr = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/sigma_mu_post_2hit.root");
+TFile * f_el_pre = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_el_pre_2hit_first2.root");
+TFile * f_el_post = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_el_post_2hit_first2.root");
+TFile * f_mu_pre = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_mu_pre_2hit_first2.root");
+TFile * f_mu_post = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_mu_post_2hit_first2.root");
 
 
-//TFile *f_el_1_MCcorr = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/el_1.root");
-//TFile *f_mu_1_MCcorr = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/mu_1.root");
-TFile *f_el_2_MCcorr = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/el_2.root");
-TFile *f_mu_2_MCcorr = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/mu_2.root");
+//TFile *f_el_1 = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/el_1.root");
+//TFile *f_mu_1 = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/mu_1.root");
+TFile *f_el_2 = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/el_2_first2.root");
+TFile *f_mu_2 = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/mu_2_first2.root");
 
 /*
 TFile * f_el_pre_MCcorr = TFile::Open("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/sigma_el_pre_2hit_MCcorr.root");
@@ -46,15 +46,16 @@ TFile *f_mu_1_MCcorr = TFile::Open("/home/espedica/fair_install/instFairRoot/sha
 TFile *f_el_2_MCcorr = TFile::Open("/home/espedica/fair_install/instFairRoot/share/MUonE/macros/proposal/el_2_MCcorr.root");
 TFile *f_mu_2_MCcorr = TFile::Open("/home/espedica/fair_install/instFairRoot/share/MUonE/macros/proposal/mu_2_MCcorr.root");*/
 
+// /home/espedica/macros_fairmu/snakemake/plots/results/
 
-TFile * f_el_pre =TFile::Open("/home/espedica/macros_fairmu/clean_codes/validation/results/sigma_el_pre_2hit_oldTuple.root");
-TFile * f_el_post = TFile::Open("/home/espedica/macros_fairmu/clean_codes/validation/results/sigma_el_post_2hit_oldTuple.root");
-TFile * f_mu_pre = TFile::Open("/home/espedica/macros_fairmu/clean_codes/validation/results/sigma_mu_pre_2hit_oldTuple.root");
-TFile * f_mu_post = TFile::Open("/home/espedica/macros_fairmu/clean_codes/validation/results/sigma_mu_post_2hit_oldTuple.root");
+TFile * f_el_pre_MCcorr =TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_el_pre_2hit_first2vertexSplitting.root");
+TFile * f_el_post_MCcorr = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_el_post_2hit_first2vertexSplitting.root");
+TFile * f_mu_pre_MCcorr = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_mu_pre_2hit_first2vertexSplitting.root");
+TFile * f_mu_post_MCcorr = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/sigma_mu_post_2hit_first2vertexSplitting.root");
 
 
-TFile *f_el_2 = TFile::Open("/home/espedica/macros_fairmu/clean_codes/validation/results/el_2_oldTuple.root");
-TFile *f_mu_2 = TFile::Open("/home/espedica/macros_fairmu/clean_codes/validation/results/mu_2_oldTuple.root");
+TFile *f_el_2_MCcorr = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/el_2_first2vertexSplitting.root");
+TFile *f_mu_2_MCcorr = TFile::Open("/home/espedica/macros_fairmu/snakemake/plots/results/mu_2_first2vertexSplitting.root");
 
 
 TH1::SetDefaultSumw2(kTRUE);
@@ -85,21 +86,21 @@ TGraph *mu_2=(TGraph*)f_mu_2->Get("mu_2");
 
  /*auto legend_mu1 = new TLegend(0.75,0.15,0.9,0.3);
 legend_mu1->AddEntry(mu_1,"WP_14 default","LEP");
-legend_mu1->AddEntry(mu_1_MCcorr,"WP_14 allNewFeatures","LEP");//Reco-fixes GA","LEP");
+legend_mu1->AddEntry(mu_1_MCcorr,"WP_14 vertexSplitting","LEP");//Reco-fixes GA","LEP");
 */
 
  auto legend_mu2 = new TLegend(0.75,0.15,0.9,0.3);
 legend_mu2->AddEntry(mu_2,"WP_14 default","LEP");
-legend_mu2->AddEntry(mu_2_MCcorr,"WP_14 allNewFeatures","LEP");//Reco-fixes GA","LEP");
+legend_mu2->AddEntry(mu_2_MCcorr,"WP_14 vertexSplitting","LEP");//Reco-fixes GA","LEP");
 
 /*
  auto legend_e1 = new TLegend(0.75,0.75,0.9,0.9);
 legend_e1->AddEntry(el_1,"WP_14 default","LEP");
-legend_e1->AddEntry(el_1_MCcorr,"WP_14 allNewFeatures","LEP");//Reco-fixes GA","LEP");
+legend_e1->AddEntry(el_1_MCcorr,"WP_14 vertexSplitting","LEP");//Reco-fixes GA","LEP");
 */
  auto legend_e2 = new TLegend(0.75,0.75,0.9,0.9);
 legend_e2->AddEntry(el_2,"WP_14 default","LEP");
-legend_e2->AddEntry(el_2_MCcorr,"WP_14 allNewFeatures","LEP");//Reco-fixes GA","LEP");
+legend_e2->AddEntry(el_2_MCcorr,"WP_14 vertexSplitting","LEP");//Reco-fixes GA","LEP");
 
 
 TCanvas d("d","d",2100,1400);
@@ -153,26 +154,26 @@ mg4->SetTitle("Sigma difference #mu 2 hit shared");
 mg4->GetYaxis()->SetTitle("(#sigma_post - #sigma_pre)/#sigma_pre");
 mg4->GetXaxis()->SetTitle("#theta_#mu (mrad)");
 
-d.SaveAs("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/diff_oldTuple.pdf");
+d.SaveAs("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/diff_first2vertexSplitting.pdf");
 
 
 
  auto legend_mu1pre = new TLegend(0.75,0.15,0.9,0.3);
 legend_mu1pre->AddEntry(mu_pre,"pre WP_14","LEP");
-legend_mu1pre->AddEntry(mu_pre_MCcorr,"pre WP_14 allNewFeatures","LEP");//Reco-fixes GA","LEP");
+legend_mu1pre->AddEntry(mu_pre_MCcorr,"pre WP_14 vertexSplitting","LEP");//Reco-fixes GA","LEP");
 
  auto legend_mu2post = new TLegend(0.75,0.15,0.9,0.3);
 legend_mu2post->AddEntry(mu_post,"post WP_14","LEP");
-legend_mu2post->AddEntry(mu_post_MCcorr,"post WP_14 allNewFeatures","LEP");//Reco-fixes GA","LEP");
+legend_mu2post->AddEntry(mu_post_MCcorr,"post WP_14 vertexSplitting","LEP");//Reco-fixes GA","LEP");
 
 
  auto legend_e1pre = new TLegend(0.75,0.15,0.9,0.3);
 legend_e1pre->AddEntry(el_pre,"pre WP_14","LEP");
-legend_e1pre->AddEntry(el_pre_MCcorr,"pre WP_14 allNewFeatures","LEP");//Reco-fixes GA","LEP");
+legend_e1pre->AddEntry(el_pre_MCcorr,"pre WP_14 vertexSplitting","LEP");//Reco-fixes GA","LEP");
 
  auto legend_e2post = new TLegend(0.75,0.15,0.9,0.3);
 legend_e2post->AddEntry(el_post,"post WP_14","LEP");
-legend_e2post->AddEntry(el_post_MCcorr,"post WP_14 allNewFeatures","LEP");//Reco-fixes GA","LEP");
+legend_e2post->AddEntry(el_post_MCcorr,"post WP_14 vertexSplitting","LEP");//Reco-fixes GA","LEP");
 
 
 auto el_pre_diff = new TGraphErrors();
@@ -278,7 +279,7 @@ mu_post_diff->SetMaximum(0.02);
 mu_post_diff->Draw("A*");
 *///gPad->SetLogy();
 
-d2.SaveAs("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/sigma_overlap_oldTuple.pdf");
+d2.SaveAs("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/sigma_overlap_first2vertexSplitting.pdf");
 
 /*
 for(int i=0; i< el_2->GetN(); i++){

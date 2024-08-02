@@ -15,16 +15,28 @@
 
 using namespace std;
 
-void RealDataAnalyzer(int numb){
+void ev_draw(int numb){
 
+double z_mod[6]={911.2+18.0218,911.2+21.8693,911.2+55.3635,911.2+56.6205,911.2+89.9218,911.2+93.7693};
+double alpha[6]={0  *TMath::DegToRad(), 90 *TMath::DegToRad(),135*TMath::DegToRad(), 45 *TMath::DegToRad(),0  *TMath::DegToRad(), 90 *TMath::DegToRad()};
 
-        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-32mrad_1M_1hit.root");
-///mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new12_st0_6_1shared_5M.root");
-//("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new_straight.root");
-//TRMesmer_3cm.root");//dataReconstruction_try_sigma.root");//nrrowBP_20GeV_1shared.root");//trPoints,$
+        TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_0hit.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
+/*   TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/reco/WiP_v0140_commit_2f4e96f4_MCsignal_bestConfig_0hit.root");
+   TFile *f2 = new TFile("/mnt/raid10/DATA/espedica/fairmu/gen_digi/commit_2f4e96f4_MCsignal_SIM-DIGI.root");
 
+   TTree *cbmsim = (TTree*)inputfile->Get("cbmsim");
+   TTree *t2 = (TTree*)f2->Get("cbmsim");
+        t2->SetEntries(cbmsim->GetEntries());
+   cbmsim->AddFriend(t2);
+*/
+
+
+//        TClonesArray *TrackerPoints = 0;
+//        cbmsim->SetBranchAddress("TrackerPoints", &TrackerPoints);
+        TClonesArray *TrackerStubs = 0;
+	cbmsim->SetBranchAddress("TrackerStubs", &TrackerStubs);
         MUonERecoOutput *ReconstructionOutput = 0;
         cbmsim->SetBranchAddress("ReconstructionOutput", &ReconstructionOutput);
        TClonesArray *MCTrack = 0;
@@ -40,6 +52,12 @@ auto gx_s = new TGraph();
 auto gy_s = new TGraph();
 auto gx_v1 = new TGraph();
 auto gy_v1 = new TGraph();
+auto guv = new TGraph();
+auto guv_t = new TGraph();
+auto g_mod_u = new TGraph();
+auto g_mod_u_t = new TGraph();
+auto g_mod_v = new TGraph();
+auto g_mod_v_t = new TGraph();
 
 std::vector<double> qx_in;
 std::vector<double> mx_in;
@@ -91,12 +109,13 @@ std::vector<double> my_v;
 
 double x=0.;double y=0.;double z=0.;
 //std::array<double,6>={912.7+18.0218,912.7+21.8693,912.7+55.3635,912.7+56.6205,912.7+89.9218,912.7+93.7693};
+    int sec0=0; int sec1=0;
 
 for(Long64_t i = numb; i < numb+1; i++) {
 //for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
 
 		cbmsim->GetEntry(i);
-		if(i%1000 == 0) cout<<"Entry "<<i<<endl;
+//		if(i%1000 == 0) cout<<"Entry "<<i<<endl;
 
 cout<<"Entry "<< cbmsim->GetEntry(i)<<endl;
 
@@ -109,9 +128,9 @@ vector<MUonERecoOutputTrack> tracks = ReconstructionOutput->reconstructedTracks(
 
 cout << "tracks.size() " << tracks.size() << endl;
 
+int sec1=0;
  if(tracks.size()>0){
 
-    int sec0=0; int sec1=0;
 
     for(int j=0; j<tracks.size();j++)
     {
@@ -119,7 +138,7 @@ cout << "tracks.size() " << tracks.size() << endl;
         if(tracks.at(j).sector()==1) sec1++;
         }
 
-cout << "Track size 3 and " << sec0 << ", " << sec1 << endl;
+cout << "Track size " << tracks.size() << " and " << sec0 << ", " << sec1 << endl;
 
 
 
@@ -163,11 +182,75 @@ std::array<std::vector<double>,6> position_s1;
 double px0;
 double py0;
 
-/*vector<MUonERecoOutputHit> stubs_=ReconstructionOutput->reconstructedHits();
+int code_e,code_mu;
+
+/*	for(int n = 0; n < MCTrack->GetEntries(); n++) {
+	 const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
+         if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) {code_e=n;}
+         if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {code_mu=n;}
+}*/
+
+/*for(int s=0; s<TrackerPoints->GetEntries(); s++)
+                         {const MUonETrackerPoint *TrackerPt = static_cast<const MUonETrackerPoint*>(TrackerPoints->At(s));
+
+if(TrackerPt->trackPDGCode()==-13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1)
+				{
+				  TVector3 exiting=TrackerPt->exitingPositionGlobalCoordinates();
+
+				  if(TrackerPt->moduleID()==0 or TrackerPt->moduleID()==4) {position_s1.at(TrackerPt->moduleID()).push_back(exiting.X());
+											cout <<TrackerPt->moduleID()<< ") mu " << exiting.X() <<endl;}
+				  if(TrackerPt->moduleID()==1 or TrackerPt->moduleID()==5) {position_s1.at(TrackerPt->moduleID()).push_back(exiting.Y());
+                                                                                        cout <<TrackerPt->moduleID()<< ") mu " << exiting.Y() <<endl;}
+				}
+if(TrackerPt->trackPDGCode()==11 and TrackerPt->trackID()==code_e and TrackerPt->stationID()==1)
+{
+                                  TVector3 exiting=TrackerPt->exitingPositionGlobalCoordinates();
+                                  if(TrackerPt->moduleID()==0 or TrackerPt->moduleID()==4){ position_s1.at(TrackerPt->moduleID()).push_back(exiting.X());
+                                                                                        cout <<TrackerPt->moduleID()<< ") el " << exiting.X() <<endl;}
+                                  if(TrackerPt->moduleID()==1 or TrackerPt->moduleID()==5){ position_s1.at(TrackerPt->moduleID()).push_back(exiting.Y());
+                                                                                        cout <<TrackerPt->moduleID()<< ") el " << exiting.Y() <<endl;}
+}
+
+
+
+			 }
+
+*/
+
+
+/*for(int t=0; t<TrackerStubs->GetEntries(); t++)
+                         {const MUonETrackerStub *stubs = static_cast<const MUonETrackerStub*>(TrackerStubs->At(t));
+	if(stubs->stationID()==1){ double stub_pos=(stubs->seedClusterCenterStrip() + 0.5 + 0.5 * stubs->bend()) * 9.144 / 1016 - 0.5 * 9.144;
+ 			  if(stubs->moduleID()==0) {position_s1.at(stubs->moduleID()).push_back(stub_pos);}
+                          if( stubs->moduleID()==4) {position_s1.at(stubs->moduleID()).push_back(stub_pos);}
+                          if(stubs->moduleID()==1) {position_s1.at(stubs->moduleID()).push_back(stub_pos*sin(90));}
+			  if(stubs->moduleID()==5) {position_s1.at(stubs->moduleID()).push_back(stub_pos*sin(90));}
+			}
+	else if(stubs->stationID()==0){ double stub_pos=(stubs->seedClusterCenterStrip() + 0.5 + 0.5 * stubs->bend()) * 9.144 / 1016 - 0.5 * 9.144;
+                          if(stubs->moduleID()==0) {position_s.at(stubs->moduleID()).push_back(stub_pos);}
+                          if( stubs->moduleID()==4) {position_s.at(stubs->moduleID()).push_back(stub_pos);}
+                          if(stubs->moduleID()==1) {position_s.at(stubs->moduleID()).push_back(stub_pos*sin(90));}
+                          if(stubs->moduleID()==5) {position_s.at(stubs->moduleID()).push_back(stub_pos*sin(90));}
+                        }
+}
+*/
+
+vector<MUonERecoOutputHit> stubs_=ReconstructionOutput->reconstructedHits();
 for(int s=0; s<stubs_.size(); s++){
 if(stubs_.at(s).stationID()==0)position_s.at(stubs_.at(s).moduleID()).push_back(stubs_.at(s).positionPerpendicular());
-if(stubs_.at(s).stationID()==1)position_s1.at(stubs_.at(s).moduleID()).push_back(stubs_.at(s).positionPerpendicular());
-}*/
+if(stubs_.at(s).stationID()==1){position_s1.at(stubs_.at(s).moduleID()).push_back(stubs_.at(s).positionPerpendicular());
+				cout << stubs_.at(s).moduleID()<< ") stub posPerp " << stubs_.at(s).positionPerpendicular() << endl;}
+}
+
+// position stub all event UV local frame
+if(position_s1.at(2).size()!=0){
+for(int h=0;h<position_s1.at(2).size(); h++){ guv->SetPoint(guv->GetN(),2,position_s1.at(2).at(h)); g_mod_u->SetPoint(g_mod_u->GetN(),0.,position_s1.at(2).at(h));} 
+}
+if(position_s1.at(3).size()!=0){
+for(int h=0;h<position_s1.at(3).size(); h++){ guv->SetPoint(guv->GetN(),3,position_s1.at(3).at(h)); g_mod_v->SetPoint(g_mod_v->GetN(),position_s1.at(3).at(h),0.);} 
+}
+
+
 
 for(int j=0; j<tracks.size();j++)
 {
@@ -191,7 +274,8 @@ my_in.push_back(tracks.at(j).ySlope());
 if(tracks.at(j).sector()==1 and sec1>=0) //and tracks.at(0).processIDofLinkedTrack()==45 and tracks.at(0).linkedTrackID()!=tracks.at(1).linkedTrackID()){
 {
 std::vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
-
+cout << j << ") int ID " <<tracks.at(j).processIDofLinkedTrack()<< endl;
+cout << j << ") hits_size " <<hits_.size()<< endl;
 qx.push_back(tracks.at(j).x0());
 mx.push_back(tracks.at(j).xSlope());
 qy.push_back(tracks.at(j).y0());
@@ -199,10 +283,22 @@ my.push_back(tracks.at(j).ySlope());
 
 for(int h=0;h<hits_.size();h++){
 position.at(hits_.at(h).moduleID()).push_back(hits_.at(h).positionPerpendicular());
-cout << hits_.at(h).moduleID() << ") hits_.at(h).positionPerpendicular() " << hits_.at(h).positionPerpendicular() << endl;
+cout << hits_.at(h).moduleID() << ") stub track " << j << " posPerp " << hits_.at(h).positionPerpendicular() << endl;
 		}
 	}
 }
+
+// position stub used by tracks UV local frame
+if(position.at(2).size()!=0){
+for(int h=0;h<position.at(2).size(); h++){ guv_t->SetPoint(guv_t->GetN(),2,position.at(2).at(h)); g_mod_u_t->SetPoint(g_mod_u_t->GetN(),0.,position.at(2).at(h));} 
+}
+if(position.at(3).size()!=0){
+for(int h=0;h<position.at(3).size(); h++){ guv_t->SetPoint(guv_t->GetN(),3,position.at(3).at(h)); g_mod_v_t->SetPoint(g_mod_v_t->GetN(),position.at(3).at(h),0.);} 
+}
+
+
+
+
 
 if(position_s.at(0).size()!=0){
 for(int h=0;h<position_s.at(0).size(); h++){ gx_s->SetPoint(gx_s->GetN(),0,position_s.at(0).at(h));} 
@@ -211,10 +307,12 @@ if(position_s.at(1).size()!=0){
 for(int h=0;h<position_s.at(1).size(); h++){ gy_s->SetPoint(gy_s->GetN(),0,position_s.at(1).at(h));} 
 }
 
+
 if(position_s.at(2).size()==position_s.at(3).size()!=0){
-for(int h=0;h<position_s.at(2).size(); h++){   gx_s->SetPoint(gx_s->GetN(),2,newX(45,-position_s.at(2).at(h),position_s.at(3).at(h)));
+for(int h=0;h<position_s.at(2).size(); h++){    gx_s->SetPoint(gx_s->GetN(),2,newX(45,-position_s.at(2).at(h),position_s.at(3).at(h)));
                                                 gy_s->SetPoint(gy_s->GetN(),2,newY(45,-position_s.at(2).at(h),position_s.at(3).at(h)));} 
 }
+
 
 if(position_s.at(4).size()!=0){
 for(int h=0;h<position_s.at(4).size(); h++){ gx_s->SetPoint(gx_s->GetN(),4,position_s.at(4).at(h));} 
@@ -232,10 +330,17 @@ if(position_s1.at(1).size()!=0){
 for(int h=0;h<position_s1.at(1).size(); h++){ gy_s->SetPoint(gy_s->GetN(),6,position_s1.at(1).at(h));} 
 }
 
+/*
+cout <<"position_s1.at(2).size() " << position_s1.at(2).size() << " and position_s.at(3).size() " << position_s.at(3).size() << endl;
 if(position_s1.at(2).size()==position_s.at(3).size()!=0){
+cout<<"quiii"<<endl;
 for(int h=0;h<position_s1.at(2).size(); h++){   gx_s->SetPoint(gx_s->GetN(),8,newX(45,-position_s1.at(2).at(h),position_s1.at(3).at(h)));
-                                                gy_s->SetPoint(gy_s->GetN(),8,newY(45,-position_s1.at(2).at(h),position_s1.at(3).at(h)));} 
-}
+						cout << "new X(uv) " << newX(45,-position_s1.at(2).at(h),position_s1.at(3).at(h)) << endl;
+                                                gy_s->SetPoint(gy_s->GetN(),8,newY(45,-position_s1.at(2).at(h),position_s1.at(3).at(h))); 
+						cout << "new Y(uv) " <<newY(45,-position_s1.at(2).at(h),position_s1.at(3).at(h)) << endl;} 
+}*/
+
+
 
 if(position_s1.at(4).size()!=0){
 for(int h=0;h<position_s1.at(4).size(); h++){ gx_s->SetPoint(gx_s->GetN(),10,position_s1.at(4).at(h));} 
@@ -307,18 +412,23 @@ if(position.at(5).size()!=0){
 for(int h=0;h<position.at(5).size(); h++){ gy->SetPoint(gy->GetN(),10,position.at(5).at(h));} 
 }
 
+/*
 if(position.at(2).size()==position.at(3).size()!=0){
 for(int h=0;h<position.at(2).size(); h++){   gx->SetPoint(gx->GetN(),8,newX(45,-position.at(2).at(h),position.at(3).at(h)));
                                                 gy->SetPoint(gy->GetN(),8,newY(45,-position.at(2).at(h),position.at(3).at(h)));} 
-}
+}*/
 
 }
 cout << "---------------------"<<endl;
 } //end of general for
 
 
-TCanvas a2("a2","a2",1400,1400);
-a2.Divide(2,2);
+std::vector <TGraph*> guv_loc_t(sec1);
+std::vector <TGraph*> g_mod_u_loc_t(sec1);
+std::vector <TGraph*> g_mod_v_loc_t(sec1);
+
+TCanvas a2("a2","a2",1400,2100);
+a2.Divide(2,3);
 a2.cd(1);
 
 TLine *t = new TLine(5,-5,5,5);
@@ -366,28 +476,53 @@ if(qx_in.size()!=0 and mx_in.size()!=0)
        }
 }
 
+//RECO TRACKS
 if(qx.size()!=0 and mx.size()!=0)
 { cout << qx.size() << " qx"<<endl;
+
+
         for(int c=0; c<qx.size(); c++)
-               {TLine* lx = new TLine(5, trackXatZ(qx.at(c),mx.at(c), 912.7), 10, trackXatZ(qx.at(c),mx.at(c), 912.7+89.9218));
+               {
+          double tracklocxy2 = (qx.at(c) + mx.at(c)*z_mod[2])*cos(alpha[2]) +
+                               (qy.at(c) + my.at(c)*z_mod[2])*sin(alpha[2]);
+          double tracklocxy3 = (qx.at(c) + mx.at(c)*z_mod[3])*cos(alpha[3]) +
+                               (qy.at(c) + my.at(c)*z_mod[3])*sin(alpha[3]);
+
+guv_loc_t.push_back(new TGraph());
+g_mod_u_loc_t.push_back(new TGraph());
+g_mod_v_loc_t.push_back(new TGraph());
+
+guv_loc_t.at(c)->SetPoint(guv_loc_t.at(c)->GetN(),2,tracklocxy2);
+guv_loc_t.at(c)->SetPoint(guv_loc_t.at(c)->GetN(),3,tracklocxy3);
+
+g_mod_u_loc_t.at(c)->SetPoint(g_mod_u_loc_t.at(c)->GetN(),0.,tracklocxy2);
+g_mod_v_loc_t.at(c)->SetPoint(g_mod_v_loc_t.at(c)->GetN(),tracklocxy3,0.);
+
+cout << "Local pos (posPerp) of the track " << c <<" in U " << tracklocxy2 << endl;
+cout << "Local pos (posPerp) of the track " << c <<" in V " << tracklocxy3 << endl;
+
+		cout << "linea " << c << endl;
+		TLine* lx = new TLine(5, trackXatZ(qx.at(c),mx.at(c), 912.7), 10, trackXatZ(qx.at(c),mx.at(c), 912.7+89.9218));
                 lx->SetLineColor(kRed+c);
-                //lx->SetTitle("sig track");
+                //lx->SetTitle(Form("sig track %d",c));
                 lx->Draw("same");
         }
 }
-        for(int n = 0; n < MCTrack->GetEntries(); n++) {
+
+//MC TRACKS
+/*        for(int n = 0; n < MCTrack->GetEntries(); n++) {
          const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
 
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) {
                                                                 TLine* lxe = new TLine(5, trackXatZ(MCTr->bx(),MCTr->ax(), 912.7), 10, trackXatZ(MCTr->bx(),MCTr->ax(), 912.7+89.9218));
-                                                                lxe->SetLineColor(kOrange);
+                                                                lxe->SetLineColor(kGreen);
                                                                 lxe->Draw("same");}
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {
                                                                 TLine* lxmu = new TLine(5, trackXatZ(MCTr->bx(),MCTr->ax(), 912.7), 10, trackXatZ(MCTr->bx(),MCTr->ax(), 912.7+89.9218));
-                                                                lxmu->SetLineColor(kOrange);
+                                                                lxmu->SetLineColor(kGreen+1);
                                                                 lxmu->Draw("same");}
         }
-
+*/
 gPad->BuildLegend(0.25,0.15,0.25,0.15);
 l0->Draw("same");
 l1->Draw("same");
@@ -511,25 +646,34 @@ if(qy.size()!=0 and my.size()!=0)
         for(int c=0; c<qy.size(); c++)
                {TLine* ly = new TLine(5, trackYatZ(qy.at(c),my.at(c), 912.7), 10, trackYatZ(qy.at(c),my.at(c), 912.7+89.9218));
                 ly->SetLineColor(kRed+c);
-                //ly->SetTitle("sig track");
+                //ly->SetTitle(Form("sig track %d",c));
                 ly->Draw("same");
 	}
 }
 
 
-        for(int n = 0; n < MCTrack->GetEntries(); n++) {
+/*        for(int n = 0; n < MCTrack->GetEntries(); n++) {
          const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
 
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) {
                                                                 TLine* lye = new TLine(5, trackYatZ(MCTr->by(),MCTr->ay(), 912.7), 10, trackYatZ(MCTr->by(),MCTr->ay(), 912.7+89.9218));
-								lye->SetLineColor(kOrange);
-								lye->Draw("same");}
+								lye->SetLineColor(kGreen);
+								lye->Draw("same");
+								cout <<"Ee " << MCTr->energy() << endl;
+
+ for(int s=0; s<TrackerPoints->GetEntries(); s++){
+  const MUonETrackerPoint *TrackerPt = static_cast<const MUonETrackerPoint*>(TrackerPoints->At(s));
+  if(TrackerPt->trackID()==n and TrackerPt->stationID()==1){if(TrackerPt->moduleID()==5)cout << "mod 5 " << TrackerPt->exitingPositionGlobalCoordinates().Y();}
+ }
+
+								}
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {
                                                                 TLine* lymu = new TLine(5, trackYatZ(MCTr->by(),MCTr->ay(), 912.7), 10, trackYatZ(MCTr->by(),MCTr->ay(), 912.7+89.9218));
-                                                                lymu->SetLineColor(kOrange);
-                                                                lymu->Draw("same");}
+                                                                lymu->SetLineColor(kGreen+1);
+                                                                lymu->Draw("same");
+								}
 	}
-
+*/
 
 gPad->BuildLegend(0.25,0.15,0.25,0.15);
 l0->Draw("same");
@@ -606,6 +750,112 @@ t->Draw("same");
 l3->Draw("same");
 l4->Draw("same");
 l5->Draw("same");
+
+a2.cd(5);
+
+guv->SetMinimum(-6);
+guv->SetMaximum(6);
+guv->SetMarkerColor(kRed);
+guv->SetTitle("stubs");
+
+guv_t->SetMinimum(-6);
+guv_t->SetMaximum(6);
+guv_t->SetMarkerColor(kBlue);
+guv_t->SetTitle("track stubs");
+
+for(int c=0; c<guv_loc_t.size();c++){
+guv_loc_t.at(c)->SetMinimum(-6);
+guv_loc_t.at(c)->SetMaximum(6);
+guv_loc_t.at(c)->SetMarkerColor(kGreen+c);
+guv_loc_t.at(c)->SetMarkerStyle(29);
+guv_loc_t.at(c)->SetTitle("loc track pos");
+}
+
+TMultiGraph *mguv = new TMultiGraph();
+mguv->SetMinimum(-6);
+mguv->SetMaximum(6);
+mguv->Add(guv,"A*");
+mguv->Add(guv_t,"A*");
+for(int c=0; c<guv_loc_t.size();c++) mguv->Add(guv_loc_t.at(c),"A*");
+mguv->Draw("A* ");
+mguv->SetTitle("UV local position");
+
+gPad->BuildLegend(0.25,0.15,0.25,0.15);
+
+TLine *l0_uv = new TLine(0,-5,0,5);
+TLine *l1_uv = new TLine(1,-5,1,5);
+TLine *l2_uv = new TLine(2,-5,2,5);
+TLine *l3_uv = new TLine(3,-5,3,5);
+TLine *l4_uv = new TLine(4,-5,4,5);
+TLine *l5_uv = new TLine(5,-5,5,5);
+TLine *t2 = new TLine(-1,-5,-1,5);
+t2->SetLineWidth(4);
+t2->SetLineColor(47);
+
+l0_uv->Draw("same");
+l1_uv->Draw("same");
+l2_uv->Draw("same");
+l3_uv->Draw("same");
+l4_uv->Draw("same");
+l5_uv->Draw("same");
+t2->Draw("same");
+
+mguv->GetXaxis()->SetLimits(-2.,6.);
+
+
+a2.cd(6);
+
+g_mod_u->SetMinimum(-6);
+g_mod_u->SetMaximum(6);
+g_mod_u->SetMarkerColor(kRed);
+g_mod_u->SetTitle("stubs");
+
+g_mod_u_t->SetMinimum(-6);
+g_mod_u_t->SetMaximum(6);
+g_mod_u_t->SetMarkerColor(kBlue);
+g_mod_u_t->SetTitle("track stubs");
+
+for(int c=0; c<g_mod_u_loc_t.size();c++){
+g_mod_u_loc_t.at(c)->SetMinimum(-6);
+g_mod_u_loc_t.at(c)->SetMaximum(6);
+g_mod_u_loc_t.at(c)->SetMarkerColor(kPink+c);
+g_mod_u_loc_t.at(c)->SetMarkerStyle(29);
+g_mod_u_loc_t.at(c)->SetTitle("loc track pos");
+}
+
+
+g_mod_v->SetMinimum(-6);
+g_mod_v->SetMaximum(6);
+g_mod_v->SetMarkerColor(kRed);
+g_mod_v->SetTitle("stubs");
+
+g_mod_v_t->SetMinimum(-6);
+g_mod_v_t->SetMaximum(6);
+g_mod_v_t->SetMarkerColor(kBlue);
+g_mod_v_t->SetTitle("track stubs");
+
+
+for(int c=0; c<g_mod_v_loc_t.size();c++){
+g_mod_v_loc_t.at(c)->SetMinimum(-6);
+g_mod_v_loc_t.at(c)->SetMaximum(6);
+g_mod_v_loc_t.at(c)->SetMarkerColor(kPink+c);
+g_mod_v_loc_t.at(c)->SetMarkerStyle(29);
+g_mod_v_loc_t.at(c)->SetTitle("loc track pos");
+}
+
+TMultiGraph *mguv_mod = new TMultiGraph();
+mguv_mod->SetMinimum(-5);
+mguv_mod->SetMaximum(5);
+mguv_mod->Add(g_mod_u,"A*");
+mguv_mod->Add(g_mod_u_t,"A*");
+for(int c=0; c<g_mod_u_loc_t.size();c++) mguv_mod->Add(g_mod_u_loc_t.at(c),"A*");
+mguv_mod->Add(g_mod_v,"A*");
+mguv_mod->Add(g_mod_v_t,"A*");
+for(int c=0; c<g_mod_v_loc_t.size();c++) mguv_mod->Add(g_mod_v_loc_t.at(c),"A*");
+mguv_mod->Draw("A* ");
+mguv_mod->SetTitle("UV local position");
+
+mguv_mod->GetXaxis()->SetLimits(-5.,5);
 
 a2.SaveAs("pdf_exercise.pdf");
 

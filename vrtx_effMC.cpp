@@ -282,7 +282,7 @@ h3vrtx->Divide(h3vrtx,h3,1,1,"B");
 
 TH1D * h2vrtx_w = (TH1D*) h_opening_wrong_vrtx->Clone();
 TH1D * h2_clone_w = (TH1D*) h_opening_clone->Clone();
-h2vrtx_w->Divide(h2vrtx,h2_clone,1,1,"B");
+h2vrtx_w->Divide(h2vrtx_w,h2_clone_w,1,1,"B");
 
 TH1D * h3vrtx_w = (TH1D*) h_opening_wrong_vrtx_reco->Clone();
 TH1D * h3_w = (TH1D*) h_opening_clone_reco->Clone();

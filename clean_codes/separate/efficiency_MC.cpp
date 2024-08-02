@@ -18,26 +18,96 @@ void efficiency_MC(int nhits, int index){
 
 TChain * cbmsim = new TChain("cbmsim");
 
+TString gen_filename;
+//if(index==0){cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi_reco/WiP_v0140_commit_258faf6b_0_5mrad.root");}
+//if(index==0){cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_2hitFirstModules_NOoutchi2_1M.root",100000);}
+//if(index==0){cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi_reco/WiP_v0140_commit_258faf6b_0_5mrad_20k.root ");}
+//if(index==0){cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi_reco/oldWiP/WiP_v0140_commit_9e7dcd2b_0_5mrad.root");}
+//if(index==0){cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi_reco/oldWiP/WiP_v0140_commit_a8ab92c9_0_5mrad.root");}
+if(index==0){cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi_reco/WiP_v0140_commit_258faf6b_0_5mrad_nofirst.root");}
+//if(index==0){cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi_reco/oldWiP/WiP_v0140_commit_7d3da1ca_0_5mrad_nofirst.root");}
 
+/*if(index==0){
+	    //cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-inf_mrad_2hitFirstModules_NOoutchi2_MCcorrections_reco_nofirst.root");
+	    //gen_filename="/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/old_forRDMC_2hitFirstModules.root";}
+	cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/WiP_v0140_commit_258faf6b_0_5mrad_%dhitFirstModules.root",static_cast<char>(nhits)));
+        gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_0_5mrad.root";}
+   TFile *f2 = new TFile(gen_filename);
+   TTree *t2 = (TTree*)f2->Get("cbmsim");
+   cbmsim->AddFriend(t2);
+
+else if(index==1){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/WiP_v0140_commit_258faf6b_5_10mrad_%dhitFirstModules.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_5_10mrad.root";}
+
+else if(index==2){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/WiP_v0140_commit_258faf6b_10_15mrad_%dhitFirstModules.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_10_15mrad.root";}
+
+else if(index==3){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/WiP_v0140_commit_258faf6b_15_20mrad_%dhitFirstModules.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_15_20mrad.root";}
+
+else if(index==4){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/WiP_v0140_commit_258faf6b_20_25mrad_%dhitFirstModules.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_20_25mrad.root";}
+
+else if(index==5){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/WiP_v0140_commit_258faf6b_25_32mrad_%dhitFirstModules.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_25_32mrad.root";}
+
+   TFile *f2 = new TFile(gen_filename);
+   TTree *t2 = (TTree*)f2->Get("cbmsim");
+
+        t2->SetEntries(cbmsim->GetEntries());
+
+cout << "cbmsim " << cbmsim->GetEntries() << endl;
+cout << "t2 " << t2->GetEntries() << endl;
+
+   cbmsim->AddFriend(t2);
+*/
+/*TString gen_filename;
+
+  if(index==0){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/snakemake/range_0_5_%dhit.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_0_5mrad.root";}
+  else if(index==1){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/snakemake/range_5_10_%dhit.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_5_10mrad.root";}
+  else if(index==2){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/snakemake/range_10_15_%dhit.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_10_15mrad.root";}
+  else if(index==3){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/snakemake/range_15_20_%dhit.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_15_20mrad.root";}
+  else if(index==4){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/snakemake/range_20_25_%dhit.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_20_25mrad.root";}
+  else if(index==5){cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/reco/snakemake/range_25_32_%dhit.root",static_cast<char>(nhits)));
+          gen_filename="/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_25_32mrad.root";}
+  else cout << "WRONG NUMBER" << endl;
+
+   TFile *f2 = new TFile(gen_filename);
+   TTree *t2 = (TTree*)f2->Get("cbmsim");
+
+        t2->SetEntries(cbmsim->GetEntries());
+
+cout << "cbmsim " << cbmsim->GetEntries() << endl;
+cout << "t2 " << t2->GetEntries() << endl;
+
+   cbmsim->AddFriend(t2);
+*/
+/*
 if(nhits==0){
-  if(index==0)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-  else if(index==1)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-  else if(index==2)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-  else if(index==3)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-  else if(index==4)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-  else if(index==5)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
+  if(index==0)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
+  else if(index==1)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
+  else if(index==2)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
+  else if(index==3)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
+  else if(index==4)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
+  else if(index==5)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
   else cout << "WRONG NUMBER" << endl;
 }
 else{
-  if(index==0)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-  else if(index==1)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-  else if(index==2)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-  else if(index==3)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-  else if(index==4)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-  else if(index==5)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
+  if(index==0)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
+  else if(index==1)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
+  else if(index==2)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
+  else if(index==3)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
+  else if(index==4)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
+  else if(index==5)cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)),700000);
   else cout << "WRONG NUMBER" << endl;
 }
-
+*/
+cout << "cbmsim " << cbmsim->GetEntries() << endl;
 
         TClonesArray *MCTrack = 0;
         TClonesArray *TrackerStripDigis = 0;
@@ -86,7 +156,8 @@ TH1D *theta_e_noreco=new TH1D("theta_e_noreco", "Electron scattering angles from
 TH1D *theta_mu_noreco=new TH1D("theta_mu_noreco", "Muon scattering angle from MESMER when NOT reco",NBINS_mu,edges_mu);
 
 
-	double r_wnorm[6]={20.786765103274643,33.313091221576336,42.396733790329876,50.584815206143652,61.828110400735824,106.88513370134392};
+	double r_wnorm[6]={18.558632798881270,33.313091221576336,42.396733790329876,50.584815206143652,61.828110400735824,106.88513370134392};
+//20.786765103274643,33.313091221576336,42.396733790329876,50.584815206143652,61.828110400735824,106.88513370134392};
 
 
 
@@ -125,10 +196,14 @@ Double_t code_mu=-99;
 
 // Checking if in the MCTracks container there are elastic particles and if they are in acceptance (4 hits in X modules (== 2 stubs, as TrackerPoints give the hit per sensor) + 4 hits in Y modules + at least 2 hits in UV)
 
+cout << "event " << i << endl;
+
+
         for(int n = 0; n < MCTrack->GetEntries(); n++) {
          const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
 
          if(MCTr->interactionID()==0 and MCTr->pdgCode()==-13) {code_mu_in=n; p_muin_MC.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); p_muin_MC.Unit();E_e=MCTr->energy();
+cout <<  "muin " << endl;
         for(int s=0; s<TrackerPoints->GetEntries(); s++)
                          {const MUonETrackerPoint *TrackerPt = static_cast<const MUonETrackerPoint*>(TrackerPoints->At(s));
          if(TrackerPt->trackPDGCode()==-13 and TrackerPt->trackID()==n and TrackerPt->stationID()==0){
@@ -141,7 +216,7 @@ Double_t code_mu=-99;
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) {code_e=n; p_e_MC.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); p_e_MC.Unit(); the_gen=p_muin_MC.Angle(p_e_MC);
                                                                                  theX_gen=MCTr->ax();
                                                                                  theY_gen=MCTr->ay();
-
+cout <<  "el " << endl;
         for(int s=0; s<TrackerPoints->GetEntries(); s++)
                          {const MUonETrackerPoint *TrackerPt = static_cast<const MUonETrackerPoint*>(TrackerPoints->At(s));
          if(TrackerPt->trackPDGCode()==11 and TrackerPt->trackID()==code_e and TrackerPt->stationID()==1){
@@ -154,6 +229,7 @@ Double_t code_mu=-99;
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {code_mu=n; p_mu_MC.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); p_mu_MC.Unit(); thmu_gen=p_muin_MC.Angle(p_mu_MC);
                                                                                  thmuX_gen=MCTr->ax();
                                                                                  thmuY_gen=MCTr->ay();
+cout <<  "mu " << endl;
         for(int s=0; s<TrackerPoints->GetEntries(); s++)
                          {const MUonETrackerPoint *TrackerPt = static_cast<const MUonETrackerPoint*>(TrackerPoints->At(s));
 	 if(TrackerPt->trackPDGCode()==-13 and TrackerPt->trackID()==code_mu and TrackerPt->stationID()==1){
@@ -163,12 +239,13 @@ Double_t code_mu=-99;
 		}
 	 }
 	}
-
-
+cout << "code_mu_in " << code_mu_in << " code_e " << code_e << " code_mu " << code_mu << endl;
+cout << "MesmerEvent->wgt_LO " << MesmerEvent->wgt_LO << " " << endl;
 // Look at reconstruction if events are reconstructible (all three particles with necessary hits to be potentially reconstructed)
 
-if(code_mu_in!=-99 and code_e!=-99 and code_mu!=-99 and hit_modXmuin==4 and hit_modYmuin==4 and stereo_muin>1 and hit_modXe==4 and hit_modYe==4 and stereo_e>1 and hit_modXmu==4 and hit_modYmu==4 and stereo_mu>1){
+if(MesmerEvent->wgt_LO!=0 and code_mu_in!=-99 and code_e!=-99 and code_mu!=-99 and hit_modXmuin==4 and hit_modYmuin==4 and stereo_muin>1 and hit_modXe==4 and hit_modYe==4 and stereo_e>1 and hit_modXmu==4 and hit_modYmu==4 and stereo_mu>1){
 
+cout << "reconstructible" << endl;
 // wnorm is a number needed for normalization when we use different mesmer sample together (like in this case, 6 sample in differen kinematic region of the electron)
 
 double wnorm=99.;
@@ -308,8 +385,20 @@ cout << "N. of events with other (interaction ID !=45) particles and clones "<< 
 cout <<"N. of electron clones " << n_clones_el << " over events with >= 2 e+mu " << total << " -> " << n_clones_el/total*100 << "%" << endl;
 cout <<"N. of muon clones " << n_clones_mu << " over events with >= 2 e+mu " << total << " -> " << n_clones_mu/total*100 << "%" << endl;
 
+TCanvas t("t","t",700,700);
+theta_e_single_clone->Draw();
+t->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_LO_%dhit_%d_first2.pdf",static_cast<char>(nhits),static_cast<char>(index)));
 
+theta_e_single_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/theta_e_single_clone_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+theta_mu_single_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/theta_mu_single_clone_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+theta_e_gen->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/theta_e_gen_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+theta_mu_gen->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/theta_mu_gen_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+h_opening_gen->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/h_opening_gen_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+theta_e_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/theta_e_clone_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+theta_mu_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/theta_mu_clone_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+h_opening_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/h_opening_clone_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
 
+/*
 TH1D * h0 = (TH1D*) theta_e_single->Clone();
 TH1D * h0gen = (TH1D*) theta_e_gen->Clone();
 h0->Divide(h0,h0gen,1,1,"B");
@@ -400,14 +489,14 @@ h4->Draw("E");
 h4_clone->SetLineColor(kPink);
 h4_clone->Draw("E same");
 gStyle->SetOptStat(0);
-a1.SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/eff_LO_%dhit_%d.pdf",static_cast<char>(nhits),static_cast<char>(index)));
+a1.SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/eff_LO_%dhit_%d_first2.pdf",static_cast<char>(nhits),static_cast<char>(index)));
 
 
-h0_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_single_eff_LO_%dhit_%d.root",static_cast<char>(nhits),static_cast<char>(index)));
-h1_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/mu_single_eff_LO_%dhit_%d.root",static_cast<char>(nhits),static_cast<char>(index)));
-h2_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_eff_LO_%dhit_%d.root",static_cast<char>(nhits),static_cast<char>(index)));
-h3_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/mu_eff_LO_%dhit_%d.root",static_cast<char>(nhits),static_cast<char>(index)));
-h4_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/op_eff_LO_%dhit_%d.root",static_cast<char>(nhits),static_cast<char>(index)));
-
+h0_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_single_eff_LO_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+h1_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/mu_single_eff_LO_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+h2_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_eff_LO_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+h3_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/mu_eff_LO_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+h4_clone->SaveAs(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/op_eff_LO_%dhit_%d_first2.root",static_cast<char>(nhits),static_cast<char>(index)));
+*/
 }
 

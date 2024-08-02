@@ -14,50 +14,42 @@
 
 using namespace std;
 
-void resolutions(){
+void resolutions(int nhits){
+
 
 TChain * cbmsim = new TChain("cbmsim");
 
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_2hitFirstModules_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_1M_2hitFirstModules_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_1M_2hitFirstModules_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_1M_2hitFirstModules_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_1M_2hitFirstModules_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_1M_2hitFirstModules_NOoutchi2_1M.root");
-
-
-/*cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_1hitFirstModules_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_1M_1hitFirstModules_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_1M_1hitFirstModules_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_1M_1hitFirstModules_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_1M_1hitFirstModules_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_1M_1hitFirstModules_NOoutchi2_1M.root");
-*/
-
-/*cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_0hit_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_0hit_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_0hit_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_0hit_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_0hit_NOoutchi2_1M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_0hit_NOoutchi2_1M.root");
-*/
+if(nhits==0){
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
+}
+else{
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
+cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
+}
 
 /*
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_1hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_1M_1hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_1M_1hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_1M_1hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_1M_1hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_1M_1hitFirstModules_NOoutchi2_reassign.root");
+   TFile *f1 = new TFile("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-32_mrad_1hitFirstModules_NOoutchi2_reassignections.root");
+   TFile *f2 = new TFile("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/old_1hitFirstModules.root");
+
+   TTree *cbmsim = (TTree*)f1->Get("cbmsim");
+   TTree *t2 = (TTree*)f2->Get("cbmsim");
+
+
+   cbmsim->AddFriend(t2);
+   cout << t2->GetEntries() << endl;
+   cout << cbmsim->GetEntries() << endl;
+   cbmsim->Print();
 */
 
-/*cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_1M_2hitFirstModules_NOoutchi2_reassign.root");
-*/
 
         TClonesArray *MCTrack = 0;
         TClonesArray *TrackerStripDigis = 0;
@@ -282,13 +274,13 @@ int code_mu=-99;
                                                                                                  else if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_mu++;}
 		}
 	 }
-         i++;
 	}
 
+//cout << code_mu_in << " " << code_e << " " << code_mu << " " << hit_modXmuin << " " <<  hit_modYmuin << " " <<  stereo_muin << " " <<  hit_modXe << endl;
 	if(code_mu_in!=-99 and code_e!=-99 and code_mu!=-99 and hit_modXmuin==4 and hit_modYmuin==4 and stereo_muin>1 and hit_modXe==4 and hit_modYe==4 and stereo_e>1 and hit_modXmu==4 and hit_modYmu==4 and stereo_mu>1){
 
 
-double wnorm=0.;
+double wnorm=99.;
 
 //cout << "1) the_gen " << the_gen << " thmu_gen " << thmu_gen << " index " << index << " index_mu " << index_mu << endl;
 if(the_gen>=0. and the_gen<0.001){index=0; wnorm=r_wnorm[0];}
@@ -344,6 +336,7 @@ int mu_in=0;
 vector<double> quality_e; quality_e.reserve(5);
 vector<double> quality_mu; quality_mu.reserve(5);
 
+
          for (auto&& track : tracks) {
 
         if(code_mu_in==track.linkedTrackID() and track.sector()==0){
@@ -395,7 +388,6 @@ if(find_if(quality_e.begin(),quality_e.end(),[](double i){return i>=0.65;})!=end
 
 if(vrtx.outgoingMuon().fractionOfHitsSharedWithLinkedTrack()>=0.65 and vrtx.outgoingElectron().fractionOfHitsSharedWithLinkedTrack()>=0.65){
 
-
 	if(chi!=0 and e==1 and mu==1){
 			if(vrtx.outgoingMuon().linkedTrackID()==code_mu)h_res_vrtx_mu.at(index_mu)->Fill(vrtx.muonTheta()-thmu_gen,MesmerEvent->wgt_LO*wnorm);
 			if(vrtx.outgoingMuon().linkedTrackID()==code_e)h_res_vrtx_el.at(index)->Fill(vrtx.muonTheta()-the_gen,MesmerEvent->wgt_LO*wnorm);
@@ -403,6 +395,15 @@ if(vrtx.outgoingMuon().fractionOfHitsSharedWithLinkedTrack()>=0.65 and vrtx.outg
                         if(vrtx.outgoingElectron().linkedTrackID()==code_e)h_res_vrtx_el.at(index)->Fill(vrtx.electronTheta()-the_gen,MesmerEvent->wgt_LO*wnorm);}
 
 	if(chi!=0 and e>=1 and mu>=1){
+/*cout << " tracks quality" << tracks.size() << endl;
+cout << " chi " <<  chi << endl;
+cout << " wgt_LO " << MesmerEvent->wgt_LO << endl;
+cout << " wnorm " << wnorm << endl;
+cout << " vrtx.outgoingMuon().linkedTrackID() " << vrtx.outgoingMuon().linkedTrackID() << endl;
+cout << " code_mu " << code_mu << endl;
+cout << "vrtx.muonTheta()-thmu_gen " << vrtx.muonTheta()-thmu_gen << endl;
+secout << "thmu_gen " << thmu_gen << endl;*/
+
                         if(vrtx.outgoingMuon().linkedTrackID()==code_mu)h_res_vrtx_mu_clones.at(index_mu)->Fill(vrtx.muonTheta()-thmu_gen,MesmerEvent->wgt_LO*wnorm);
                         if(vrtx.outgoingMuon().linkedTrackID()==code_e)h_res_vrtx_el_clones.at(index)->Fill(vrtx.muonTheta()-the_gen,MesmerEvent->wgt_LO*wnorm);
                         if(vrtx.outgoingElectron().linkedTrackID()==code_mu)h_res_vrtx_mu_clones.at(index_mu)->Fill(vrtx.electronTheta()-thmu_gen,MesmerEvent->wgt_LO*wnorm);
@@ -423,11 +424,11 @@ h_res_vrtx_el.at(m)->SetMinimum(1.);
 h_res_vrtx_el.at(m)->Draw("hist");
 h_res_el_pre.at(m)->SetLineColor(kRed+1);
 h_res_el_pre.at(m)->Draw("hist same");
-h_res_el_pre.at(m)->SaveAs(Form("quality_tracks/root/res_prevrtx_el_%d_2hitFirstModules_LO.root",static_cast<char>(m)));
-h_res_vrtx_el.at(m)->SaveAs(Form("quality_tracks/root/res_vrtx_el_%d_2hitFirstModules_LO.root",static_cast<char>(m)));
+h_res_el_pre.at(m)->SaveAs(Form("quality_tracks/root/res_prevrtx_el_%d_%dhitFirstModules_LO.root",static_cast<char>(m),static_cast<char>(nhits)));
+h_res_vrtx_el.at(m)->SaveAs(Form("quality_tracks/root/res_vrtx_el_%d_%dhitFirstModules_LO.root",static_cast<char>(m),static_cast<char>(nhits)));
 //gPad->SetLogy();
 }
-n0.SaveAs("quality_tracks/h_res_pre_el_2hitFirstModules_LO.pdf");
+n0.SaveAs(Form("quality_tracks/h_res_pre_el_%dhitFirstModules_LO.pdf",static_cast<char>(nhits)));
 
 
 TCanvas n1("n1","n1",2100,3500);
@@ -437,10 +438,10 @@ n1.cd(m+1);
 h_res_vrtx_el_clones.at(m)->Draw("hist");
 h_res_el_pre_clones.at(m)->SetLineColor(kRed+1);
 h_res_el_pre_clones.at(m)->Draw("hist same");
-h_res_el_pre_clones.at(m)->SaveAs(Form("quality_tracks/root/res_prevrtx_clones_el_%d_2hitFirstModules_LO.root",static_cast<char>(m)));
-h_res_vrtx_el_clones.at(m)->SaveAs(Form("quality_tracks/root/res_vrtx_clones_el_%d_2hitFirstModules_LO.root",static_cast<char>(m)));
+h_res_el_pre_clones.at(m)->SaveAs(Form("quality_tracks/root/res_prevrtx_clones_el_%d_%dhitFirstModules_LO.root",static_cast<char>(m),static_cast<char>(nhits)));
+h_res_vrtx_el_clones.at(m)->SaveAs(Form("quality_tracks/root/res_vrtx_clones_el_%d_%dhitFirstModules_LO.root",static_cast<char>(m),static_cast<char>(nhits)));
 }
-n1.SaveAs("quality_tracks/h_res_vrtx_el_clones_2hitFirstModules_LO.pdf");
+n1.SaveAs(Form("quality_tracks/h_res_vrtx_el_clones_%dhitFirstModules_LO.pdf",static_cast<char>(nhits)));
 
 
 TCanvas n2("n2","n2",2100,3500);
@@ -451,11 +452,11 @@ h_res_vrtx_mu.at(m)->SetMinimum(1.);
 h_res_vrtx_mu.at(m)->Draw("hist");
 h_res_mu_pre.at(m)->SetLineColor(kRed+1);
 h_res_mu_pre.at(m)->Draw("hist same");
-h_res_mu_pre.at(m)->SaveAs(Form("quality_tracks/root/res_prevrtx_AngleMu_%d_2hitFirstModules_LO.root",static_cast<char>(m)));
-h_res_vrtx_mu.at(m)->SaveAs(Form("quality_tracks/root/res_vrtx_AngleMu_%d_2hitFirstModules_LO.root",static_cast<char>(m)));
+h_res_mu_pre.at(m)->SaveAs(Form("quality_tracks/root/res_prevrtx_AngleMu_%d_%dhitFirstModules_LO.root",static_cast<char>(m),static_cast<char>(nhits)));
+h_res_vrtx_mu.at(m)->SaveAs(Form("quality_tracks/root/res_vrtx_AngleMu_%d_%dhitFirstModules_LO.root",static_cast<char>(m),static_cast<char>(nhits)));
 //gPad->SetLogy();
 }
-n2.SaveAs("quality_tracks/h_res_pre_mu_2hitFirstModules_LO.pdf");
+n2.SaveAs(Form("quality_tracks/h_res_pre_mu_%dhitFirstModules_LO.pdf",static_cast<char>(nhits)));
 
 TCanvas n3("n3","n3",2100,3500);
 n3.Divide(3,5);
@@ -464,21 +465,14 @@ n3.cd(m+1);
 h_res_vrtx_mu_clones.at(m)->Draw("hist");
 h_res_mu_pre_clones.at(m)->SetLineColor(kRed+1);
 h_res_mu_pre_clones.at(m)->Draw("hist same");
-h_res_mu_pre_clones.at(m)->SaveAs(Form("quality_tracks/root/res_prevrtx_clones_AngleMu_%d_2hitFirstModules_LO.root",static_cast<char>(m)));
-h_res_vrtx_mu_clones.at(m)->SaveAs(Form("quality_tracks/root/res_vrtx_clones_AngleMu_%d_2hitFirstModules_LO.root",static_cast<char>(m)));
+h_res_mu_pre_clones.at(m)->SaveAs(Form("quality_tracks/root/res_prevrtx_clones_AngleMu_%d_%dhitFirstModules_LO.root",static_cast<char>(m),static_cast<char>(nhits)));
+h_res_vrtx_mu_clones.at(m)->SaveAs(Form("quality_tracks/root/res_vrtx_clones_AngleMu_%d_%dhitFirstModules_LO.root",static_cast<char>(m),static_cast<char>(nhits)));
 }
-n3.SaveAs("quality_tracks/h_res_vrtx_mu_clones_2hitFirstModules_LO.pdf");
+n3.SaveAs(Form("quality_tracks/h_res_vrtx_mu_clones_%dhitFirstModules_LO.pdf",static_cast<char>(nhits)));
 
 TCanvas in("in","in",700,700);
 h_res_vrtx_muin->Draw();
-in.SaveAs("quality_tracks/h_res_pmuin_2hitFirstModules_LO.pdf");
-
-
-
-
-TCanvas d1("d1","d1",700,700);
-h_phi->Draw("hist");
-d1.SaveAs("phi_180.pdf");
+in.SaveAs(Form("quality_tracks/h_res_pmuin_%dhitFirstModules_LO.pdf",static_cast<char>(nhits)));
 
 
 

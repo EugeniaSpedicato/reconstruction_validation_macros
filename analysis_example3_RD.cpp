@@ -17,11 +17,11 @@
 using namespace std;
 
 
-void RealDataAnalyzer(){
+void analysis_example3_RD(){
 
- 	TFile *inputfile = new TFile("/mnt/raid10/DATA/espedica/fairmu/dataReconstruction_3234-3235_new12_st0_6.root");
+ 	TFile *inputfile = new TFile("example3_RD.root");
 
-        TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
+       TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
 
         MUonERecoOutput *ReconstructionOutput = 0;
 

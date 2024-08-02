@@ -14,25 +14,34 @@ void plots_012hits_eff(){
 array<TFile*,6> f_thmu_LO_clone1,f_thmu_LO_clone2,f_thmu_LO_clone0,f_the_LO_clone1,f_the_LO_clone2,f_the_LO_clone0,f_op_LO_clone1,f_op_LO_clone2,f_op_LO_clone0,f_thmu_single_LO_clone1,f_thmu_single_LO_clone2,f_thmu_single_LO_clone0,f_the_single_LO_clone1,f_the_single_LO_clone2,f_the_single_LO_clone0;
 
  for(int id=0; id<6; id++){
-f_thmu_LO_clone1.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/mu_eff_LO_1hit_%d.root",static_cast<char>(id)));
-f_thmu_LO_clone2.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/mu_eff_LO_2hit_%d.root",static_cast<char>(id)));
-f_thmu_LO_clone0.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/mu_eff_LO_0hit_%d.root",static_cast<char>(id)));
 
-f_the_LO_clone1.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/el_eff_LO_1hit_%d.root",static_cast<char>(id)));
-f_the_LO_clone2.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/el_eff_LO_2hit_%d.root",static_cast<char>(id)));
-f_the_LO_clone0.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/el_eff_LO_0hit_%d.root",static_cast<char>(id)));
+string range;
+if(id==0)range = "0_5";
+else if(id==1)range = "5_10";
+else if(id==2)range = "10_15";
+else if(id==3)range = "15_20";
+else if(id==4)range = "20_25";
+else if(id==5)range = "25_32";
 
-f_op_LO_clone1.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/op_eff_LO_1hit_%d.root",static_cast<char>(id)));
-f_op_LO_clone2.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/op_eff_LO_2hit_%d.root",static_cast<char>(id)));
-f_op_LO_clone0.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/op_eff_LO_0hit_%d.root",static_cast<char>(id)));
+f_thmu_LO_clone1.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/mu_eff_LO_1hit_%d_first2.root",static_cast<char>(id)));
+f_thmu_LO_clone2.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/mu_eff_LO_2hit_%d_first2.root",static_cast<char>(id)));
+f_thmu_LO_clone0.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/mu_eff_LO_0hit_%d_first2.root",static_cast<char>(id)));
 
-f_thmu_single_LO_clone1.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/mu_single_eff_LO_1hit_%d.root",static_cast<char>(id)));
-f_thmu_single_LO_clone2.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/mu_single_eff_LO_2hit_%d.root",static_cast<char>(id)));
-f_thmu_single_LO_clone0.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/mu_single_eff_LO_0hit_%d.root",static_cast<char>(id)));
+f_the_LO_clone1.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_eff_LO_1hit_%d_first2.root",static_cast<char>(id)));
+f_the_LO_clone2.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_eff_LO_2hit_%d_first2.root",static_cast<char>(id)));
+f_the_LO_clone0.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_eff_LO_0hit_%d_first2.root",static_cast<char>(id)));
 
-f_the_single_LO_clone1.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/el_single_eff_LO_1hit_%d.root",static_cast<char>(id)));
-f_the_single_LO_clone2.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/el_single_eff_LO_2hit_%d.root",static_cast<char>(id)));
-f_the_single_LO_clone0.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/validation/el_single_eff_LO_0hit_%d.root",static_cast<char>(id)));
+f_op_LO_clone1.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/op_eff_LO_1hit_%d_first2.root",static_cast<char>(id)));
+f_op_LO_clone2.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/op_eff_LO_2hit_%d_first2.root",static_cast<char>(id)));
+f_op_LO_clone0.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/op_eff_LO_0hit_%d_first2.root",static_cast<char>(id)));
+
+f_thmu_single_LO_clone1.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/mu_single_eff_LO_1hit_%d_first2.root",static_cast<char>(id)));
+f_thmu_single_LO_clone2.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/mu_single_eff_LO_2hit_%d_first2.root",static_cast<char>(id)));
+f_thmu_single_LO_clone0.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/mu_single_eff_LO_0hit_%d_first2.root",static_cast<char>(id)));
+
+f_the_single_LO_clone1.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_single_eff_LO_1hit_%d_first2.root",static_cast<char>(id)));
+f_the_single_LO_clone2.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_single_eff_LO_2hit_%d_first2.root",static_cast<char>(id)));
+f_the_single_LO_clone0.at(id) = TFile::Open(Form("/home/espedica/macros_fairmu/clean_codes/separate/validation/el_single_eff_LO_0hit_%d_first2.root",static_cast<char>(id)));
 }
 
 TH1::SetDefaultSumw2(kTRUE);
@@ -156,7 +165,7 @@ legend_e_single->Draw();
 
 gStyle->SetOptStat(0);
 
-a.SaveAs("/home/espedica/macros_fairmu/clean_codes/validation/results/eff_single_LO_012hit.pdf");
+a.SaveAs("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/eff_single_LO_012hit.pdf");
 
 //TCanvas a1("a1","a1",1400,1400);
 TCanvas a1("a1","a1",2400,700);
@@ -203,7 +212,7 @@ h_op_LO_clone0->SetLineColor(kOrange+10);
 h_op_LO_clone0->Draw("E same");
 legend_op->Draw();
 gStyle->SetOptStat(0);
-a1.SaveAs("/home/espedica/macros_fairmu/clean_codes/validation/results/eff_event_LO_012hit.pdf");
+a1.SaveAs("/home/espedica/macros_fairmu/clean_codes/separate/validation/results/eff_event_LO_012hit.pdf");
 
 
 }

@@ -14,26 +14,23 @@
 
 using namespace std;
 
-void old_effMC(int nhits){
+void efficiency_MC(const char* reco_filename, const char* gen_filename, int nhits, const char* index, const char* info){
 
-TChain * cbmsim = new TChain("cbmsim");
+   TFile *f1 = new TFile(reco_filename);
+   TFile *f2 = new TFile(gen_filename);
+   TTree *cbmsim = (TTree*)f1->Get("cbmsim");
+   TTree *t2 = (TTree*)f2->Get("cbmsim");
 
-if(nhits==0){
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_%dhit_NOoutchi2_1M.root",static_cast<char>(nhits)));
-}
-else{
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_0-5mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_5-10mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_10-15mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_15-20mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_20-25mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/efficiency_NLO/theta_25-32mrad_1M_%dhitFirstModules_NOoutchi2_1M.root",static_cast<char>(nhits)));
-}
+	t2->SetEntries(cbmsim->GetEntries());
+
+cout << "entries cbmsim " << cbmsim->GetEntries() << endl;
+cout << "entries t2 " << t2->GetEntries() << endl;
+
+
+   cbmsim->AddFriend(t2);
+   cout << t2->GetEntries() << endl;
+   cout << cbmsim->GetEntries() << endl;
+
 
         TClonesArray *MCTrack = 0;
         TClonesArray *TrackerStripDigis = 0;
@@ -78,56 +75,23 @@ TH1D *theta_e_gen=new TH1D("theta_e_gen", "Electron scattering generated angles 
 TH1D *theta_mu_gen=new TH1D("theta_mu_gen", "Muon scattering generated angles from MESMER",NBINS_mu,edges_mu);
 TH1D *h_opening_gen=new TH1D("h_opening_gen", "Opening angle generated events from MESMER",35,0.,0.035);
 
-
-TH1D *multiplicity = new TH1D("multiplicity", "number of outgoing reco tracks", 20,0,20);
-TH1D *multiplicity_el = new TH1D("multiplicity_el", "number of outgoing reco tracks when elastic event is reconstructed with 2 tracks and without other", 20,0,20);
-TH1D *multiplicity_cl = new TH1D("multiplicity_cl", "number of outgoing reco tracks when elastic event is reconstructed with clones", 20,0,20);
-TH1D *multiplicity_other = new TH1D("multiplicity_other", "number of outgoing reco tracks with just other interaction ID", 20,0,20);
-TH1D *multiplicity_both = new TH1D("multiplicity_both", "number of outgoing reco tracks when elastic event is reconstructed with 2 tracks + other", 20,0,20);
-TH1D *multiplicity_one_el = new TH1D("multiplicity_one_el", "number of outgoing reco tracks when just one elastic is reco", 20,0,20);
-TH1D *multiplicity_el3  = new TH1D("multiplicity_el3", "number of outgoing reco tracks when elastic event is reconstructed with other particles", 20,0,20);
-TH1D *clones_el = new TH1D("clones_el", "number of electron's clone tracks when elastic event is reconstructed",NBINS,edges_el);
-TH1D *clones_mu = new TH1D("clones_mu", "number of muon's clone tracks when elastic event is reconstructed",NBINS_mu,edges_mu);
-
-TH2D *h_2d=new TH2D("h_2d","Electron reco vrtx angle Vs muon reco vrtx angle",1000,0.,0.03,200,0.,0.005);
+TH1D *theta_e_noreco=new TH1D("theta_e_noreco", "Electron scattering angles from MESMER when NOT reco",NBINS,edges_el);
+TH1D *theta_mu_noreco=new TH1D("theta_mu_noreco", "Muon scattering angle from MESMER when NOT reco",NBINS_mu,edges_mu);
 
 
-//old wnorm
-//  double r_wnorm[6]={20.383577565024513,23.500259910776567,36.594795515579023,52.764785364090010,61.449970536155391,104.67651677602215};
-//   double r_wnorm[6]={306.11916749125714,306.11916749125714,306.11916749125714,306.11916749125714,306.11916749125714,306.11916749125714};
-//   double r_wnorm[6]={307.91166977973597,307.91166977973597,307.91166977973597,307.91166977973597,307.91166977973597,307.91166977973597};
-
-//wnorm 1M NLO
-// double r_wnorm[6]={21.522863161260670,38.514215499428630,41.710050452754516,49.388519620534474,61.328951873440843,105.50015224118995};
-// double r_wnorm[6]={311.68129471616066,311.68129471616066,311.68129471616066,311.68129471616066,311.68129471616066,311.68129471616066};
-
-//wnorm 1M NNLO
-// double r_wnorm[6]={20.461867203505570,24.217332290303446,36.677249299608334,53.056125493170988,61.449970536155391,104.98858886225770};
-//   double r_wnorm[6]={307.91166977973597,307.91166977973597,307.91166977973597,307.91166977973597,307.91166977973597,307.91166977973597};
-
-//   double r_wnorm[6]={1.,1.,1.,1.,1.,1.};
-
-//wnorm 1M/1M NLO 300outlier/nooutlier NLO 1hitshared
-	double r_wnorm[6]={20.786765103274643,33.313091221576336,42.396733790329876,50.584815206143652,61.828110400735824,106.88513370134392};
-
-//1000chi2 1M single range
-//      double r_wnorm[6]={169.10075957722117,169.10075957722117,169.10075957722117,169.10075957722117,169.10075957722117,169.10075957722117};
+	double r_wnorm[6]={18.558632798881270,31.156709183434657,41.306609022934722,50.678758808390178,61.782157006784871,106.98964295859898};
 
 
-double sum_wgt=0.;
-double sumW2[6]={0.};
 
 double n_clones_el=0.;
 double n_clones_mu=0.;
 double total=0.;
-double no_muin=0.;
 double all=0.;
 double n_el2=0.;
 double n_el3=0.;
 double n_cl=0.;
 double n_one_el=0.;
 double n_other=0.;
-double n_zero=0.;
 double n_both=0.;
 double tot=0.;
 
@@ -135,7 +99,6 @@ for(Long64_t i = 0; i < cbmsim->GetEntries(); i++) {
                 cbmsim->GetEntry(i);
                 if(i%100 == 0) cout<<"Entry "<<i<<endl;
 
-int index=7;
 
 Double_t code_mu_in=-99;
 Double_t code_e=-99;
@@ -148,13 +111,16 @@ Double_t code_mu=-99;
            int hit_modXmu=0; int hit_modXe=0;
            int hit_modYmu=0; int hit_modYe=0;
            int stereo_mu=0; int stereo_e=0;
-     int hit_modXmuin=0;
-     int hit_modYmuin=0;
-     int stereo_muin=0;
-     double E_e=0.;
+	   int hit_modXmuin=0;
+	   int hit_modYmuin=0;
+	   int stereo_muin=0;
+	   double E_e=0.;
+
+// Checking if in the MCTracks container there are elastic particles and if they are in acceptance (4 hits in X modules (== 2 stubs, as TrackerPoints give the hit per sensor) + 4 hits in Y modules + at least 2 hits in UV)
 
         for(int n = 0; n < MCTrack->GetEntries(); n++) {
          const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
+
          if(MCTr->interactionID()==0 and MCTr->pdgCode()==-13) {code_mu_in=n; p_muin_MC.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); p_muin_MC.Unit();E_e=MCTr->energy();
         for(int s=0; s<TrackerPoints->GetEntries(); s++)
                          {const MUonETrackerPoint *TrackerPt = static_cast<const MUonETrackerPoint*>(TrackerPoints->At(s));
@@ -164,6 +130,7 @@ Double_t code_mu=-99;
                                                                                                  else if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_muin++;}
                 }
 	}
+
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) {code_e=n; p_e_MC.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); p_e_MC.Unit(); the_gen=p_muin_MC.Angle(p_e_MC);
                                                                                  theX_gen=MCTr->ax();
                                                                                  theY_gen=MCTr->ay();
@@ -176,6 +143,7 @@ Double_t code_mu=-99;
                                                                                                  else if(TrackerPt->moduleID()==2 or TrackerPt->moduleID()==3) stereo_e++;}
         	}
 	 }
+
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {code_mu=n; p_mu_MC.SetXYZ(MCTr->px(),MCTr->py(),MCTr->pz()); p_mu_MC.Unit(); thmu_gen=p_muin_MC.Angle(p_mu_MC);
                                                                                  thmuX_gen=MCTr->ax();
                                                                                  thmuY_gen=MCTr->ay();
@@ -189,16 +157,23 @@ Double_t code_mu=-99;
 	 }
 	}
 
-	if(code_mu_in!=-99 and code_e!=-99 and code_mu!=-99 and hit_modXmuin==4 and hit_modYmuin==4 and stereo_muin>1 and hit_modXe==4 and hit_modYe==4 and stereo_e>1 and hit_modXmu==4 and hit_modYmu==4 and stereo_mu>1){
+
+// Look at reconstruction if events are reconstructible (all three particles with necessary hits to be potentially reconstructed)
+
+if(code_mu_in!=-99 and code_e!=-99 and code_mu!=-99 and hit_modXmuin==4 and hit_modYmuin==4 and stereo_muin>1 and hit_modXe==4 and hit_modYe==4 and stereo_e>1 and hit_modXmu==4 and hit_modYmu==4 and stereo_mu>1){
+
+// wnorm is a number needed for normalization when we use different mesmer sample together (like in this case, 6 sample in differen kinematic region of the electron)
 
 double wnorm=99.;
 
-if(the_gen>=0 and the_gen<0.005){index=0; wnorm=r_wnorm[0];}
-if(the_gen>=0.005 and the_gen<0.010){index=1; wnorm=r_wnorm[1];}
-if(the_gen>=0.010 and the_gen<0.015){index=2; wnorm=r_wnorm[2];}
-if(the_gen>=0.015 and the_gen<0.020){index=3; wnorm=r_wnorm[3];}
-if(the_gen>=0.020 and the_gen<0.025){index=4; wnorm=r_wnorm[4];}
-if(the_gen>=0.025 and the_gen<=0.032){index=5; wnorm=r_wnorm[5];}
+size_t sz=sizeof(index);
+if( strncmp(index,"0_5",sz) ){wnorm=r_wnorm[0];}
+else if( strncmp(index,"5_10",sz) ){wnorm=r_wnorm[1];}
+else if( strncmp(index,"10_15",sz) ){wnorm=r_wnorm[2];}
+else if( strncmp(index,"15_20",sz) ){wnorm=r_wnorm[3];}
+else if( strncmp(index,"20_25",sz) ){wnorm=r_wnorm[4];}
+else if( strncmp(index,"25_32",sz) ){wnorm=r_wnorm[5];}
+
  all+=MesmerEvent->wgt_LO*wnorm;
 
 
@@ -215,9 +190,13 @@ Int_t e=0;
 Int_t mu=0;
 TVector3 p_muin,p_e,p_mu;
 Double_t the_rec,theX_rec,theY_rec,thmu_rec,thmuX_rec,thmuY_rec;
-MUonERecoOutputVertex vrtx = ReconstructionOutput->bestVertex();
 
+// Define best vertex and its chi2
+MUonERecoOutputVertex vrtx = ReconstructionOutput->bestVertex();
 Double_t chi=vrtx.chi2perDegreeOfFreedom();
+
+
+// Look at reconstructed track container to see if outgoing mu and e are reconstructed
 vector<double> quality_e; quality_e.reserve(5);
 vector<double> quality_mu; quality_mu.reserve(5);
 
@@ -252,27 +231,17 @@ int mu_in=0;
 
          }//for
 
-if(mu_in==0){no_muin+=MesmerEvent->wgt_LO*wnorm;}
 
-Double_t posxIN=pos_on_track(x0_in,th_inx,912.7);
-Double_t posyIN=pos_on_track(y0_in,th_iny,912.7);
-
-
-//if(stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<2 and thmu_gen>0.0002){
-if(stubs_muin>=5 and chi2_muin<2){// and thmu_gen>0.0002){
+// Check that the incoming muon is well reconstructed
+if(stubs_muin>=5 and chi2_muin<2){//and thmu_gen>0.0002){
 
 tot+=MesmerEvent->wgt_LO*wnorm;
 
-multiplicity->Fill(tracks.size()-1,MesmerEvent->wgt_LO*wnorm);
 theta_mu_gen->Fill(thmu_gen,MesmerEvent->wgt_LO*wnorm);
 theta_e_gen->Fill(the_gen,MesmerEvent->wgt_LO*wnorm);
-
-//sumW2[index]+=(MesmerEvent->wgt_LO*wnorm*MesmerEvent->wgt_LO*wnorm);
-//sum_wgt+=MesmerEvent->wgt_LO*wnorm;
-
 h_opening_gen->Fill(opening_angle,MesmerEvent->wgt_LO*wnorm);
 
-
+// Qulity checks for the evaluation of single mu and single el reconstrustion efficiency
 if(find_if(quality_mu.begin(),quality_mu.end(),[](double i){return i>=0.65;})!=end(quality_mu)){
  if(mu==1){theta_mu_single->Fill(thmu_gen,MesmerEvent->wgt_LO*wnorm);}
  if(mu>=1){theta_mu_single_clone->Fill(thmu_gen,MesmerEvent->wgt_LO*wnorm);}
@@ -287,36 +256,34 @@ if(find_if(quality_e.begin(),quality_e.end(),[](double i){return i>=0.65;})!=end
 
 if(yes2>=0){total+=MesmerEvent->wgt_LO*wnorm;}
 
+
+// Qulity checks for the evaluation of elastic events reconstrustion efficiency
 if(find_if(quality_e.begin(),quality_e.end(),[](double i){return i>=0.65;})!=end(quality_e) and find_if(quality_mu.begin(),quality_mu.end(),[](double i){return i>=0.65;})!=end(quality_mu)){
- if(e==1 and mu==1 and other==0){n_el2+=MesmerEvent->wgt_LO*wnorm; multiplicity_el->Fill(tracks.size()-1,MesmerEvent->wgt_LO*wnorm);}
 
- if(e==1 and mu==1 and other!=0){n_el3+=MesmerEvent->wgt_LO*wnorm; multiplicity_el3->Fill(tracks.size()-1,MesmerEvent->wgt_LO*wnorm);}
- if( (e>1 or mu>1) and other==0){ n_cl+=MesmerEvent->wgt_LO*wnorm;  multiplicity_cl->Fill(tracks.size()-1,MesmerEvent->wgt_LO*wnorm);}
- if(yes2==0 and other>0){ n_other+=MesmerEvent->wgt_LO*wnorm; multiplicity_other->Fill(tracks.size()-1,MesmerEvent->wgt_LO*wnorm);}
- if(yes2==1 and other==0){ n_one_el+=MesmerEvent->wgt_LO*wnorm;  multiplicity_one_el->Fill(tracks.size()-1,MesmerEvent->wgt_LO*wnorm);}
- //if( (e>1 or mu>1) and other>0){ n_both+=MesmerEvent->wgt_LO*wnorm;  multiplicity_both->Fill(tracks.size()-1,MesmerEvent->wgt_LO*wnorm);}
- if( (e>1 or mu>1) and other>0){ n_both+=MesmerEvent->wgt_LO*wnorm;  multiplicity_both->Fill(tracks.size()-1,MesmerEvent->wgt_LO*wnorm);}
- //if(e>1 or mu>1 or (other>0 and e==1 and mu==1)){ n_both+=MesmerEvent->wgt_LO*wnorm;  multiplicity_both->Fill(tracks.size()-1,MesmerEvent->wgt_LO*wnorm);}
-
- if(tracks.size()==1){ n_zero+=MesmerEvent->wgt_LO*wnorm;}
-
+ //some number for multiplicity and what is reconstructed other==particle different from elastic lepton
+ if(e==1 and mu==1 and other==0) n_el2+=MesmerEvent->wgt_LO*wnorm;
+ if(e==1 and mu==1 and other!=0) n_el3+=MesmerEvent->wgt_LO*wnorm;
+ if( (e>1 or mu>1) and other==0) n_cl+=MesmerEvent->wgt_LO*wnorm;
+ if(yes2==0 and other>0) n_other+=MesmerEvent->wgt_LO*wnorm;
+ if(yes2==1 and other==0) n_one_el+=MesmerEvent->wgt_LO*wnorm;
+ if( (e>1 or mu>1) and other>0) n_both+=MesmerEvent->wgt_LO*wnorm;
+ if(chi!=0 and yes2>=2 and e>1)n_clones_el+=MesmerEvent->wgt_LO*wnorm;
+ if(chi!=0 and yes2>=2 and mu>1)n_clones_mu+=MesmerEvent->wgt_LO*wnorm;
 
 
- if(chi!=0 and yes2>=2 and e>1){n_clones_el+=MesmerEvent->wgt_LO*wnorm; clones_el->Fill(the_gen,MesmerEvent->wgt_LO*wnorm);}
- if(chi!=0 and yes2>=2 and mu>1){n_clones_mu+=MesmerEvent->wgt_LO*wnorm; clones_mu->Fill(thmu_gen,MesmerEvent->wgt_LO*wnorm);}
-
+// reconstruction efficiency for elastic events without clones of elastic particles
  if(e==1 and mu==1 and chi!=0){
  theta_mu->Fill(thmu_gen,MesmerEvent->wgt_LO*wnorm);
  theta_e->Fill(the_gen,MesmerEvent->wgt_LO*wnorm);
  h_opening->Fill(opening_angle,MesmerEvent->wgt_LO*wnorm);
                  }//if chi!=0
 
+// reconstruction efficiency for elastic events including clones of elastic particles
  if(e>=1 and mu>=1 and chi!=0){
  theta_mu_clone->Fill(thmu_gen,MesmerEvent->wgt_LO*wnorm);
  theta_e_clone->Fill(the_gen,MesmerEvent->wgt_LO*wnorm);
  h_opening_clone->Fill(opening_angle,MesmerEvent->wgt_LO*wnorm);
-                 }else{h_2d->Fill(the_gen,thmu_gen,MesmerEvent->wgt_LO*wnorm);}//if chi!=0
-
+                 }
 			}//quality
                 }//if mu_in
 
@@ -324,101 +291,32 @@ if(find_if(quality_e.begin(),quality_e.end(),[](double i){return i>=0.65;})!=end
 
 }//for
 
-cout << "N. of events where muin not reco " << no_muin << " over " << all<< " -> " << no_muin/all*100 << "%"<< endl;
-
 cout << "N. of elastic events with 1 muon and 1 electron and no other "<< n_el2 << " -> " << n_el2/tot*100 << "%"<< endl;
 cout << "N. of elastic events with 1 muon and 1 electron and other "<< n_el3 << " -> " << n_el3/tot*100 << "%"<< endl;
 cout << "N. of elastic events with mu/e clones "<< n_cl << " -> " << n_cl/tot*100 << "%"<< endl;
 cout << "N. of events with just 1 elastic "<< n_one_el << " -> " << n_one_el/tot*100 << "%"<< endl;
 cout << "N. of elastic events with just other (interaction ID !=45) particles "<< n_other << " -> " << n_other/tot*100 << "%"<< endl;
 cout << "N. of events with other (interaction ID !=45) particles and clones "<< n_both << " -> " << n_both/tot*100 << "%"<< endl;
-cout << "N. of events with no particles "<< n_zero << " -> " << n_zero/tot*100 << "%"<< endl;
 
 
 cout <<"N. of electron clones " << n_clones_el << " over events with >= 2 e+mu " << total << " -> " << n_clones_el/total*100 << "%" << endl;
 cout <<"N. of muon clones " << n_clones_mu << " over events with >= 2 e+mu " << total << " -> " << n_clones_mu/total*100 << "%" << endl;
 
+TCanvas t("t","t",700,700);
+theta_e_single_clone->Draw();
+t.SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/el_LO_%dhit_%s_%s.pdf",static_cast<char>(nhits),index,info));
 
- auto legend = new TLegend(0.7,0.7,0.9,0.9);
-   legend->AddEntry(multiplicity,"multiplicity","LEP");
-   legend->AddEntry(multiplicity_el,"multiplicity_el","LEP");
-   legend->AddEntry(multiplicity_cl,"multiplicity_cl","LEP");
-   legend->AddEntry(multiplicity_other,"multiplicity_other","LEP");
-   legend->AddEntry(multiplicity_both,"multiplicity_both","LEP");
-   legend->AddEntry(multiplicity_one_el,"multiplicity_one_el","LEP");
-   legend->AddEntry(multiplicity_el3,"multiplicity_el3","LEP");
+theta_e_single_clone->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/theta_e_single_clone_%dhit_%s_%s.root",static_cast<char>(nhits),index,info));
+theta_mu_single_clone->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/theta_mu_single_clone_%dhit_%s_%s.root",static_cast<char>(nhits),index,info));
+theta_e_gen->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/theta_e_gen_%dhit_%s_%s.root",static_cast<char>(nhits),index,info));
+theta_mu_gen->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/theta_mu_gen_%dhit_%s_%s.root",static_cast<char>(nhits),index,info));
+h_opening_gen->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/h_opening_gen_%dhit_%s_%s.root",static_cast<char>(nhits),index,info));
+theta_e_clone->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/theta_e_clone_%dhit_%s_%s.root",static_cast<char>(nhits),index,info));
+theta_mu_clone->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/theta_mu_clone_%dhit_%s_%s.root",static_cast<char>(nhits),index,info));
+h_opening_clone->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/h_opening_clone_%dhit_%s_%s.root",static_cast<char>(nhits),index,info));
+
+
 /*
-TCanvas b("b","b",700,700);
-b.Divide(2,3);
-b.cd(1);
-theta_mu_noreco->Draw("E");
-gPad->SetLogy();
-b.cd(2);
-theta_e_noreco->Draw("E");
-b.cd(3);
-clones_mu->SetMinimum(1);
-clones_mu->Draw("E");
-b.cd(4);
-clones_el->Draw("E");
-clones_el->SetMinimum(1);
-gPad->SetLogy();
-b.cd(5);
-multiplicity->Draw("E");
-multiplicity_el->SetLineColor(kRed-3); 
-multiplicity_el->Draw("E same");
-multiplicity_cl->SetLineColor(kTeal-3); 
-multiplicity_cl->Draw("E same");
-multiplicity_other->SetLineColor(kViolet-3);
-multiplicity_other->Draw("E same");
-multiplicity_both->SetLineColor(kOrange); 
-multiplicity_both->Draw("E same");
-multiplicity_one_el->SetLineColor(kAzure+10); 
-multiplicity_one_el->Draw("E same");
-multiplicity_el3->SetLineColor(kPink-4); 
-multiplicity_el3->Draw("E same");
-gPad->SetLogy();
-gStyle->SetOptStat(0);
-legend->Draw("same");
-b.SaveAs("proposal/NOoutchi2_not_reco_angles_NLO_reconstructibility_2hitFirstModules_02cut_quality.pdf");
-
-
-TCanvas c("c","c",700,700);
-c.Divide(2,3);
-c.cd(1);
-theta_mu_gen->SetLineColor(kPink);
-theta_mu_gen->Draw("E");
-theta_mu_single->Draw("E same");
-gPad->SetLogy();
-gStyle->SetOptStat(0);
-c.cd(2);
-theta_e_gen->SetLineColor(kPink);
-theta_e_gen->Draw("E");
-theta_e_single->Draw("E same");
-gStyle->SetOptStat(0);
-c.cd(3);
-theta_mu_gen->SetLineColor(kPink);
-theta_mu_gen->Draw("E");
-theta_mu->Draw("E same");
-gPad->SetLogy();
-gStyle->SetOptStat(0);
-c.cd(4);
-theta_e_gen->SetLineColor(kPink);
-theta_e_gen->Draw("E");
-theta_e->Draw("E same");
-gStyle->SetOptStat(0);
-c.cd(5);
-h_opening_gen->SetLineColor(kPink);
-h_opening_gen->Draw("E");
-h_opening->Draw("E same");
-gStyle->SetOptStat(0);
-gPad->SetLogy();
-c.SaveAs("proposal/NOoutchi2_angle_NLO_reconstructibility_2hitFirstModules_02cut_quality.pdf");
-theta_e_gen->SaveAs("proposal/NOoutchi2_theta_e_gen_LO_%dhitFirstModules_quality.root");
-theta_mu_gen->SaveAs("proposal/NOoutchi2_theta_mu_gen_LO_%dhitFirstModules_quality.root");
-
-
-*/
-
 TH1D * h0 = (TH1D*) theta_e_single->Clone();
 TH1D * h0gen = (TH1D*) theta_e_gen->Clone();
 h0->Divide(h0,h0gen,1,1,"B");
@@ -454,21 +352,21 @@ h3_clone->Divide(h3_clone,h3gen,1,1,"B");
 TH1D * h4_clone = (TH1D*) h_opening_clone->Clone();
 h4_clone->Divide(h4_clone,h4gen,1,1,"B");
 
-cout << "muon" << endl;
+cout << "Efficiency as function of muon angle" << endl;
 for(int b=1; b<h3->GetNbinsX(); b++){
 cout << b << " ) " << h3->GetBinContent(b) << " +- " << h3->GetBinError(b)<< " ----> " << h3->GetBinError(b)/h3->GetBinContent(b)*100 << "%" << endl;
 }
-cout << "electron" << endl;
+cout << "Efficiency as function of electron angle" << endl;
 for(int b=1; b<h2->GetNbinsX(); b++){
 cout << b << " ) " << h2->GetBinContent(b) << " +- " << h2->GetBinError(b)<< " ---> " << h2->GetBinError(b)/h2->GetBinContent(b)*100 << "%" <<endl ;
 }
 
 
-cout << "muon clone" << endl;
+cout << "Efficiency as function of muon angle including clones" << endl;
 for(int b=1; b<h3_clone->GetNbinsX(); b++){
 cout << b << " ) " << h3_clone->GetBinContent(b) << " +- " << h3_clone->GetBinError(b)<< " ----> " << h3_clone->GetBinError(b)/h3_clone->GetBinContent(b)*100 << "%" << endl;
 }
-cout << "electron clone" << endl;
+cout << "Efficiency as function of electron angle including clones" << endl;
 for(int b=1; b<h2_clone->GetNbinsX(); b++){
 cout << b << " ) " << h2_clone->GetBinContent(b) << " +- " << h2_clone->GetBinError(b)<< " ---> " << h2_clone->GetBinError(b)/h2_clone->GetBinContent(b)*100 << "%" <<endl ;
 }
@@ -509,27 +407,14 @@ h4->Draw("E");
 h4_clone->SetLineColor(kPink);
 h4_clone->Draw("E same");
 gStyle->SetOptStat(0);
-//a1.SaveAs(Form("proposal/NOoutchi2_eff_NLO_reconstructibility_1hitFirstModules_02cut_quality.pdf");
+a1.SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/eff_LO_%dhit_%s.pdf",static_cast<char>(nhits),index,info));
 
-h0->SaveAs(Form("proposal/NOoutchi2_el_single_eff_LO_%dhitFirstModules_quality.root",static_cast<char>(nhits)));
-h1->SaveAs(Form("proposal/NOoutchi2_mu_single_eff_LO_%dhitFirstModules_quality.root",static_cast<char>(nhits)));
-h2->SaveAs(Form("proposal/NOoutchi2_el_eff_LO_%dhitFirstModules_quality.root",static_cast<char>(nhits)));
-h3->SaveAs(Form("proposal/NOoutchi2_mu_eff_LO_%dhitFirstModules_quality.root",static_cast<char>(nhits)));
-h4->SaveAs(Form("proposal/NOoutchi2_op_eff_LO_%dhitFirstModules_quality.root",static_cast<char>(nhits)));
 
-h0_clone->SaveAs(Form("proposal/NOoutchi2_el_single_eff_LO_%dhitFirstModules_clone_quality.root",static_cast<char>(nhits)));
-h1_clone->SaveAs(Form("proposal/NOoutchi2_mu_single_eff_LO_%dhitFirstModules_clone_quality.root",static_cast<char>(nhits)));
-h2_clone->SaveAs(Form("proposal/NOoutchi2_el_eff_LO_%dhitFirstModules_clone_quality.root",static_cast<char>(nhits)));
-h3_clone->SaveAs(Form("proposal/NOoutchi2_mu_eff_LO_%dhitFirstModules_clone_quality.root",static_cast<char>(nhits)));
-h4_clone->SaveAs(Form("proposal/NOoutchi2_op_eff_LO_%dhitFirstModules_clone_quality.root",static_cast<char>(nhits)));
-
-/*
-TCanvas b2("b2","b2",700,700);
-h_2d->GetYaxis()->SetTitle("Muon angle[rad]");
-h_2d->GetXaxis()->SetTitle("Electron angle[rad]");
-TGaxis::SetMaxDigits(3);
-h_2d->Draw("COLZ");
-b2.SaveAs("proposal/NOoutchi2_notreco_LO_%dhitFirstModules_clone_quality.pdf");
+h0_clone->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/el_single_eff_LO_%dhit_%s.root",static_cast<char>(nhits),index,info));
+h1_clone->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/mu_single_eff_LO_%dhit_%s.root",static_cast<char>(nhits),index,info));
+h2_clone->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/el_eff_LO_%dhit_%s.root",static_cast<char>(nhits),index,info));
+h3_clone->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/mu_eff_LO_%dhit_%s.root",static_cast<char>(nhits),index,info));
+h4_clone->SaveAs(Form("/home/espedica/macros_fairmu/snakemake/plots/op_eff_LO_%dhit_%s.root",static_cast<char>(nhits),index,info));
 */
 }
 

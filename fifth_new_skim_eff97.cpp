@@ -30,7 +30,8 @@ int iskim = 61;
     filelist = filelist  + "files.txt";
 
 TChain * cbmsim = new TChain("cbmsim");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_1M_new_085PUmean.root");
+//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_1M_new_085PUmean.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi/commit_2f4e96f4_MCsignal_SIM-DIGI.root");
 
   //////////////////////////////////////////////////////////////////////
   auto n_entries = cbmsim->GetEntries();
@@ -38,16 +39,16 @@ cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_1M_new_085PUmean.root");
 
    TClonesArray *MCTrack = 0;
    TClonesArray *TrackerStubs = 0;
-   MUonERecoOutput *ReconstructionOutput = 0;
+   //MUonERecoOutput *ReconstructionOutput = 0;
 
    cbmsim->SetBranchAddress("MCTrack", &MCTrack);
    cbmsim->SetBranchAddress("TrackerStubs", &TrackerStubs);
-   cbmsim->SetBranchAddress("ReconstructionOutput", &ReconstructionOutput);
+   //cbmsim->SetBranchAddress("ReconstructionOutput", &ReconstructionOutput);
 
   //////////////////////////////////////////////////////////////////////
    TClonesArray *o_MCTrack = 0;
    TClonesArray *o_TrackerStubs = 0;
-   MUonERecoOutput *o_ReconstructionOutput = 0;
+   //MUonERecoOutput *o_ReconstructionOutput = 0;
 
 TFile *o_file;
   TTree *o_tree;
@@ -65,7 +66,7 @@ if (iskim > 0) {
     o_tree = new TTree("cbmsim", "");
     o_tree->Branch("MCTrack", &o_MCTrack);
     o_tree->Branch("TrackerStubs", &o_TrackerStubs);
-    o_tree->Branch("ReconstructionOutput", &o_ReconstructionOutput);
+    //o_tree->Branch("ReconstructionOutput", &o_ReconstructionOutput);
         }
 
   // histograms: find X range (file number - SuperId - time)
@@ -346,7 +347,7 @@ double yz_mu=10.;
 
         for(int n = 0; n < MCTrack->GetEntries(); n++) {
          const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
-         if(MCTr->interactionID()==0 and MCTr->pdgCode()==13){mu_gen++;}
+         if(MCTr->interactionID()==0 and MCTr->pdgCode()==-13){mu_gen++;}
 
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) { e_out=n;}
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {mu_out=n;}
@@ -371,6 +372,7 @@ if(mu_gen>0){
 //      if(imod == 0 or imod == 4 or imod==6 or imod==10) a=-1;
       float local=a*(stubs->seedClusterCenterStrip() + 0.5 + 0.5 * stubs->bend()) * 9.144 / 1016 - 0.5 * 9.144;
 
+//simulating modules efficiency of 97%
         bool hit= (rand()%100) <= 97;
 
          if (imod <6 and abs(local)<3 ) {

@@ -31,7 +31,8 @@ int iskim = 41;
     filelist = filelist  + "files.txt";
 
 TChain * cbmsim = new TChain("cbmsim");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_1M_new_085PUmean.root");
+//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_1M_new_085PUmean.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi/commit_2f4e96f4_MCsignal_SIM-DIGI.root");
 
   //////////////////////////////////////////////////////////////////////
   auto n_entries = cbmsim->GetEntries();
@@ -328,7 +329,7 @@ double yz_mu=10.;
 
         for(int n = 0; n < MCTrack->GetEntries(); n++) {
          const MUonETrack *MCTr = static_cast<const MUonETrack*>(MCTrack->At(n));
-         if(MCTr->interactionID()==0 and MCTr->pdgCode()==13){mu_gen++;}
+         if(MCTr->interactionID()==0 and MCTr->pdgCode()==-13){mu_gen++;}
 
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==11) { e_out=n;}
          if(MCTr->interactionID()==45 and MCTr->pdgCode()==-13) {mu_out=n;}
