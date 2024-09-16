@@ -27,8 +27,8 @@ TChain * cbmsim = new TChain("cbmsim");
 
 if(version=="default" and nhits==2){
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_2.root");
+//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_1.root");
+//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_2.root");
 }
 else if(version=="default" and nhits==0 and bend=="Bend"){
 //cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_1.root");
@@ -76,7 +76,8 @@ else if(version=="alin" and nhits==0 and bend=="Bend"){
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_0hit_alin.root");
 }
 else if(version=="default" and nhits==-1 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_minus1hit_alin.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_minus1hit.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_minus1hit_1.root");
 }
 else if(version=="fileMateusz" and nhits==0 and bend=="Bend"){
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/15_eventsProblems_0hit.root");
@@ -84,6 +85,38 @@ cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/15_eventsProbl
 else if(version=="converted" and nhits==0 and bend=="Bend"){
 cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_b2ed7c3b_MCsignal_RECO_convertedToRealDataFormat_0hit.root");
 }
+else if(version=="tiltAlin" and nhits==0 and bend=="Bend"){
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_tiltAlin_0.root");
+}
+else if(version=="run17" and nhits==-1 and bend=="Bend"){
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_m1hit_run17_partial.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_m1hit_run17_partial_1.root");
+}
+else if(version=="run8" and nhits==-1 and bend=="Bend"){
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_m1hit_run8_partial.root");
+}
+else if(version=="default_chi2out50" and nhits==2 and bend=="Bend"){
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_2hit_run6_chi2out50.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_2hit_run6_chi2out50_1.root");
+}
+else if(version=="default_bb35b5de" and nhits==2 and bend=="Bend"){
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_2hit_run6.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_2hit_run6_1.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_2hit_run6_2.root");
+}
+else if(version=="default_bb35b5de" and nhits==-1 and bend=="Bend"){
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_m1hit_run6.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_m1hit_run6_1.root");
+}
+else if(version=="default_bb35b5de" and nhits==0 and bend=="Bend"){
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_0hit_run6.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_0hit_run6_1.root");
+}
+else if(version=="my_modifica" and nhits==0 and bend=="Bend"){
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_0hit.root");
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_0hit_1.root");
+}
+
 ROOT::TTreeProcessorMT tp1(*cbmsim,nthreads);
 
       MUonERecoOutput *ReconstructionOutput = 0;
@@ -153,11 +186,13 @@ ROOT::TTreeProcessorMT tp1(*cbmsim,nthreads);
            ROOT::TThreadedObject<TH1D> perp_res5("perp_res5","perp_res mod3",80,-0.2,0.2);
    ROOT::TThreadedObject<TH2D> h_2d("h2D","theta mu vs theta E with all cuts", 320, 0.,0.032,50,0.,0.005);
 
+           ROOT::TThreadedObject<TH1D> not_used_better("not_used_better","not_used_better",2,0,2);
+           ROOT::TThreadedObject<TH1D> used_better("used_better","used_better",2,0,2);
+
            std::vector<uint64_t> nID_v;
 
 auto trackatZ = [](double q, double m,double z) {return q + (z ) * m;};
 
-double tilt[6]={0.233,-0.233,0.,0.,0.233,-0.233};
 //double tilt[6]={0.233,0.233,0.,0.,0.233,0.233};//,0.233,-0.233,0.,0.,0.233,-0.233};
 double posZ[6]={18.0218,21.8693,55.3635,56.6205,89.9218,93.7693};//, 119.2218, 123.0693,156.4535, 157.8205,191.1218, 194.9693};
 double rot[6]={0  *TMath::DegToRad(),90 *TMath::DegToRad(),135*TMath::DegToRad(),45 *TMath::DegToRad(),0  *TMath::DegToRad(),90 *TMath::DegToRad()};
@@ -165,12 +200,21 @@ double Zsens[6]={-0.09,+0.09,+0.2,-0.2,-0.09,+0.09};
 double alpha[6]={0  *TMath::DegToRad(), 90 *TMath::DegToRad(), 135*TMath::DegToRad(), 45 *TMath::DegToRad(),0  *TMath::DegToRad(), 90 *TMath::DegToRad()};
 
 
+double tilt[6]={0.233,0.233,0.,0.,0.233,0.233};
 //double offsetX[6]={-0.041151187339928,0.,0.07044990681274964,0.07366436386828577,-0.02216311771211892,0., //prima staz
 double offsetX[6]={0.05309770641837935,0.,0.01831731454809257,0.1400357237114471,-0.0564074004379715,0.};//seconda staz
 //double offsetY[6]={0.,-0.01962944331210647,-0.07050890136986443, 0.07323347608588825,0.,-0.01011926023475611,//prima staz
 double offsetY[6]={0.,0.2324750543793093,-0.01838517522060464,0.1391336460004981,0.,-0.04404067629216706};
 //double offset_alpha[6]={-0.1164515010010689*TMath::DegToRad(),-0.03411354091431071*TMath::DegToRad(),0.1369298349690934*TMath::DegToRad(),-0.4577137342911528*TMath::DegToRad(),0.007725616313160143*TMath::DegToRad(),-0.1283674677074805*TMath::DegToRad(),//prima staz
-double offset_alpha[6]={0.08712552021046044*TMath::DegToRad(),0.005738391422644699*TMath::DegToRad(),0.1284617932104747*TMath::DegToRad(),0.2515280983199862*TMath::DegToRad(),-0.179018408807327*TMath::DegToRad()};//seconda staz
+double offset_alpha[6]={0.08712552021046044*TMath::DegToRad(),0.005738391422644699*TMath::DegToRad(),0.1284617932104747*TMath::DegToRad(),0.2515280983199862*TMath::DegToRad(),-0.19965187647738691*TMath::DegToRad(),-0.179018408807327*TMath::DegToRad()};//seconda staz
+
+/*
+//alignment tilt
+double tilt[6]={0.233-0.0029263031563715987,0.233-0.01494246656307502,0.+0.99568515498159038,0.+1.7808494322921509,0.233-0.008612741424450638,0.233-0.011802765130691497};
+double offsetX[6]={0.053097706418379353,0.,0.018317314548092569,0.1400357237114471,-0.056407400437971503,0.};//seconda staz
+double offsetY[6]={0.,0.23247505437930929,-0.018385175220604639,0.1391336460004981,0.,-0.044040676292167062};
+double offset_alpha[6]={0.087125520210460439*TMath::DegToRad(),0.0057383914226446994*TMath::DegToRad(),0.12846179321047471*TMath::DegToRad(),0.25152809831998618*TMath::DegToRad(),-0.19965187647738691*TMath::DegToRad(),-0.179018408807327*TMath::DegToRad()};//seconda staz
+*/
 
 
 auto trackFit = [&] (std::vector<MUonERecoOutputHit> stubs){
@@ -181,6 +225,7 @@ auto trackFit = [&] (std::vector<MUonERecoOutputHit> stubs){
 
                 int linkID= stubs.at(j).moduleID();
                 if(stubs.at(j).stationID()==0 or linkID==2 or linkID==3) continue;
+//                if(stubs.at(j).stationID()==0) continue;
                 double cos_term = cos(rot[linkID]+offset_alpha[linkID]);
                 double sin_term = sin(rot[linkID]+offset_alpha[linkID]);
 //BEND
@@ -352,7 +397,7 @@ not_used_hits.push_back(all_hits.at(s));
 
 
 
-TVector3 pmuin;
+/*TVector3 pmuin;
 TVector3 pmu;
 TVector3 pe;
 
@@ -365,11 +410,45 @@ TVector3 pe;
 pmu.SetXYZ(mxT,myT,1.0);
 pe.SetXYZ(mx,my,1.0);
 
-if(pe.Angle(pmuin)>pmu.Angle(pmuin) and pmu.Angle(pmuin)>0.0003){h_2d->Fill(pe.Angle(pmuin),pmu.Angle(pmuin));}
-else if(pe.Angle(pmuin)<pmu.Angle(pmuin) and pe.Angle(pmuin)>0.0003){h_2d->Fill(pmu.Angle(pmuin),pe.Angle(pmuin));}
+if(pe.Angle(pmuin)>pmu.Angle(pmuin)){h_2d->Fill(pe.Angle(pmuin),pmu.Angle(pmuin));}
+else if(pe.Angle(pmuin)<pmu.Angle(pmuin) ){h_2d->Fill(pmu.Angle(pmuin),pe.Angle(pmuin));}
 
 
-if( (pe.Angle(pmuin)>pmu.Angle(pmuin) and pmu.Angle(pmuin)>0.0003) or (pe.Angle(pmuin)<pmu.Angle(pmuin) and pe.Angle(pmuin)>0.0003) ){
+if( pe.Angle(pmuin)>pmu.Angle(pmuin) or pe.Angle(pmuin)<pmu.Angle(pmuin)){*/
+
+TVector3 pmuin;
+TVector3 pmu;
+TVector3 pe;
+
+         for (auto&& track : tracks) {
+        std::vector<MUonERecoOutputHit> hits_=track.hits();
+  if(track.sector()==0)         {pmuin.SetXYZ(track.xSlope(),track.ySlope(),1.0);}
+        }
+
+
+pmu.SetXYZ(mxT,myT,1.0);
+pe.SetXYZ(mx,my,1.0);
+
+double the_rec=0.;
+double thmu_rec=0.;
+
+if(pe.Angle(pmuin)>pmu.Angle(pmuin) and pmu.Angle(pmuin)>0.0003){the_rec=pe.Angle(pmuin); thmu_rec=pmu.Angle(pmuin);}
+else if(pe.Angle(pmuin)<pmu.Angle(pmuin) and pe.Angle(pmuin)>0.0003){the_rec=pmu.Angle(pmuin); thmu_rec=pe.Angle(pmuin);}
+
+double Elastic=0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec)));
+double Elastic2=asin( (sin(the_rec)*sqrt(Elastic*Elastic-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic)*(160+0.5109989461*0.001-Elastic)-105.6583745 *0.001*105.6583745 *0.001 ) );
+
+
+if( thmu_rec>0.0003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002){
+
+//cout << "distance not_used " << not_used.at(2).at(0)- trackPos(2,not_usedZ.at(2).at(0),params) << endl;
+//cout << "distance used " << posT.at(2).at(0)- trackPos(2,not_usedZ.at(2).at(0),params) <<endl;
+
+if(not_used.at(2).at(0)- trackPos(2,not_usedZ.at(2).at(0),params) < posT.at(2).at(0)- trackPos(2,not_usedZ.at(2).at(0),params) ){not_used_better->Fill(1.);}
+else{used_better->Fill(1.);}
+
+h_2d->Fill(the_rec,thmu_rec);
+
 
 
  residual0T->Fill(posT.at(0).at(0)- trackPos(0,posTZ.at(0).at(0),paramsT) );
@@ -416,10 +495,6 @@ h_hist_distance2->Fill(u);
 h_hist_distance3->Fill(v);
 
 
-
-TVector3 pmuin;
-TVector3 pmu;
-TVector3 pe;
 
          for (auto&& track : tracks) {
         std::vector<MUonERecoOutputHit> hits_=track.hits();
@@ -468,6 +543,14 @@ auto perp_res3M=perp_res3.Merge();
 auto perp_res4M=perp_res4.Merge();
 auto perp_res5M=perp_res5.Merge();
 
+
+auto not_used_betterM=not_used_better.Merge();
+auto used_betterM=used_better.Merge();
+
+cout << "Not used hit closer to not tracked track " << not_used_betterM->Integral() << endl;
+cout << "Used hit closer to not tracked track " << used_betterM->Integral() << endl;
+
+
 auto h_hist_distance0M = h_hist_distance0.Merge();
 auto h_hist_distance_zoom0M = h_hist_distance_zoom0.Merge();
 auto h_position0M =h_position0.Merge();
@@ -494,7 +577,7 @@ auto h_position5M =h_position5.Merge();
 
 TCanvas t2("t2","t2",700,700);
 h_2dM->Draw("COLZ");
-t2.SaveAs(Form("hole/%s_h2d_th03_%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
+t2.SaveAs(Form("hole/%s_h2d_elasticCurve%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
 
 TCanvas n1("n1","n1",1000,1000);
 n1.Divide(2,3);
@@ -510,7 +593,7 @@ n1.cd(5);
 h_hist_distance4M->Draw("hist");
 n1.cd(6);
 h_hist_distance5M->Draw("hist");
-n1.SaveAs(Form("hole/%s_distance_stubs_th03_%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
+n1.SaveAs(Form("hole/%s_distance_stubs_elasticCurve%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
 
 TCanvas n1_zoom("n1_zoom","n1_zoom",1000,1000);
 n1_zoom.Divide(2,3);
@@ -526,7 +609,7 @@ n1_zoom.cd(5);
 //h_hist_distance_zoom4M->Draw("hist");
 n1_zoom.cd(6);
 //h_hist_distance_zoom5M->Draw("hist");
-n1_zoom.SaveAs(Form("hole/%s_distance_stubs_zoom_th03_%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
+n1_zoom.SaveAs(Form("hole/%s_distance_stubs_zoom_elasticCurve%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
 
 
 auto residual0M = residual0.Merge();
@@ -550,7 +633,7 @@ r.cd(5);
 residual4M->Draw("hist");
 r.cd(6);
 residual5M->Draw("hist");
-r.SaveAs(Form("hole/%s_residuals_notrack_th03_%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
+r.SaveAs(Form("hole/%s_residuals_notrack_elasticCurve%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
 
 
 auto residual0TM = residual0T.Merge();
@@ -574,7 +657,7 @@ rT.cd(5);
 residual4TM->Draw("hist");
 rT.cd(6);
 residual5TM->Draw("hist");
-rT.SaveAs(Form("hole/%s_residuals_track_th03_%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
+rT.SaveAs(Form("hole/%s_residuals_track_elasticCurve%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
 
 auto residual0DM = residual0D.Merge();
 auto residual1DM = residual1D.Merge();
@@ -597,7 +680,7 @@ rD.cd(5);
 residual4DM->Draw("hist");
 rD.cd(6);
 residual5DM->Draw("hist");
-rD.SaveAs(Form("hole/%s_residuals_disttrack_th03_%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
+rD.SaveAs(Form("hole/%s_residuals_disttrack_elasticCurve%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
 
 TCanvas pr("pr","pr",1400,2100);
 pr.Divide(2,3);
@@ -613,7 +696,7 @@ pr.cd(5);
 perp_res4->Draw("hist");
 pr.cd(6);
 perp_res5->Draw("hist");
-pr.SaveAs(Form("hole/%s_perp_res_th03_%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
+pr.SaveAs(Form("hole/%s_perp_res_elasticCurve%s_%dhit.pdf",version.c_str(),bend.c_str(),nhits));
 
 
 return 1;
