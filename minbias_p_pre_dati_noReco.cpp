@@ -16,7 +16,7 @@ using namespace std;
 
                 auto pos_on_track = [](double q, double m, double z){return (q + m*z);};
 
-int p_pre_dati_noReco(string version, int nhits,string bend,string mc){
+int minbias_p_pre_dati_noReco(string version, int nhits,string bend,string mc){
 
   int nthreads = 6;
   ROOT::EnableImplicitMT(nthreads);
@@ -25,165 +25,28 @@ int p_pre_dati_noReco(string version, int nhits,string bend,string mc){
 TChain * cbmsim = new TChain("cbmsim");
 TChain * cbmsim_g = new TChain("cbmsim");
 
-if(version=="default" and nhits==2 and mc=="data"){
-cout <<"si 2 hit default"<<endl;
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_2.root");
-}
-else if(version=="default" and nhits==0 and bend=="Bend" and mc=="data"){
-cout <<"si 0 hit default"<<endl;
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_0hit_1.root");
+if(version=="my_modifica_minbias" and nhits==0 and bend=="Bend"){
+          cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_skim/asMC_minbias_10Mevents_0hit.root");
+          cbmsim_g->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi/minbias_SIM-DIGI_10Mevents.root");
 
-/*cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_uvWindow045_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_uvWindow045_0hit_1.root");*/
+          cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_skim/asMC_minbias_11Mevents_0hit.root");
+          cbmsim_g->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi/minbias_SIM-DIGI_11Mevents.root");
 
-//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_UVwindow015_0hit.root");
+          cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_skim/asMC_minbias_8Mevents_0hit.root");
+          cbmsim_g->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi/minbias_SIM-DIGI_8Mevents.root");
+cbmsim->AddFriend(cbmsim_g);
 }
-else if(version=="default" and nhits==1 and bend=="Bend" and mc=="data"){
-cout <<"si 1 hit default"<<endl;
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_1hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_1hit_1.root");
+else if(version=="my_modifica_minbias_preskim" and nhits==0 and bend=="Bend"){
+          cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_skim/MCMinimumBias_SimDigiReco_8MeventsGNN2.root");
+          cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_skim/MCMinimumBias_SimDigiReco_master10Mevents.root");
+	  cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_skim/MCMinimumBias_SimDigiReco_11MeventsGNN.root");
 }
-else if(version=="default" and nhits==0 and bend=="noBend" and mc=="data"){
-cout <<"si 0 hit default no bend"<<endl;
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_noBend_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_noBend_0hit_1.root");
-}
-else if(version=="ricMis" and nhits==2 and bend=="Bend" and mc=="data"){
-cout <<"si 2 hit ricMis"<<endl;
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_commit_b2ed7c3b.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_commit_b2ed7c3b_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_commit_b2ed7c3b_2.root");
-}
-else if(version=="wip12" and nhits==0 and bend=="Bend" and mc=="data"){
-cout <<"si 0 hit wip12"<<endl;
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_commit_9e0035f0_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_commit_9e0035f0_0hit_1.root");
-}
-else if(version=="wip11" and nhits==0 and bend=="Bend" and mc=="data"){
-cout <<"si 0 hit wip11 old skim e old reco"<<endl;
 
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_0.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_2.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_3.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_4.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_5.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_6.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_7.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_8.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_9.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_10.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_11.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/skim_GA_divided/dataReconstruction_3234-3235_new_1hit_skimGA_inputs_12.root");
+/*if(version=="my_modifica_minbias" and nhits==0 and bend=="Bend"){
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/minbias_skim/minbias_nuovo_algo_0hit.root");
+}*/
 
-}
-else if(version=="noskim" and nhits==0 and bend=="Bend" and mc=="data"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_noskim_run6_1.root");
-}
-else if(version=="oldskim" and nhits==0 and bend=="Bend" and mc=="data"){
-cout <<"si 0 hit master pero su old skim"<<endl;
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_run6_decemberSkim_bestConfig_0hit.root");
-//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_OLDskim_run6.root");
-}
-else if(version=="oldskim_wip11" and nhits==0 and bend=="Bend" and mc=="data"){
-cout <<"si 0 hit wip11 pero su old skim"<<endl;
-//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_run6_decemberSkim_bestConfig_wip11_0hit_5M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_run6_decemberSkim_bestConfig_wip11_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_run6_decemberSkim_bestConfig_wip11_0hit_1.root");
-}
-else if(version=="oldskim_wip11" and nhits==1 and bend=="Bend" and mc=="data"){
-cout <<"si 1 hit wip11 pero su old skim"<<endl;
-//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_run6_decemberSkim_bestConfig_wip11_1hit_5M.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_run6_decemberSkim_bestConfig_wip11_1hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_run6_decemberSkim_bestConfig_wip11_1hit_1.root");
-}
-else if(version=="ricMis_noAlign" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_commit_ricMis_0hit_noalignment_5M.root");
-}
-else if(version=="uOpposit" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_0hit_uOpposit.root");
-}
-else if(version=="default" and nhits==-1 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_minus1hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_minus1hit_1.root");
-}
-else if(version=="alin" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_0hit_alin.root");
-}
-else if(version=="cloneremovaltest" and nhits==2 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_2hit_cloneremovaltest.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_2hit_cloneremovaltest_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/dataReconstruction_skim_run6_bestConfig_2hit_cloneremovaltest_2.root");
-}
-else if(version=="run8" and nhits==-1 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_m1hit_run8_partial.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_m1hit_run8_partial_1.root");
-}
-else if(version=="default_zTarFix" and nhits==-1 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_m1hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_m1hit_1.root");
-}
-else if(version=="run17" and nhits==-1 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_m1hit_run17_partial.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_m1hit_run17_partial_1.root");
-}
-else if(version=="run17" and nhits==2 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_2hit_run17_partial.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_2hit_run17_partial_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_2hit_run17_partial_2.root");
-}
-else if(version=="default_chi2out50" and nhits==2 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_2hit_run6_chi2out50.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_6c846c96_MCsignal_RECO_2hit_run6_chi2out50_1.root");
-}
-else if(version=="default_bb35b5de" and nhits==2 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_2hit_run6.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_2hit_run6_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_2hit_run6_2.root");
-}
-else if(version=="default_bb35b5de" and nhits==-1 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_m1hit_run6.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_m1hit_run6_1.root");
-}
-else if(version=="default_chi2out50" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_0hit_run6_chi2out50_partial.root");
-}
-else if(version=="default_bb35b5de" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_0hit_run6.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/commit_bb35b5de_RECO_0hit_run6_1.root");
-}
-else if(version=="default_bb35b5de" and nhits==-1 and bend=="noBend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/prova_usual_algo_m1hit_noBend.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/prova_usual_algo_m1hit_noBend_1.root");
-}
-else if(version=="my_modifica" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_0hit_1.root");
-}
-else if(version=="my_modifica" and nhits==1 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/prova_run6_nuovo_algo_1hit.root");
-}
-else if(version=="my_modifica" and nhits==2 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_2.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_3.root");
-}
-else if(version=="my_modifica_reassign" and nhits==2 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_reassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_reassign_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_reassign_2.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_reassign_3.root");
-}
-else if(version=="my_modifica_NEWreassign" and nhits==2 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_NEWreassign.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_NEWreassign_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_NEWreassign_2.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/real_data_skim_run6/all_run6_nuovo_algo_2hit_NEWreassign_3.root");
-}
+
 ROOT::TTreeProcessorMT tp1(*cbmsim,nthreads);
 
       MUonERecoOutput *ReconstructionOutput = 0;
@@ -300,16 +163,22 @@ TH1::SetDefaultSumw2(kTRUE);
 
    ROOT::TThreadedObject<TH1D> h_nstubs_track_e("h_nstubs_track_e","nstubs track e",8,0,8);
    ROOT::TThreadedObject<TH1D> h_nstubs_track_mu("h_nstubs_track_mu","nstubs track mu",8,0,8);
+
    ROOT::TThreadedObject<TH1D> h_nstubs_s1("h_nstubs_s1","nstubs station1",18,0,18);
    ROOT::TThreadedObject<TH1D> h_nstubs_pre_s1("h_nstubs_pre_s1","nstubs station1 pre selection",45,0,45);
 
-
-   ROOT::TThreadedObject<TH1D> mod_mu("mod_mu","modules' hits muon track",6,0,6);
-   ROOT::TThreadedObject<TH1D> mod_el("mod_el","modules' hits electron track",6,0,6);
+   ROOT::TThreadedObject<TH1D> count("count","count",2,0.,2.);
 
    ROOT::TThreadedObject<TH1D> vrtx_chi2("vrtx_chi2","vrtx_chi2",80,0,20);
    ROOT::TThreadedObject<TH1D> track_el("track_el","track el chi2",80,0,20);
    ROOT::TThreadedObject<TH1D> track_mu("track_mu","track mu chi2",80,0,20);
+
+   ROOT::TThreadedObject<TH1D> sig("sig","sig",2,0,2);
+   ROOT::TThreadedObject<TH1D> bkg_e("bkg_e","bkg_e",45,0,45);
+   ROOT::TThreadedObject<TH1D> bkg_mu("bkg_mu","bkg_mu",45,0,45);
+   ROOT::TThreadedObject<TH1D> sig_sel("sig_sel","sig_sel",2,0,2);
+   ROOT::TThreadedObject<TH1D> count_lastSil("count_lastSil","count_lastSil",2,0,2);
+   ROOT::TThreadedObject<TH1D> count_lastSil_sel("count_lastSil_sel","count_lastSil_sel",2,0,2);
 
 auto trackatZ = [](double q, double m,double z) {return q + (z ) * m;};
 double z_mod[6]={911.2+18.0218,911.2+21.8693,911.2+55.3635,911.2+56.6205,911.2+89.9218,911.2+93.7693};
@@ -317,6 +186,8 @@ double alpha[6]={0  *TMath::DegToRad(), 90 *TMath::DegToRad(),135*TMath::DegToRa
 
  auto myFunction = [&](TTreeReader &myReader) {
 
+
+     TTreeReaderArray<MUonETrack> MCtracksRV(myReader, "MCTrack");
      TTreeReaderValue<std::vector<MUonERecoOutputTrack>> RVtracks(myReader, "ReconstructedTracks");
      TTreeReaderValue<MUonERecoOutputVertex> vrtx(myReader, "BestVertex");
      TTreeReaderValue<std::vector<MUonERecoOutputHit>> RVstubs(myReader, "ReconstructedHits");
@@ -440,6 +311,14 @@ if(chi!=0){
 
 
  if(sec0==1 and stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<=2 and stub0==6 and th_muin<0.004){// and stub1<=15){
+count->Fill(1.);
+
+
+        for (auto&& mc_tracks : MCtracksRV) {
+                if(mc_tracks.interactionID()==9 and mc_tracks.startZ()<(906.) and mc_tracks.startZ()>(902.)) { count_lastSil->Fill(1.); }
+                else if(mc_tracks.interactionID()==9 and mc_tracks.startZ()<(914.) and mc_tracks.startZ()>(909.)) { sig->Fill(1.); }
+        }
+
 
 
 //bool allmod=std::all_of(std::begin(module_st1), std::end(module_st1), [](int i){return i==1;});
@@ -472,7 +351,6 @@ if(chi!=0 and the_rec!=-99 and thmu_rec!=-99){
 
         h_z_pos_pre->Fill(vrtx->zPositionFit());
 
-double zpos =vrtx->zPositionFit();
 
                                                 double dotProduct_v = p_mu.Dot(p_e);
                                                 TVector3 crossProduct_v = p_mu.Cross(p_e);
@@ -492,7 +370,6 @@ double zpos =vrtx->zPositionFit();
 
 double Elastic=0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec)));
 double Elastic2=asin( (sin(the_rec)*sqrt(Elastic*Elastic-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic)*(160+0.5109989461*0.001-Elastic)-105.6583745 *0.001*105.6583745 *0.001 ) );
-//double Elastic3=asin( (sin(Elastic2)*sqrt( (160+0.5109989461*0.001-Elastic)*(160+0.5109989461*0.001-Elastic)-105.6583745 *0.001*105.6583745 *0.001 ))/sqrt(Elastic*Elastic-0.5109989461*0.001*0.5109989461*0.001) );
 
 bool allmod=std::all_of(std::begin(module_st1), std::end(module_st1), [](int i){return i==1;});
 
@@ -500,22 +377,19 @@ int mod2=0;
 double mod2_mu=99.;
 
 //  if(allmod and abs(acoplanarity_v)<=0.4 and chi<20 and thmu_rec>0.0002 and stub1<=20 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and the_rec<0.025 and the_rec>=0.003 and thmu_rec<=0.003){// and vrtx->zPositionFit()<917 and vrtx->zPositionFit()>907){
+double zpos =vrtx->zPositionFit()-1.5;
 
-// if(chi>0 and stub1<=15 and thmu_rec>=0.0003 and thmu_rec<=0.0011 and the_rec<0.020 and the_rec>=0.006 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos<(911.2+3) and zpos>(911.2-3)){
-// if(chi>0 and stub1<=15 and thmu_rec>=0.0002 and the_rec<0.020 and the_rec>=0.005 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos<(911.2+3) and zpos>(911.2-3)){
- if(chi>0 and stub1<=15 and thmu_rec>=0.0002 and the_rec<0.032 and the_rec>=0.005 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos>906){
-
-
+//if(chi>0 and stub1<=15 and thmu_rec>=0.0003 and thmu_rec<=0.0011 and the_rec<0.020 and the_rec>=0.005 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos<(911.2+3) and zpos>(911.2-3)){
+if(chi>0 and stub1<=15 and thmu_rec>=0.0002 and the_rec<0.020 and the_rec>=0.005 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos>906 ){
 
 // if(allmod and chi<150 and stub1<=20 and thmu_rec>0.0002 and thmu_rec<=0.002 and the_rec<0.030 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
-// if(allmod and t_e.chi2perDegreeOfFreedom()<30 and t_mu.chi2perDegreeOfFreedom()<10 and stub1<=20 and thmu_rec>0.0002 and thmu_rec<=0.002 and the_rec<0.030 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
+// if(allmod and t_e.chi2perDegreeOfFreedom()<30 and t_mu.chi2perDegreeOfFreedom()<10 and stub1<=150 and thmu_rec>0.0002 and thmu_rec<=0.002 and the_rec<0.030 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
 // if(allmod and chi<20 and stub1<=20 and thmu_rec>0.0002 and thmu_rec<=0.002 and the_rec<0.030 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
-//if(allmod and chi<20 and stub1<=20 and thmu_rec>0.0002 and thmu_rec<=0.002 and the_rec<0.015 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
+// if(allmod and chi<20 and stub1<=20 and thmu_rec>0.0002 and thmu_rec<=0.002 and the_rec<0.015 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
 
 // if(abs(u)>0.17 and abs(v)>0.17 and allmod2 and stub1==12 and thmu_rec>0.0005 and thmu_rec<=0.002 and the_rec<0.010 and the_rec>=0.003){
-//if(allmod2 and stub1==12){// and thmu_rec>0.0005 and thmu_rec<=0.002 and the_rec<0.010 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
+// if(allmod2 and stub1==12 and thmu_rec>0.0005 and thmu_rec<=0.002 and the_rec<0.010 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
 //if(allmod and stub1==12 and abs(u)<0.2 ){//and thmu_rec>0.0005 and thmu_rec<=0.002 and the_rec<0.010 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005){
-//cout <<"ciao0"<<endl;
 
 //first
  if(yes2>=2){
@@ -524,6 +398,7 @@ double mod2_mu=99.;
 vrtx_chi2->Fill(chi);
 track_el->Fill(t_e.chi2perDegreeOfFreedom());
 track_mu->Fill(t_mu.chi2perDegreeOfFreedom());
+
 
           double tracklocxy0 = (t_e.x0() + t_e.xSlope()*z_mod[2])*cos(alpha[2]) +
                                (t_e.y0() + t_e.ySlope()*z_mod[2])*sin(alpha[2]);
@@ -537,12 +412,13 @@ std::array<double,6> t_e_hits;t_e_hits.fill({-99.});
  std::array<double,6> t_mu_hits;t_mu_hits.fill({-99.});
 
  for(int h=0; h<t_mu.hits().size(); h++){
-  if(t_mu.hits().at(h).stationID()==1) {mod_mu->Fill(t_mu.hits().at(h).moduleID()); t_mu_hits.at(t_mu.hits().at(h).moduleID())=t_mu.hits().at(h).position();}
+  if(t_mu.hits().at(h).stationID()==1) t_mu_hits.at(t_mu.hits().at(h).moduleID())=t_mu.hits().at(h).position();
  }
 
  for(int h=0; h<t_e.hits().size(); h++){
-  if(t_e.hits().at(h).stationID()==1) {mod_el->Fill(t_e.hits().at(h).moduleID()); t_e_hits.at(t_e.hits().at(h).moduleID())=t_e.hits().at(h).position();}
+  if(t_e.hits().at(h).stationID()==1) t_e_hits.at(t_e.hits().at(h).moduleID())=t_e.hits().at(h).position();
  }
+
 
 
 //analog
@@ -558,6 +434,7 @@ std::array<double,6> t_e_hits;t_e_hits.fill({-99.});
  if( t_e_hits.at(3)!=-99. and t_mu_hits.at(3)!=-99.) h_dist3->Fill(t_e_hits.at(3)-t_mu_hits.at(3));
  if( t_e_hits.at(4)!=-99. and t_mu_hits.at(4)!=-99.) h_dist4->Fill(t_e_hits.at(4)-t_mu_hits.at(4));
  if( t_e_hits.at(5)!=-99. and t_mu_hits.at(5)!=-99.) h_dist5->Fill(t_e_hits.at(5)-t_mu_hits.at(5));
+
 
      if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.)h_du_aco->Fill(acoplanarity_v,t_e_hits.at(2)-t_mu_hits.at(2));
      if( t_e_hits.at(3)!=-99. and t_mu_hits.at(3)!=-99.)h_dv_aco->Fill(acoplanarity_v,t_e_hits.at(3)-t_mu_hits.at(3));
@@ -597,6 +474,32 @@ if( the_rec>0.025 and the_rec<=0.035 ){ if( t_e_hits.at(2)!=-99. and t_mu_hits.a
  h_opening->Fill(p_mu.Angle(p_e));
  h_nstubs_s1->Fill(stub1);
 
+        for (auto&& mc_tracks : MCtracksRV) {
+                if(mc_tracks.interactionID()==9 and mc_tracks.startZ()<(906.) and mc_tracks.startZ()>(902.)) { count_lastSil_sel->Fill(1.); }
+        }
+
+
+/*
+if(zpos<(906.) and zpos>(902.))
+{
+double genz=0.;
+
+        Int_t i=0;
+        for (auto&& mc_tracks : MCtracksRV) {
+                if(mc_tracks.interactionID()==9 and t_e.linkedTrackID()==i) { genz= mc_tracks.startZ(); cout <<"electron at Z " << mc_tracks.startZ() << endl;}
+        i++;
+	}
+
+ h_z_pos_pre->Fill(genz);
+ h_z_pos->Fill(vrtx->zPositionFit());
+cout << "t_mu.processIDofLinkedTrack " << t_mu.processIDofLinkedTrack() << endl;
+cout << "t_e.processIDofLinkedTrack " << t_e.processIDofLinkedTrack() << endl;
+cout <<"----------"<<endl;
+}*/
+
+if( (t_mu.processIDofLinkedTrack()==0 and t_e.processIDofLinkedTrack()==9) or (t_mu.processIDofLinkedTrack()==9 and t_e.processIDofLinkedTrack()==0) ){sig_sel->Fill(1.);}
+else{bkg_mu->Fill(t_mu.processIDofLinkedTrack()); bkg_e->Fill(t_e.processIDofLinkedTrack());}
+
 if(thmu_rec>=the_rec-0.00005 and thmu_rec<=the_rec+0.00005)theq->Fill(thmu_rec);
 				}//yes2>=2
 			}//aco e chi
@@ -608,12 +511,18 @@ yes2=0;
 
   tp1.Process(myFunction);
 
+auto count_lastSilM=count_lastSil.Merge();
+auto count_lastSil_selM=count_lastSil_sel.Merge();
+
+auto h_nstubs_pre_s1M=h_nstubs_pre_s1.Merge();
+auto h_nstubs_s1M=h_nstubs_s1.Merge();
+
+
 auto vrtx_chi2M=vrtx_chi2.Merge();
 auto track_elM=track_el.Merge();
 auto track_muM=track_mu.Merge();
 
-auto h_nstubs_pre_s1M=h_nstubs_pre_s1.Merge();
-auto h_nstubs_s1M=h_nstubs_s1.Merge();
+auto countM = count.Merge();
 
 auto h_hist_distance0M = h_hist_distance0.Merge();
 auto h_hist_distance_zoom0M = h_hist_distance_zoom0.Merge();
@@ -698,9 +607,6 @@ auto h_nstubs_track_muM=h_nstubs_track_mu.Merge();
   auto residualUM_post = residualU.Merge();
   auto residualU_noM_post =residualU_no.Merge();
 
-auto mod_muM=mod_mu.Merge();
-auto mod_elM=mod_el.Merge();
-
 /*
 TCanvas t("t","t",700,700);
 t.Divide(2,2);
@@ -712,78 +618,70 @@ t.cd(3);
 residualUM_post->Draw("hist");
 t.cd(4);
 residualU_noM_post->Draw("hist");
-t.SaveAs(Form("comparison_RDMC/%s_RD_muin_wip11_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+t.SaveAs(Form("comparison_RDMC/%s_RD_muin_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 */
 
+auto sig_selM=sig_sel.Merge();
+auto sigM = sig.Merge();
+auto bkg_eM = bkg_e.Merge();
+auto bkg_muM = bkg_mu.Merge();
+
+cout << "countM.Integral() " << countM->Integral() << endl;
+cout << "bkg_eM.Integral() " << bkg_eM->Integral() << endl;
+cout << "bkg_muM.Integral() " << bkg_muM->Integral() << endl;
+cout << "sig_selM.Integral() " << sig_selM->Integral() << endl;
+cout << "sigM.Integral() " << sigM->Integral() << endl;
+cout << "count_lastSil.Integral() " << count_lastSilM->Integral() << endl;
+cout << "count_lastSil_sel.Integral() " << count_lastSil_selM->Integral() << endl;
+
+TCanvas bs("bs","bs",1400,700);
+bs.Divide(2,1);
+bs.cd(1);
+bkg_muM->Draw("hist");
+bs.cd(2);
+bkg_eM->Draw("hist");
+bs.SaveAs(Form("comparison_RDMC/%s_bkg_link_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+
+vrtx_chi2M->SaveAs(Form("comparison_RDMC/%s_vrtx_chi2_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+track_elM->SaveAs(Form("comparison_RDMC/%s_track_el_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+track_muM->SaveAs(Form("comparison_RDMC/%s_track_mu_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
 
+h_2dMerged->SaveAs(Form("comparison_RDMC/%s_2D_RD_parallel_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-vrtx_chi2M->SaveAs(Form("comparison_RDMC/%s_vrtx_chi2_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-track_elM->SaveAs(Form("comparison_RDMC/%s_track_el_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-track_muM->SaveAs(Form("comparison_RDMC/%s_track_mu_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+theta_muMerged->SaveAs(Form("comparison_RDMC/%s_theta_mu_RD_parallel_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
+theta_eMerged->SaveAs(Form("comparison_RDMC/%s_theta_e_RD_parallel_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-TCanvas m("m","m",1400,700);
-m.Divide(2,1);
-m.cd(1);
-mod_muM->Draw("hist");
-m.cd(2);
-mod_elM->Draw("hist");
-m.SaveAs(Form("comparison_RDMC/%s_module_tracks_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+d_acoM->SaveAs(Form("comparison_RDMC/%s_d_aco_RD_parallel_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
+h_openingM->SaveAs(Form("comparison_RDMC/%s_opening_RD_parallel_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-TCanvas d("d","d",1400,2100);
-d.Divide(2,3);
-d.cd(1);
-h_dist0M->Draw("hist");
-h_dist0M->SaveAs(Form("comparison_RDMC/%s_distance_MOD0_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-d.cd(2);
-h_dist1M->Draw("hist");
-h_dist1M->SaveAs(Form("comparison_RDMC/%s_distance_MOD1_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-d.cd(3);
-h_dist2M->Draw("hist");
-h_dist2M->SaveAs(Form("comparison_RDMC/%s_distance_MOD2_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-d.cd(4);
-h_dist3M->Draw("hist");
-h_dist3M->SaveAs(Form("comparison_RDMC/%s_distance_MOD3_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-d.cd(5);
-h_dist4M->Draw("hist");
-h_dist4M->SaveAs(Form("comparison_RDMC/%s_distance_MOD4_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-d.cd(6);
-h_dist5M->Draw("hist");
-h_dist5M->SaveAs(Form("comparison_RDMC/%s_distance_MOD5_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_z_pos_preM->SaveAs(Form("comparison_RDMC/%s_z_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-d.SaveAs(Form("comparison_RDMC/%s_distance_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_nstubs_pre_s1M->SaveAs(Form("comparison_RDMC/%s_nstubs_pre_s1_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
 
-h_2dMerged->SaveAs(Form("comparison_RDMC/%s_2D_RD_parallel_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_2d_preMerged->SaveAs(Form("comparison_RDMC/%s_preCuts_2D_RD_parallel_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-theta_muMerged->SaveAs(Form("comparison_RDMC/%s_theta_mu_RD_parallel_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+theta_mu_preMerged->SaveAs(Form("comparison_RDMC/%s_preCuts_theta_mu_RD_parallel_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-theta_eMerged->SaveAs(Form("comparison_RDMC/%s_theta_e_RD_parallel_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+theta_e_preMerged->SaveAs(Form("comparison_RDMC/%s_preCuts_theta_e_RD_parallel_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-d_acoM->SaveAs(Form("comparison_RDMC/%s_d_aco_RD_parallel_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+d_aco_preM->SaveAs(Form("comparison_RDMC/%s_preCuts_d_aco_RD_parallel_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-h_openingM->SaveAs(Form("comparison_RDMC/%s_opening_RD_parallel_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_opening_preM->SaveAs(Form("comparison_RDMC/%s_preCuts_opening_RD_parallel_pre_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-h_z_posM->SaveAs(Form("comparison_RDMC/%s_z_post_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_z_posM->SaveAs(Form("comparison_RDMC/%s_z_post_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-h_nstubs_pre_s1M->SaveAs(Form("comparison_RDMC/%s_nstubs_pre_s1_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_nstubs_s1M->SaveAs(Form("comparison_RDMC/%s_nstubs_s1_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
 
-h_2d_preMerged->SaveAs(Form("comparison_RDMC/%s_preCuts_2D_RD_parallel_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-
-theta_mu_preMerged->SaveAs(Form("comparison_RDMC/%s_preCuts_theta_mu_RD_parallel_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-
-theta_e_preMerged->SaveAs(Form("comparison_RDMC/%s_preCuts_theta_e_RD_parallel_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-
-d_aco_preM->SaveAs(Form("comparison_RDMC/%s_preCuts_d_aco_RD_parallel_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-
-h_opening_preM->SaveAs(Form("comparison_RDMC/%s_preCuts_opening_RD_parallel_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-
-h_z_pos_preM->SaveAs(Form("comparison_RDMC/%s_z_pre_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-
-h_nstubs_s1M->SaveAs(Form("comparison_RDMC/%s_nstubs_s1_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+TCanvas z("z","z",800,800);
+h_z_posM->Draw("hist");
+h_z_pos_preM->SetLineColor(kRed);
+h_z_pos_preM->Draw("hist same");
+z.SaveAs("minbias_z.pdf");
 
 //theqM->SaveAs(Form("comparison_RDMC/%s_th_eqM_pre_Z.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
@@ -795,23 +693,23 @@ h_z_pos_preM->Draw("hist");
 a.cd(2);
 h_z_posM->SetLineColor(kOrange+10);
 h_z_posM->Draw("hist");
-a.SaveAs(Form("comparison_RDMC/%s_data_pos_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+a.SaveAs(Form("comparison_RDMC/%s_data_pos_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 */
 
 
-/*h_dist_mod2_range0M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_0_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-h_dist_mod2_range1M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_1_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-h_dist_mod2_range2M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_2_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-//h_dist_mod2_range3M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_3_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-//h_dist_mod2_range4M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_4_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-//h_dist_mod2_range5M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_5_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+/*h_dist_mod2_range0M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_0_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_dist_mod2_range1M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_1_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_dist_mod2_range2M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_2_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+//h_dist_mod2_range3M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_3_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+//h_dist_mod2_range4M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_4_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+//h_dist_mod2_range5M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod2_range_5_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
-h_dist_mod0_range0M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_0_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-h_dist_mod0_range1M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_1_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-h_dist_mod0_range2M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_2_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-//h_dist_mod0_range3M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_3_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-//h_dist_mod0_range4M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_4_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-//h_dist_mod0_range5M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_5_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_dist_mod0_range0M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_0_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_dist_mod0_range1M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_1_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+h_dist_mod0_range2M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_2_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+//h_dist_mod0_range3M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_3_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+//h_dist_mod0_range4M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_4_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+//h_dist_mod0_range5M->SaveAs(Form("comparison_RDMC/%s_h_dist_mod0_range_5_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 */
 
 
@@ -865,8 +763,7 @@ h_dist_mod2_range2M->Draw("hist same");
 //h_dist_mod2_range5M->Draw("hist same");
 
 legend_e_mod2->Draw("same");
-c.SaveAs(Form("comparison_RDMC/%s_h_dist_ranges_el_mu_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
-
+c.SaveAs(Form("comparison_RDMC/%s_h_dist_ranges_el_mu_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
 TCanvas p("p","p",2100,2100);
 p.Divide(3,3);
@@ -888,8 +785,31 @@ p.cd(8);
 h_pos_el_range2M->Draw("hist");
 p.cd(9);
 h_pos_mu_range2M->Draw("hist");
-p.SaveAs(Form("comparison_RDMC/%s_pos_MOD2_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+p.SaveAs(Form("comparison_RDMC/%s_pos_MOD2_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 */
+
+TCanvas d("d","d",1400,2100);
+d.Divide(2,3);
+d.cd(1);
+h_dist0M->Draw("hist");
+h_dist0M->SaveAs(Form("comparison_RDMC/%s_distance_MOD0_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+d.cd(2);
+h_dist1M->Draw("hist");
+h_dist1M->SaveAs(Form("comparison_RDMC/%s_distance_MOD1_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+d.cd(3);
+h_dist2M->Draw("hist");
+h_dist2M->SaveAs(Form("comparison_RDMC/%s_distance_MOD2_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+d.cd(4);
+h_dist3M->Draw("hist");
+h_dist3M->SaveAs(Form("comparison_RDMC/%s_distance_MOD3_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+d.cd(5);
+h_dist4M->Draw("hist");
+h_dist4M->SaveAs(Form("comparison_RDMC/%s_distance_MOD4_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+d.cd(6);
+h_dist5M->Draw("hist");
+h_dist5M->SaveAs(Form("comparison_RDMC/%s_distance_MOD5_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.root",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+
+d.SaveAs(Form("comparison_RDMC/%s_distance_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
 TCanvas ad("ad","ad",1400,700);
 ad.Divide(2,1);
@@ -897,7 +817,7 @@ ad.cd(1);
 h_du_acoM->Draw("COLZ");
 ad.cd(2);
 h_dv_acoM->Draw("COLZ");
-ad.SaveAs(Form("comparison_RDMC/%s_dist_VS_aco_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+ad.SaveAs(Form("comparison_RDMC/%s_dist_VS_aco_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
 
 TCanvas n1("n1","n1",1000,1000);
@@ -910,7 +830,7 @@ n1.cd(3);
 h_hist_distance_zoom0M->Draw("hist");
 n1.cd(4);
 h_hist_distance_zoom2M->Draw("hist");
-n1.SaveAs(Form("comparison_RDMC/%s_distance_stubs_zoom_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+n1.SaveAs(Form("comparison_RDMC/%s_distance_stubs_zoom_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
 TCanvas ns("ns","ns",700,700);
 ns.Divide(1,2);
@@ -918,7 +838,7 @@ ns.cd(1);
 h_nstubs_track_eM->Draw("hist");
 ns.cd(2);
 h_nstubs_track_muM->Draw("hist");
-ns.SaveAs(Form("comparison_RDMC/%s_nstubs_track_basic_chi150_flatArea_the32_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
+ns.SaveAs(Form("comparison_RDMC/%s_nstubs_track_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_%s_%dhit_%s.pdf",version.c_str(),bend.c_str(),nhits,mc.c_str()));
 
 return 0;
 }

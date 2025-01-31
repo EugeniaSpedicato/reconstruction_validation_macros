@@ -14,13 +14,21 @@
 
 using namespace std;
 
-void RealDataAnalyzer(){
+void digit(){
 
         //TFile *inputfile = new TFile("TRMesmer_box_nobend_parallel_50k_60GeV_0.root");
       //TFile *inputfile = new TFile("TRMesmer_box_offset/TRMesmer_box_offset_100k_2GeV_0.root");
 	//TFile *inputfile = new TFile("TRMesmer_box_nobend_100k_2.root");
-        TFile *inputfile = new TFile("TRMesmer_box_nobend_parallel_10k_2GeV_2.root");
+/*        TFile *inputfile = new TFile("TRMesmer_box_nobend_parallel_10k_2GeV_2.root");
         TTree* cbmsim = (TTree*) inputfile->Get("cbmsim");
+*/
+
+TChain * cbmsim = new TChain("cbmsim");
+TChain * cbmsim_g = new TChain("cbmsim");
+          cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/reco/my_modifica_MCsignal_RECO_misaligned_0hit_7.root");
+          cbmsim_g->Add("/mnt/raid10/DATA/espedica/fairmu/gen_digi/commit_bb35b5de_MCsignal_SIM-DIGI_misaligned_7.root");
+cbmsim->AddFriend(cbmsim_g);
+
 
         TClonesArray *MCTrack = 0;
         TClonesArray *SignalTracks = 0;
@@ -319,12 +327,14 @@ double corr_clustersize_mu;
 
 for(int j=0; j<tracks.size();j++)
 {
- if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()==3 and tracks.at(j).sector()==1 and tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=100)
+ if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()==3 and tracks.at(j).sector()==1 and tracks.at(j).fractionOfHitsSharedWithLinkedTrack()>=1)
         {
-vector<MUonERecoOutputTrackHit> hits_=tracks.at(j).hits();
+vector<MUonERecoOutputHit> hits_=tracks.at(j).hits();
 if(code_mu==tracks.at(j).linkedTrackID()){yes2++;
 for(int h=0;h<hits_.size();h++){
-if(hits_.at(h).moduleID()==0){dX1=hits_.at(h).positionPerpendicular(); stripX= hits_.at(h).seedClusterCenterStrip();
+if(hits_.at(h).moduleID()==0){dX1=hits_.at(h).positionPerpendicular();
+// stripX= hits_.at(h).seedClusterCenterStrip();
+ stripX= 0;
 seed_clustersize_mu=hits_.at(h).seedClusterWidth();corr_clustersize_mu=hits_.at(h).correlationClusterWidth();}
 if(hits_.at(h).moduleID()==4)dX2=hits_.at(h).positionPerpendicular();
 if(hits_.at(h).moduleID()==1)dY1=hits_.at(h).positionPerpendicular();
@@ -334,7 +344,8 @@ if(hits_.at(h).moduleID()==5)dY2=hits_.at(h).positionPerpendicular();
 if(code_e==tracks.at(j).linkedTrackID()){
 for(int h=0;h<hits_.size();h++){
 if(hits_.at(h).moduleID()==0){dX1e=hits_.at(h).positionPerpendicular();seed_clustersize_e=hits_.at(h).seedClusterWidth();corr_clustersize_e=hits_.at(h).correlationClusterWidth();
-						 stripXe= hits_.at(h).seedClusterCenterStrip();}
+//						 stripXe= hits_.at(h).seedClusterCenterStrip();}
+						 stripXe= 0;}
 if(hits_.at(h).moduleID()==1)dY1e=hits_.at(h).positionPerpendicular();
 if(hits_.at(h).moduleID()==4)dX2e=hits_.at(h).positionPerpendicular();
 if(hits_.at(h).moduleID()==5)dY2e=hits_.at(h).positionPerpendicular();
@@ -407,7 +418,7 @@ int ok_e=0;
 double thmu_rec_tracks2=0.;
 for(int j=0; j<tracks.size();j++)
 {
- if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()==3 and tracks.at(j).sector()==1 and tracks.at(j).percentageOfHitsSharedWithLinkedTrack()>=100)
+ if(tracks.at(j).processIDofLinkedTrack()==45 and tracks.size()==3 and tracks.at(j).sector()==1 and tracks.at(j).fractionOfHitsSharedWithLinkedTrack()>=1)
         {
 
                if(code_e==tracks.at(j).linkedTrackID()) { ok_e=1;
@@ -633,7 +644,7 @@ f.cd(3);
 h_stripXp->Draw("hist");
 f.cd(4);
 h_stripX->Draw("hist");
-f.SaveAs("X1coo.pdf");
+f.SaveAs("digit_X1coo.pdf");
 
 TCanvas f1("f1","f1",700,700);
 f1.Divide(2,2);
@@ -653,7 +664,7 @@ f1.cd(4);
 h_corrPmu->Draw("hist");
 h_corrmu->SetLineColor(kViolet);
 h_corrmu->Draw("hist same");
-f1.SaveAs("cluster_width.pdf");
+f1.SaveAs("digit_cluster_width.pdf");
 
 
 TCanvas d3a("d3a","d3a",700,700);
@@ -686,7 +697,7 @@ h_y2_g->Draw("hist same");
 gPad->SetLogy();
 h_y2->SetMinimum(1.0);
 gStyle->SetOptStat(222001111);
-d3a.SaveAs("h_digi.pdf");
+d3a.SaveAs("digit_h_digi.pdf");
 
 
 
@@ -720,7 +731,7 @@ h_y2_ge->Draw("hist same");
 gPad->SetLogy();
 h_y2e->SetMinimum(1.0);
 gStyle->SetOptStat(222001111);
-d3ae.SaveAs("h_digi_ele.pdf");
+d3ae.SaveAs("digit_h_digi_ele.pdf");
 
 
 
@@ -748,7 +759,7 @@ b1.cd(6);
 h_phie->SetLineColor(kRed);
 h_phie->Draw("hist");
 gStyle->SetOptStat(222001111);
-b1.SaveAs("phi_digit.pdf");
+b1.SaveAs("digit_phi_digit.pdf");
 
 
 TCanvas el("el","el",700,700);
@@ -769,7 +780,7 @@ el.cd(4);
 h_resTRymu->Draw("hist");
 el.cd(5);
 h_Ee->Draw("hist");
-el.SaveAs("resEL.pdf");
+el.SaveAs("digit_resEL.pdf");
 
 /*
 TCanvas d3aa("d3aa","d3aa",700,700);
@@ -794,7 +805,7 @@ theta2gy->SetLineColor(kRed);
 theta2gy->Draw("hist");
 theta2y->Draw("hist same");
 gStyle->SetOptStat(222001111);
-d3aa.SaveAs("th_proj_mu_GA_digit.pdf");
+d3aa.SaveAs("digit_th_proj_mu_GA_digit.pdf");
 */
 
 }
