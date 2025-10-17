@@ -1,0 +1,24 @@
+rule all:
+	input:
+		expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/MCgenReco_{name_list}_{nhit_list}hit.yaml',name_list=['seed1','seed2','seed3','seed4','seed5','seed6','seed7'],nhit_list=['0']),
+		expand('/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/dataPreprocessor_mesmer_RECO_{name_list}_{nhit_list}hit.root',name_list=['seed1','seed2','seed3','seed4','seed5','seed6','seed7'],nhit_list=['0']),
+
+		#expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/MCgenReco_{name_list}_{nhit_list}hit.yaml',name_list=['minbias6969','minbias6970','minbias6971','minbias6972','minbias6973','minbias6974','minbias6975','minbias6976','minbias6977'],nhit_list=['0']),
+		#expand('/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/{name_list}_{nhit_list}hit.root',name_list=['minbias6969','minbias6970','minbias6971','minbias6972','minbias6973','minbias6974','minbias6975','minbias6976','minbias6977'],nhit_list=['0']),
+
+rule yaml_files:
+	input:
+		path='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake'
+	output:
+		outfile='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/MCgenReco_{name_list}_{nhit_list}hit.yaml'
+
+	shell:
+		"""bash {input.path}/MCgenReco.sh {output.outfile} {wildcards.name_list} {wildcards.nhit_list}"""
+
+rule reco:
+	input:
+		name='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/MCgenReco_{name_list}_{nhit_list}hit.yaml'
+	output:
+		out='/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/dataPreprocessor_mesmer_RECO_{name_list}_{nhit_list}hit.root'
+	shell:
+		"""root -q 'runProductionJob.C("{input.name}")'"""

@@ -124,10 +124,13 @@ cout << "pre scale h_theta_e_MC->Integral() " << h_theta_e_MC->Integral() << end
 cout << "pre scale h_theta_e_RD->Integral() " << h_theta_e_RD->Integral() << endl;
 
 double minb_gm=18299672.;
-double data_gm=7.9729075e+08;
+double data_gm=0;
 
+if(rd=="my_modifica_golden_all") data_gm=8.6157600e+08;
+if(rd=="my_modifica_eos" or rd=="my_modifica") data_gm=7.9729075e+08-(0.1*7.9729075e+08);
 
-double ratio_lumi=7.9729075e+08/18299672.;
+//double ratio_lumi=(data_gm*0.97*0.82)/18299672.;
+double ratio_lumi=(data_gm*0.97)/18299672.;
 double error_lumi_mc = sqrt(minb_gm);
 double error_lumi_rd =  sqrt(data_gm);
 double error_lumi_ratio = sqrt( (error_lumi_rd/minb_gm)*(error_lumi_rd/minb_gm) + (data_gm/(minb_gm*minb_gm)*(error_lumi_mc))*(data_gm/(minb_gm*minb_gm)*(error_lumi_mc)) );
@@ -142,13 +145,15 @@ double error_integral_ratio2= sqrt( (sqrt(h_theta_e_RD->Integral())/(h_theta_e_M
 cout << "integral_ratio pre scaling " << h_theta_e_RD->Integral()/h_theta_e_MC->Integral() << endl;
 cout << "error_integral_ratio  pre scaling " << error_integral_ratio2 << endl;
 
-/*	 h_theta_e_MC->Scale(data_gm/minb_gm);
+	 h_theta_e_MC->Scale(data_gm/minb_gm);
          h_theta_mu_MC->Scale(data_gm/minb_gm);
          h_opening_MC->Scale(data_gm/minb_gm);
-*/
-	 h_theta_e_MC->Scale(h_theta_e_RD->Integral()/h_theta_e_MC->Integral());//9.3792854e+08,7.9729075e+08
+
+
+/*	 h_theta_e_MC->Scale(h_theta_e_RD->Integral()/h_theta_e_MC->Integral());//9.3792854e+08,data_gm
          h_theta_mu_MC->Scale(h_theta_mu_RD->Integral()/h_theta_mu_MC->Integral());
 	 h_opening_MC->Scale(h_opening_RD->Integral()/h_opening_MC->Integral());
+*/
 
 /*double error_integral_ratio= sqrt( (sqrt(h_theta_e_RD->Integral())/h_theta_e_MC->Integral())*(sqrt(h_theta_e_RD->Integral())/h_theta_e_MC->Integral())
                                 + (h_theta_e_RD->Integral()/(h_theta_e_MC->Integral()*h_theta_e_MC->Integral()) *sqrt(h_theta_e_MC->Integral()) )*(h_theta_e_RD->Integral()/(h_theta_e_MC->Integral()*h_theta_e_MC->Integral()) *sqrt(h_theta_e_MC->Integral())) );
@@ -189,12 +194,20 @@ h->SaveAs(Form("comparison_RDMC/%s_%s_ratio_basic_chi150_flatArea_the20_the05_th
 a.SaveAs(Form("comparison_RDMC/%s_%s_opening_reb_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 
 
-TLine *line_ = new TLine(0.005,1.,0.02,1.);
-TLine *line_p = new TLine(0.005,1.03,0.02,1.03);
-TLine *line_m = new TLine(0.005,0.97,0.02,0.97);
-TLine *mu_line_ = new TLine(0.0003,1.,0.0013,1.);
-TLine *mu_line_p = new TLine(0.0003,1.03,0.0013,1.03);
-TLine *mu_line_m = new TLine(0.0003,0.97,0.0013,0.97);
+
+
+ auto l = new TLegend(0.55,0.15,0.8,0.3);
+l->AddEntry(h_theta_e_MC,"MC","LEP");;
+l->AddEntry(h_theta_e_RD,"data","LEP");
+
+ auto l1 = new TLegend(0.35,0.15,0.6,0.3);
+l1->AddEntry(h_theta_mu_MC,"MC","LEP");;
+l1->AddEntry(h_theta_mu_RD,"data","LEP");
+
+ auto l2 = new TLegend(0.55,0.15,0.8,0.3);
+l2->AddEntry(h_opening_MC,"MC","LEP");;
+l2->AddEntry(h_opening_RD,"data","LEP");
+
 
 TCanvas a1("a1","a1",1000,700);
 a1.Divide(2,2);
@@ -205,21 +218,35 @@ h_theta_e_RD->GetXaxis()->SetRangeUser(0.003,0.01);
 */
 h_theta_e_MC->GetXaxis()->SetRangeUser(0.005,0.02);
 h_theta_e_RD->GetXaxis()->SetRangeUser(0.005,0.02);
-h_theta_e_MC->SetMinimum(1.);
+h_theta_e_MC->GetYaxis()->SetTitle("Entries");
+h_theta_e_MC->SetTitle("Electron scattering angle");
+h_theta_e_MC->GetXaxis()->SetTitle("Electron angle [rad]");
+h_theta_e_MC->SetMinimum(100.);
 h_theta_e_MC->Draw("E");
 h_theta_e_RD->SetLineColor(kPink+10);
 h_theta_e_RD->Draw("E same");
+l->Draw();
 gPad->SetLogy();
 gStyle->SetOptStat(0);
-cout << "h_theta_e_MC entries: " << h_theta_e_MC->Integral() << endl;
-cout << "h_theta_e_RD entries: " << h_theta_e_RD->Integral() << endl;
+cout << "after scaling h_theta_e_MC entries: " << h_theta_e_MC->Integral() << endl;
+cout << "after scaling h_theta_e_RD entries: " << h_theta_e_RD->Integral() << endl;
 
 a1.cd(2);
 
 TH1D * h3 = (TH1D*) h_theta_e_RD->Clone();
 h3->Divide(h_theta_e_MC);
-h3->SetMinimum(0.);
-h3->GetXaxis()->SetTitle("#theta_e(rad)");
+h3->SetMinimum(0.7);
+h3->SetMaximum(1.5);
+h3->SetTitle("Electron scattering angle");
+h3->GetYaxis()->SetTitle("Data/MC ratio");
+h3->GetXaxis()->SetTitle("Electron angle [rad]");
+TLine *line_ = new TLine(0.005,1.,0.02,1.);
+TLine *line_p = new TLine(0.005,1.03,0.02,1.03);
+TLine *line_m = new TLine(0.005,0.97,0.02,0.97);
+
+TLine *line_p05 = new TLine(0.005,1.005,0.02,1.005);
+TLine *line_m05 = new TLine(0.005,0.995,0.02,0.995);
+
 h3->Draw("E");
 line_->SetLineStyle(7);
 line_p->SetLineStyle(9);
@@ -230,35 +257,55 @@ line_m->SetLineColor(40);
 line_->Draw("same");
 line_p->Draw("same");
 line_m->Draw("same");
-h3->SaveAs(Form("comparison_RDMC/%s_%s_ratio_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeaktheta_el_%dhit_%dhit.root",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+line_m05->SetLineColor(45);
+//line_p05->Draw("same");
+//line_m05->Draw("same");
+
+h3->SaveAs(Form("comparison_RDMC/%s_%s_ratio_RDnormalization_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_theta_el_%dhit_%dhit.root",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 a1.cd(3);
-//h_theta_e_MC->Scale(7.9729075e+08*5.5*1E+23*d_tar*1E-30*315.44638/6.79333e+07);//26563993,605675    137720.00    1.3242886e+09   6.79333e+07 9.3792854e+08
-h_theta_mu_MC->SetMinimum(1.);
+//h_theta_e_MC->Scale(data_gm*5.5*1E+23*d_tar*1E-30*315.44638/6.79333e+07);//26563993,605675    137720.00    1.3242886e+09   6.79333e+07 9.3792854e+08
+h_theta_mu_MC->SetMinimum(100.);
 /*h_theta_mu_MC->GetXaxis()->SetRangeUser(0.0005,0.002);
 h_theta_mu_RD->GetXaxis()->SetRangeUser(0.0005,0.002);*/
-h_theta_mu_MC->GetXaxis()->SetRangeUser(0.0002,0.0013);
-h_theta_mu_RD->GetXaxis()->SetRangeUser(0.0002,0.0013);
+h_theta_mu_MC->GetXaxis()->SetRangeUser(0.0003,0.0013);
+h_theta_mu_RD->GetXaxis()->SetRangeUser(0.0003,0.0013);
+h_theta_mu_MC->GetYaxis()->SetTitle("Entries");
+h_theta_mu_MC->SetTitle("Muon scattering angle");
+h_theta_mu_MC->GetXaxis()->SetTitle("Muon angle [rad]");
 h_theta_mu_MC->Draw("E");
 h_theta_mu_RD->SetLineColor(kPink+10);
 h_theta_mu_RD->Draw("E same");
+l1->Draw();
 gStyle->SetOptStat(0);
 gPad->SetLogy();
-cout << "h_theta_mu_MC entries: " << h_theta_mu_MC->Integral() << endl;
-cout << "h_theta_mu_RD entries: " << h_theta_mu_RD->Integral() << endl;
+cout << "after scaling h_theta_mu_MC entries: " << h_theta_mu_MC->Integral() << endl;
+cout << "after scaling h_theta_mu_RD entries: " << h_theta_mu_RD->Integral() << endl;
 
 a1.cd(4);
 TH1D * h4 = (TH1D*) h_theta_mu_RD->Clone();
 h4->Divide(h_theta_mu_MC);
-h4->SetMinimum(0.);
-h4->GetXaxis()->SetTitle("#theta_mu(rad)");
+h4->SetTitle("Muon scattering angle");
+h4->SetMinimum(0.7);
+h4->SetMaximum(1.8);
+h4->GetYaxis()->SetTitle("Data/MC ratio");
+h4->GetXaxis()->SetTitle("Muon angle [rad]");
+TLine *mu_line_ = new TLine(0.0003,1.,0.0013,1.);
+TLine *mu_line_p = new TLine(0.0003,1.03,0.0013,1.03);
+TLine *mu_line_m = new TLine(0.0003,0.97,0.0013,0.97);
 h4->Draw("E");
+TLine *mu_line_p05 = new TLine(0.005,1.005,0.02,1.005);
+TLine *mu_line_m05 = new TLine(0.005,0.995,0.02,0.995);
+mu_line_p05->SetLineColor(45);
+mu_line_m05->SetLineColor(45);
+//mu_line_p05->Draw("same");
+//mu_line_m05->Draw("same");
 mu_line_->SetLineStyle(7);
 mu_line_p->SetLineStyle(9);
 mu_line_m->SetLineStyle(9);
 mu_line_->SetLineColor(39);
 mu_line_p->SetLineColor(40);
 mu_line_m->SetLineColor(40);
-mu_line_->Draw("same");
+mu_line_->Draw();
 mu_line_p->Draw("same");
 mu_line_m->Draw("same");
 h4->SaveAs(Form("comparison_RDMC/%s_%s_ratio_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeaktheta_mu_%dhit_%dhit.root",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
@@ -267,19 +314,6 @@ a1.SaveAs(Form("comparison_RDMC/%s_%s_theta_MC_reco_RD_add_basic_chi150_flatArea
 TF1 *Elastic = new TF1("Elastic","0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(x)*cos(x))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(x)*cos(x)))",0,0.030); 
 TF1 *Elastic2 = new TF1("Elastic2","asin( (sin(x)*sqrt(Elastic(x)*Elastic(x)-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic(x))*(160+0.5109989461*0.001-Elastic(x))-105.6583745 *0.001*105.6583745 *0.001 ) )",0,0.030);
 
-
-
- auto l = new TLegend(0.55,0.15,0.9,0.3);
-l->AddEntry(h_theta_e_MC,"MC","LEP");;
-l->AddEntry(h_theta_e_RD,"data","LEP");
-
- auto l1 = new TLegend(0.55,0.15,0.9,0.3);
-l1->AddEntry(h_theta_mu_MC,"MC","LEP");;
-l1->AddEntry(h_theta_mu_RD,"data","LEP");
-
- auto l2 = new TLegend(0.55,0.15,0.9,0.3);
-l2->AddEntry(h_opening_MC,"MC","LEP");;
-l2->AddEntry(h_opening_RD,"data","LEP");
 
 
 TCanvas t("t","t",3000,2000);
@@ -379,42 +413,55 @@ h_posZ_pre_MC->Scale(h_posZ_pre_RD->Integral()/h_posZ_pre_MC->Integral());
 TCanvas v_pre("v_pre","v_pre",2000,2000);
 v_pre.Divide(2,3);
 v_pre.cd(1);
+h_aco_pre_MC->SetTitle("Acoplanarity - Preselection");
 h_aco_pre_MC->GetXaxis()->SetRangeUser(-3.2,3.2);
-h_aco_pre_MC->GetXaxis()->SetTitle("Aco");
+h_aco_pre_MC->GetYaxis()->SetTitle("Entries");
+h_aco_pre_MC->GetXaxis()->SetTitle("Acoplanarity [rad]");
 h_aco_pre_MC->Draw("E hist");
 h_aco_pre_RD->SetLineColor(kPink);
 h_aco_pre_RD->Draw("E hist same");
 v_pre.cd(2);
-h_aco_MC->GetXaxis()->SetTitle("Aco");
+h_aco_MC->SetTitle("Acoplanarity - Elastic selection");
+h_aco_MC->GetYaxis()->SetTitle("Entries");
+h_aco_MC->GetXaxis()->SetTitle("Acoplanarity [rad]");
 h_aco_MC->GetXaxis()->SetRangeUser(-0.4,0.4);
 h_aco_MC->Draw("E hist");
 h_aco_RD->SetLineColor(kPink);
 h_aco_RD->Draw("E hist same");
 v_pre.cd(3);
-h_posZ_pre_MC->GetXaxis()->SetTitle("Z (cm)");
+h_posZ_pre_MC->SetTitle("Vertex Z - Preselection");
+h_posZ_pre_MC->GetYaxis()->SetTitle("Entries");
+h_posZ_pre_MC->GetXaxis()->SetTitle("Vertex Z [cm]");
 h_posZ_pre_MC->GetXaxis()->SetRangeUser(800.,920);
 h_posZ_pre_RD->SetLineColor(kPink);
 h_posZ_pre_MC->Draw("E hist");
 h_posZ_pre_RD->Draw("E hist same");
 v_pre.cd(4);
-h_posZ_MC->GetXaxis()->SetTitle("Z (cm)");
+h_posZ_MC->SetTitle("Vertex Z - Elastic selection");
+h_posZ_MC->GetYaxis()->SetTitle("Entries");
+h_posZ_MC->GetXaxis()->SetTitle("Vertex Z [cm]");
 h_posZ_MC->GetXaxis()->SetRangeUser(800.,920);
 h_posZ_RD->SetLineColor(kPink);
 h_posZ_MC->Draw("E hist");
 h_posZ_RD->Draw("E hist same");
 v_pre.cd(5);
-h_ns1_pre_MC->GetXaxis()->SetTitle("nstubs_s1");
-h_ns1_pre_MC->Draw("E hist");
+h_ns1_pre_RD->SetTitle("Number of stubs Station1 - Preselection");
+h_ns1_pre_RD->GetYaxis()->SetTitle("Entries");
+h_ns1_pre_RD->GetXaxis()->SetTitle("Number of stubs");
 h_ns1_pre_RD->SetLineColor(kPink);
-h_ns1_pre_RD->Draw("E hist  same");
+h_ns1_pre_RD->Draw("E hist ");
+h_ns1_pre_MC->Draw("E hist same");
 h_ns1_pre_MC->SetMinimum(1.);
 gPad->SetLogy();
 v_pre.cd(6);
-h_ns1_MC->GetXaxis()->SetTitle("nstubs_s1");
+h_ns1_MC->SetTitle("Number of stubs Station1 - Elastic selection");
+h_ns1_MC->GetYaxis()->SetTitle("Entries");
+h_ns1_MC->GetXaxis()->SetTitle("Number of stubs");
 h_ns1_MC->Draw("E hist");
 h_ns1_RD->SetLineColor(kPink);
 h_ns1_RD->Draw("E hist  same");
 h_ns1_MC->SetMinimum(1.);
+
 
 gPad->SetLogy();
 v_pre.SaveAs(Form("comparison_RDMC/%s_%s_variables_preCuts_comparison_RDnormalization_basic_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));

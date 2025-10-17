@@ -16,42 +16,42 @@ TH1::SetDefaultSumw2(kTRUE);
 int const NBINS = 6;
 
 
-TFile *f_aco_pre_RD=TFile::Open(Form("comparison_RDMC/%s_preCuts_d_aco_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_RD=TFile::Open(Form("comparison_RDMC/%s_d_aco_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_thmu_RD=TFile::Open(Form("comparison_RDMC/%s_theta_mu_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_the_RD=TFile::Open(Form("comparison_RDMC/%s_theta_e_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_2D_RD=TFile::Open(Form("comparison_RDMC/%s_2D_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_op_RD=TFile::Open(Form("comparison_RDMC/%s_opening_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_aco_pre_RD=TFile::Open(Form("comparison_RDMC/%s_preCuts_d_aco_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_RD=TFile::Open(Form("comparison_RDMC/%s_d_aco_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_thmu_RD=TFile::Open(Form("comparison_RDMC/%s_theta_mu_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_the_RD=TFile::Open(Form("comparison_RDMC/%s_theta_e_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_2D_RD=TFile::Open(Form("comparison_RDMC/%s_2D_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_op_RD=TFile::Open(Form("comparison_RDMC/%s_opening_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
 
-TFile *f_aco_pre_MC=TFile::Open(Form("comparison_RDMC/%s_preCuts_d_aco_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile* f_the_MC=TFile::Open(Form("comparison_RDMC/%s_theta_e_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile* f_thmu_MC=TFile::Open(Form("comparison_RDMC/%s_theta_mu_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile* f_2D_MC=TFile::Open(Form("comparison_RDMC/%s_2D_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile* f_op_MC=TFile::Open(Form("comparison_RDMC/%s_opening_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile* f_aco_MC=TFile::Open(Form("comparison_RDMC/%s_d_aco_RD_parallel_pre_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc)); 
+TFile *f_aco_pre_MC=TFile::Open(Form("comparison_RDMC/%s_preCuts_d_aco_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile* f_the_MC=TFile::Open(Form("comparison_RDMC/%s_theta_e_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile* f_thmu_MC=TFile::Open(Form("comparison_RDMC/%s_theta_mu_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile* f_2D_MC=TFile::Open(Form("comparison_RDMC/%s_2D_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile* f_op_MC=TFile::Open(Form("comparison_RDMC/%s_opening_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile* f_aco_MC=TFile::Open(Form("comparison_RDMC/%s_d_aco_RD_parallel_pre_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc)); 
 
-TFile *f_d0_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD0_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile *f_d1_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD1_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile *f_d2_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD2_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile *f_d3_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD3_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile *f_d4_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD4_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile *f_d5_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD5_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
+TFile *f_d0_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD0_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile *f_d1_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD1_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile *f_d2_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD2_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile *f_d3_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD3_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile *f_d4_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD4_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile *f_d5_MC=TFile::Open(Form("comparison_RDMC/%s_distance_MOD5_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
 
-TFile *f_d0_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD0_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_d1_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD1_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_d2_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD2_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_d3_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD3_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_d4_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD4_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_d5_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD5_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_d0_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD0_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_d1_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD1_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_d2_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD2_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_d3_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD3_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_d4_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD4_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_d5_RD=TFile::Open(Form("comparison_RDMC/%s_distance_MOD5_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
 
 
-TFile *f_vrtx_chi2_RD=TFile::Open(Form("comparison_RDMC/%s_vrtx_chi2_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_track_el_RD=TFile::Open(Form("comparison_RDMC/%s_track_el_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
-TFile *f_track_mu_RD=TFile::Open(Form("comparison_RDMC/%s_track_mu_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_vrtx_chi2_RD=TFile::Open(Form("comparison_RDMC/%s_vrtx_chi2_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_track_el_RD=TFile::Open(Form("comparison_RDMC/%s_track_el_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
+TFile *f_track_mu_RD=TFile::Open(Form("comparison_RDMC/%s_track_mu_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_data.root",rd.c_str(),nhits_rd));
 
-TFile *f_vrtx_chi2_MC=TFile::Open(Form("comparison_RDMC/%s_vrtx_chi2_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile *f_track_el_MC=TFile::Open(Form("comparison_RDMC/%s_track_el_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
-TFile *f_track_mu_MC=TFile::Open(Form("comparison_RDMC/%s_track_mu_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_mc.root",mc.c_str(),nhits_mc));
+TFile *f_vrtx_chi2_MC=TFile::Open(Form("comparison_RDMC/%s_vrtx_chi2_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile *f_track_el_MC=TFile::Open(Form("comparison_RDMC/%s_track_el_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
+TFile *f_track_mu_MC=TFile::Open(Form("comparison_RDMC/%s_track_mu_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_Bend_%dhit_mc_smearing46.root",mc.c_str(),nhits_mc));
 
 
 TH1D* h_theta_e_MC=(TH1D*)f_the_MC->Get("theta_e");
@@ -102,13 +102,14 @@ TH1D *h_track_mu_RD=(TH1D*)f_track_mu_RD->Get("track_mu");
    Double_t n_mu_ot = 0.;
    Double_t d_tar = 0.;
    Double_t w2_elastic = 0.;
+   Double_t Nw_elastic = 0.;
 
 double eff_tracks=0.85;
 
 if(mc=="my_modifica" or mc=="my_modifica_norun" or mc=="my_modifica_LO" or mc=="my_modifica_LO_pure" or mc=="my_modifica_NLO" ){
 
 double error_CS=0.;
-double wnorm=1335.01;
+double wnorm=1335.0129848100162;
 double a_sum_Nw[11]={1492877.,1492853.,1492597.,1493119.,1492810.,1492642.,1493036.,1492805.,1492731.,1492824.,1492634.};
 double a_sum_w_wnorm[11]={2.0034687e+09,2.0068266e+09,1.998391e+09,2.0046823e+09,2.0071567e+09,1.997697e+09,2.0063223e+09,1.9985957e+09,2.0032496e+09,2.0045174e+09,2.0001658e+09};
 double a_sum_w2_wnorm[11]={8.5077092e+12,9.1146482e+12,6.6389419e+12,8.6412965e+12,9.0973111e+12,7.7243284e+12,1.0926206e+13,7.2686423e+12,1.0794938e+13,8.5531594e+12,7.1769361e+12};
@@ -134,19 +135,28 @@ error_CS=sqrt(( (sum_w2_wnorm/sum_Nw)  -  (sum_w_wnorm/sum_Nw)*(sum_w_wnorm/sum_
 cout << "cs " << sum_w_wnorm/sum_Nw << endl;
 
 
-    if(mc=="my_modifica"){n_MC_fiducial = 1.1205e+07;//n_MC_fiducial = 7.1315e+06;//6.91701e+06;
+    if(mc=="my_modifica" and nhits_mc==0){n_MC_fiducial = 1.1205e+07;//n_MC_fiducial = 7.1315e+06;//6.91701e+06;
 			  n_MC_elastic=655518;
+			  w2_fiducial = 3.57223e+07;//w2_fiducial=2.26945e+07;
+			  w2_elastic = 1.29605e+06;
+			  Nw_elastic=551465;
 			  cross_section = wnorm * 1.65026e+07/sum_Nw;}
-    if(mc=="my_modifica_LO"){n_MC_fiducial = 1.06669e+07;
+    else if(mc=="my_modifica" and nhits_mc==-1){n_MC_fiducial = 7.1315e+06;//6.91701e+06;
+			  n_MC_elastic=357198;
+			  w2_fiducial = 2.26945e+07;//w2_fiducial=2.26945e+07;
+			  w2_elastic = 844038;
+			  Nw_elastic=357198;
+			  cross_section = wnorm * 1.05e+07/sum_Nw;}
+    else if(mc=="my_modifica_LO"){n_MC_fiducial = 1.06669e+07;
                           n_MC_elastic=659496;
 			     cross_section = wnorm * 1.57087e+07/sum_Nw;}
-    if(mc=="my_modifica_norun"){n_MC_fiducial = 1.11042e+07;
+    else if(mc=="my_modifica_norun"){n_MC_fiducial = 1.11042e+07;
                           n_MC_elastic=647036;
 			     cross_section = wnorm * 1.63541e+07/sum_Nw;}
-    if(mc=="my_modifica_LO_pure"){n_MC_fiducial = 1.05679e+07;
+    else if(mc=="my_modifica_LO_pure"){n_MC_fiducial = 1.05679e+07;
                           n_MC_elastic=650930;
                              cross_section = wnorm * 1.55629e+07/sum_Nw;}
-    if(mc=="my_modifica_NLO"){n_MC_fiducial = 1.11894e+07;
+    else if(mc=="my_modifica_NLO"){n_MC_fiducial = 1.11894e+07;
                           n_MC_elastic=655816;
                              cross_section = wnorm * 1.64765e+07/sum_Nw;}
 
@@ -160,22 +170,25 @@ if(rd=="my_modifica_golden_all"){ n_mu_ot = 8.98816e+08;
                 n_fiducial = 8.98816e+08;
                 n_elastic = 92951;
                 }
-if(rd=="my_modifica_eos"){n_mu_ot= 8.8016548e+08 * 0.8567;//n_mu_ot=7.9729075e+08;
+else if(rd=="my_modifica_eos" and nhits_rd==0){n_mu_ot= 8.8016548e+08 * 0.8567;//n_mu_ot=7.9729075e+08;
                 n_fiducial = 2.64066e+07;
                 n_elastic = 78596;
                 }
-if(rd=="run8"){n_mu_ot = 4.2365303e+10 * 0.8567;
+else if(rd=="my_modifica_eos" and nhits_rd==-1){n_mu_ot= 8.8016548e+08 * 0.8567;//n_mu_ot=7.9729075e+08;
+                n_fiducial = 2.64066e+07;
+                n_elastic = 81330;
+                }
+else if(rd=="run8"){n_mu_ot = 4.2365303e+10 * 0.8567;
 		n_fiducial = 1.25818e+09;
 		n_elastic = 3.71914e+06;
 		}
 
-if(mc=="my_modifica"){
-    w2_fiducial = 3.57223e+07;//w2_fiducial=2.26945e+07;
-    w2_elastic = 1.29605e+06;//w2_elastic=825185;
-  }
 
  double eff_reco=655518./1.1205e+07;//devo prendere efficienza NNLO perche i dati sono nnlo..
+ double w2_fiducial_NNLO=3.57223e+07;
+ double w2_elastic_NNLO=1.29605e+06;
 // double eff_reco=n_MC_elastic/n_MC_fiducial;
+
     d_tar=3.;
  double eff_elasticInSilicon = 0.973;
  double lumi_rd = n_mu_ot * eff_elasticInSilicon * 5.5 * 1E+23 * d_tar * 1E-30;
@@ -184,9 +197,7 @@ if(mc=="my_modifica"){
 
 cout << "lumi_mc: " << lumi_mc << ", lumi_rd: " << lumi_rd << ", ratio_lumi: " << ratio_lumi << endl;
 
-cout << " MC cross section " << cross_section << endl;
-cout << " RD cross section " << n_elastic/(eff_tracks*eff_reco*lumi_rd) << endl;
-cout << " RD cross section " << n_elastic/(eff_tracks*eff_reco*lumi_rd) << endl;
+
 
 //double error_lumi_mc0=sqrt( (sqrt(6.91701e+06)/1342.0701)*(sqrt(6.91701e+06)/1342.0701) + (6.91701e+06*error_CS/(1342.0701*1342.0701))*(6.91701e+06*error_CS/(1342.0701*1342.0701)));
 //double error_lumi_mc=sqrt( (sqrt(w2_fiducial)/cross_section)*(sqrt(w2_fiducial)/cross_section) + (n_MC_fiducial*error_CS/(cross_section*cross_section))*(n_MC_fiducial*error_CS/(cross_section*cross_section)));
@@ -205,20 +216,46 @@ double error_lumi_ratio=sqrt( (error_lumi_rd/lumi_mc)*(error_lumi_rd/lumi_mc) + 
 
 cout<<"error_lumi_mc: " << error_lumi_mc << ", error_lumi_rd: " << error_lumi_rd << ", error_lumi_ratio: " << error_lumi_ratio << endl;
 
-/*double error_integral_ratio= sqrt( (sqrt(h_theta_e_RD->Integral())/h_theta_e_MC->Integral())*(sqrt(h_theta_e_RD->Integral())/h_theta_e_MC->Integral())
-				+ (h_theta_e_RD->Integral()/(h_theta_e_MC->Integral()*h_theta_e_MC->Integral()) *sqrt(h_theta_e_MC->Integral()) )*
-				(h_theta_e_RD->Integral()/(h_theta_e_MC->Integral()*h_theta_e_MC->Integral()) *sqrt(h_theta_e_MC->Integral())) );*/
-
-/*
-double error_integral_ratio= sqrt( (sqrt(h_theta_e_RD->Integral())/(w2_elastic*ratio_lumi))*(sqrt(h_theta_e_RD->Integral())/(w2_elastic*ratio_lumi))
-				  +(h_theta_e_RD->Integral()/(w2_elastic*w2_elastic*ratio_lumi)*sqrt(w2_elastic))*(h_theta_e_RD->Integral()/(w2_elastic*w2_elastic*ratio_lumi)*sqrt(w2_elastic))
-				  +(h_theta_e_RD->Integral()/(w2_elastic*ratio_lumi*ratio_lumi)*error_lumi_ratio)*(h_theta_e_RD->Integral()/(w2_elastic*ratio_lumi*ratio_lumi)*error_lumi_ratio)
-				 );
-*/
 double error_integral_ratio= sqrt( (sqrt(h_theta_e_RD->Integral())/(h_theta_e_MC->Integral()*ratio_lumi))*(sqrt(h_theta_e_RD->Integral())/(h_theta_e_MC->Integral()*ratio_lumi))
 				  +(h_theta_e_RD->Integral()/(h_theta_e_MC->Integral()*h_theta_e_MC->Integral()*ratio_lumi)*sqrt(w2_elastic))*(h_theta_e_RD->Integral()/(h_theta_e_MC->Integral()*h_theta_e_MC->Integral()*ratio_lumi)*sqrt(w2_elastic))
 				  +(h_theta_e_RD->Integral()/(h_theta_e_MC->Integral()*ratio_lumi*ratio_lumi)*error_lumi_ratio)*(h_theta_e_RD->Integral()/(h_theta_e_MC->Integral()*ratio_lumi*ratio_lumi)*error_lumi_ratio)
 				 );
+
+
+double error_CS_selection2=wnorm*sqrt(( (w2_elastic/1.1114e+07)  -  pow(n_MC_elastic/1.1114e+07,2) )/1.1114e+07);
+
+
+double error_CS_selection=sqrt( pow(sqrt(w2_elastic)/n_MC_elastic,2) + pow(error_lumi_mc/lumi_mc,2));;
+
+
+//double err_eff_reco=sqrt( (sqrt(w2_elastic_NNLO)/1.1205e+07)*(sqrt(w2_elastic_NNLO)/1.1205e+07)  +(655518/(1.1205e+07*1.1205e+07)*sqrt(w2_fiducial_NNLO))*(655518/(1.1205e+07*1.1205e+07)*sqrt(w2_fiducial_NNLO)));
+double error_CS_data_selection=n_elastic/(eff_tracks*lumi_rd)*sqrt( pow(sqrt(n_elastic)/n_elastic,2) + pow(0.035/eff_tracks,2) + pow(error_lumi_rd/lumi_rd,2));// + pow(err_eff_reco/eff_reco,2));
+
+
+//(sqrt(w2_elastic)/n_MC_fiducial)*(sqrt(w2_elastic)/n_MC_fiducial)  +  (n_MC_elastic/pow(n_MC_fiducial,2)*w2_fiducial)*(n_MC_elastic/pow(n_MC_fiducial,2)*w2_fiducial) );
+
+/*double error_CS_data_selection2= sqrt(
+(sqrt(n_elastic) / (eff_tracks * eff_reco * lumi_rd))*(sqrt(n_elastic) / (eff_tracks * eff_reco * lumi_rd))+
+(n_elastic / (eff_tracks * eff_tracks * eff_reco * lumi_rd)*0.035)*(n_elastic / (eff_tracks * eff_tracks * eff_reco * lumi_rd)*0.035)+
+(n_elastic / (eff_tracks * eff_reco * eff_reco * lumi_rd)*err_eff_reco)*(n_elastic / (eff_tracks * eff_reco * eff_reco * lumi_rd)*err_eff_reco)+
+(n_elastic / (eff_tracks * eff_reco * lumi_rd * lumi_rd)*error_lumi_rd)*(n_elastic / (eff_tracks * eff_reco * lumi_rd * lumi_rd)*error_lumi_rd)
+);*/
+
+cout<<"........" << endl;
+cout << " MC cross section selected region " << wnorm*n_MC_elastic/1.1114e+07 << " +- " << error_CS_selection2 << endl;
+cout << " MC cross section selected region from histo el " << wnorm*h_theta_e_MC->Integral()/1.1114e+07 << " +- " << error_CS_selection << endl;
+cout<<"........" << endl;
+cout << " MC cross section selected region my method  " << n_MC_elastic/(lumi_mc) << " +- " << error_CS_selection << endl;
+cout << " MC cross section selected region my method from histo el " << h_theta_e_MC->Integral()/(lumi_mc) << " +- " << error_CS_selection << endl;
+cout<<"........" << endl;
+cout << " RD cross section selected region " << n_elastic/(eff_tracks*lumi_rd)<< " +- " << error_CS_data_selection << endl;
+cout << " RD cross section selected region from histo el " << h_theta_e_RD->Integral()/(eff_tracks*lumi_rd)<< " +- " << error_CS_data_selection << endl;
+cout<<"........" << endl;
+cout << " errore RD cross section dovuto da :" << endl;
+					cout << "errore n_elastic = " << n_elastic << " +- " << sqrt(n_elastic) << endl;
+					cout << "errore eff_tracks = " << eff_tracks << " +- " << 0.035 << endl;
+
+
 
 cout << "Ndata/NMC before scaling " << h_theta_e_RD->Integral()/h_theta_e_MC->Integral() << endl;
 
@@ -230,7 +267,9 @@ cout << "---------------------------" << endl;
 
 }
 
-if(rd=="my_modifica_golden_all" or rd=="run8") {h_theta_e_MC->Rebin(2); h_theta_mu_MC->Rebin(2);}
+//if(rd=="my_modifica_golden_all" or rd=="run8") {h_theta_e_MC->Rebin(2); h_theta_mu_MC->Rebin(2);}
+h_theta_e_MC->Rebin(2); h_theta_mu_MC->Rebin(2);
+h_theta_e_RD->Rebin(2); h_theta_mu_RD->Rebin(2);
 
 cout <<"eff_tracks " << eff_tracks << endl;
 cout <<"n_mu_ot " << n_mu_ot << endl;
@@ -243,12 +282,16 @@ cout <<"n_MC_fiducial " << n_MC_fiducial << endl;
 	 h_2D_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
 	 h_opening_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
          h_aco_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
+
+
 h_d0_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
 h_d1_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
 h_d2_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
 h_d3_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
 h_d4_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
 h_d5_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
+
+
 h_aco_pre_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
 
 
@@ -273,6 +316,8 @@ h_track_mu_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_f
 //h_mod2_r5_MC->Scale(n_mu_ot* 5.5*1E+23*d_tar*1E-30 * cross_section*0.973/n_MC_fiducial);
 
 
+cout << "  h_theta_e_RD->Integral() after scaling " << h_theta_e_RD->Integral() << endl;
+cout << "  h_theta_e_MC->Integral() after scaling " << h_theta_e_MC->Integral() << endl;
 cout << "Ndata/NMC after scaling " << h_theta_e_RD->Integral()/h_theta_e_MC->Integral() << endl;
 
 
@@ -298,7 +343,7 @@ h_track_mu_MC->Draw("hist");
 h_track_mu_RD->SetLineColor(kPink);
 h_track_mu_RD->Draw("hist same");
 
-chi.SaveAs(Form("comparison_RDMC/%s_%s_chi2_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+chi.SaveAs(Form("comparison_RDMC/%s_%s_chi2_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 
 /*
 TCanvas dr("dr","dr",1400,2100);
@@ -317,7 +362,7 @@ dr.cd(3);
 h_mod0_r2_MC->Draw("hist");
 h_mod0_r2_RD->SetLineColor(kPink);
 h_mod0_r2_RD->Draw("hist same");
-dr.SaveAs(Form("comparison_RDMC/%s_%s_drange_mod0_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+dr.SaveAs(Form("comparison_RDMC/%s_%s_drange_mod0_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 */
 /*dr.cd(4);
 h_mod0_r3_MC->Draw("hist");
@@ -343,7 +388,7 @@ dr2.cd(3);
 h_mod2_r2_MC->Draw("hist");
 h_mod2_r2_RD->SetLineColor(kPink);
 h_mod2_r2_RD->Draw("hist same");
-dr2.SaveAs(Form("comparison_RDMC/%s_%s_drange_mod2_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+dr2.SaveAs(Form("comparison_RDMC/%s_%s_drange_mod2_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 */
 /*dr2.cd(4);
 h_mod2_r3_MC->Draw("hist");
@@ -409,7 +454,7 @@ h_d5_MC->SetMinimum(0.);
 h_d5_MC->Draw("hist");
 h_d5_RD->SetLineColor(kPink);
 h_d5_RD->Draw("hist same");
-di.SaveAs(Form("comparison_RDMC/%s_%s_h_dist_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+di.SaveAs(Form("comparison_RDMC/%s_%s_h_dist_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 
 TCanvas aco("aco","aco",2100,700);
 aco.Divide(2,1);
@@ -427,7 +472,7 @@ h_aco->Divide(h_aco_MC);
 h_aco->SetMaximum(1.);
 h_aco->GetXaxis()->SetRangeUser(-1,1);
 h_aco->Draw();
-aco.SaveAs(Form("comparison_RDMC/%s_%s_h_aco_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+aco.SaveAs(Form("comparison_RDMC/%s_%s_h_aco_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 
 
 TCanvas a("a","a",700,700);
@@ -436,8 +481,8 @@ a.cd(1);
 
 h_opening_MC->SetTitle("#mu-e opening angle");
 h_opening_MC->SetMinimum(1.);
-h_opening_MC->GetXaxis()->SetRangeUser(0.005,0.032);
-h_opening_RD->GetXaxis()->SetRangeUser(0.005,0.032);
+h_opening_MC->GetXaxis()->SetRangeUser(0.,0.032);//>SetRangeUser(0.005,0.032);
+h_opening_RD->GetXaxis()->SetRangeUser(0.,0.032);//>SetRangeUser(0.005,0.032);
 h_opening_RD->SetMinimum(1.);
 h_opening_MC->Draw("hist");
 h_opening_RD->SetLineColor(kPink+10);
@@ -485,8 +530,8 @@ h->SetTitle("#mu-e opening angle");
 h->GetXaxis()->SetTitle("Opening angle [rad]");
 h->Draw("E");
 gStyle->SetOptStat(0);
-h->SaveAs(Form("comparison_RDMC/%s_%s_ratio_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_opening_%dhit_%dhit.root",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
-a.SaveAs(Form("comparison_RDMC/%s_%s_opening_reb_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+h->SaveAs(Form("comparison_RDMC/%s_%s_ratio_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_opening_%dhit_%dhit_smearing46.root",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+a.SaveAs(Form("comparison_RDMC/%s_%s_opening_reb_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 
 /*
 for(int n=0; n < h->GetNbinsX(); n++){
@@ -509,8 +554,8 @@ h_theta_e_RD->GetXaxis()->SetRangeUser(0.003,0.01);
 /*h_theta_e_MC->GetXaxis()->SetRangeUser(0.003,0.03);
 h_theta_e_RD->GetXaxis()->SetRangeUser(0.003,0.03);*/
 
-h_theta_e_MC->GetXaxis()->SetRangeUser(0.005,0.032);
-h_theta_e_RD->GetXaxis()->SetRangeUser(0.005,0.032);
+h_theta_e_MC->GetXaxis()->SetRangeUser(0.002,0.032);//>SetRangeUser(0.005,0.032);
+h_theta_e_RD->GetXaxis()->SetRangeUser(0.002,0.032);//>SetRangeUser(0.005,0.032);
 h_theta_e_MC->SetTitle("Electron scattering angle");
 h_theta_e_MC->SetMinimum(1.);
 h_theta_e_MC->Draw("E");
@@ -555,10 +600,11 @@ op_er3->Draw("AP");
 op_er_sum3->SetMarkerColor(kOrange);
 op_er_sum3->Draw("AP");
 */
-h3->SetMinimum(0.);
+//h3->SetMaximum(1.3);
+h3->SetMinimum(0.4);
 h3->GetXaxis()->SetTitle("Electron angle [rad]");
 h3->Draw("E");
-h3->SaveAs(Form("comparison_RDMC/%s_%s_ratio_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_theta_el_%dhit_%dhit.root",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+h3->SaveAs(Form("comparison_RDMC/%s_%s_ratio_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_theta_el_%dhit_%dhit_smearing46.root",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 a1.cd(3);
 //h_theta_e_MC->Scale(7.9729075e+08*5.5*1E+23*d_tar*1E-30*315.44638/6.79333e+07);//26563993,605675    137720.00    1.3242886e+09   6.79333e+07 9.3792854e+08
 h_theta_mu_MC->SetMinimum(1.);
@@ -568,8 +614,8 @@ h_theta_mu_RD->GetXaxis()->SetRangeUser(0.0005,0.002);*/
 /*h_theta_mu_MC->GetXaxis()->SetRangeUser(0.0003,0.002);
 h_theta_mu_RD->GetXaxis()->SetRangeUser(0.0003,0.002);*/
 
-h_theta_mu_MC->GetXaxis()->SetRangeUser(0.0002,0.0014);
-h_theta_mu_RD->GetXaxis()->SetRangeUser(0.0002,0.0014);
+h_theta_mu_MC->GetXaxis()->SetRangeUser(0.0,0.005);//SetRangeUser(0.0002,0.0014);
+h_theta_mu_RD->GetXaxis()->SetRangeUser(0.0,0.005);//SetRangeUser(0.0002,0.0014);
 h_theta_mu_MC->SetTitle("Muon scattering angle");
 h_theta_mu_MC->Draw("E");
 h_theta_mu_RD->SetLineColor(kPink+10);
@@ -615,12 +661,12 @@ op_er_sum4->Draw("AP");
 
 */
 h4->SetMaximum(1.3);
-h4->SetMinimum(0.);
+h4->SetMinimum(0.5);
 h4->GetYaxis()->SetTitle("Data/MC ratio");
 h4->GetXaxis()->SetTitle("Muon angle [rad]");
 h4->Draw("E");
-h4->SaveAs(Form("comparison_RDMC/%s_%s_ratio_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_theta_mu_%dhit_%dhit.root",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
-a1.SaveAs(Form("comparison_RDMC/%s_%s_theta_MC_reco_RD_add_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+h4->SaveAs(Form("comparison_RDMC/%s_%s_ratio_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_theta_mu_%dhit_%dhit_smearing46.root",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+a1.SaveAs(Form("comparison_RDMC/%s_%s_theta_MC_reco_RD_add_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 
 TF1 *Elastic = new TF1("Elastic","0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(x)*cos(x))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(x)*cos(x)))",0,0.032); 
 TF1 *Elastic2 = new TF1("Elastic2","asin( (sin(x)*sqrt(Elastic(x)*Elastic(x)-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic(x))*(160+0.5109989461*0.001-Elastic(x))-105.6583745 *0.001*105.6583745 *0.001 ) )",0,0.032);
@@ -700,7 +746,7 @@ h5->SetContour((sizeof(levels)/sizeof(Double_t)), levels);
 h5->SetTitle("#theta el -vs- #theta mu ratio RD/MC");
 gStyle->SetPaintTextFormat(".2f");
 h5->Draw("COLZ TEXT");
-*/a2.SaveAs(Form("comparison_RDMC/%s_%s_comparison_2D_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+*/a2.SaveAs(Form("comparison_RDMC/%s_%s_comparison_2D_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 
 /*TCanvas a3("a3","a3",1400,700);
 a3.Divide(2,1);
@@ -712,7 +758,7 @@ a3.cd(2);
 auto p2 =h5->ProfileY();
 p2->SetTitle("Efficiency as a function of #theta mu");
 p2->Draw();
-a3.SaveAs(Form("comparison_RDMC/%s_%s_profile1hit_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+a3.SaveAs(Form("comparison_RDMC/%s_%s_profile1hit_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_el_Bend_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 */
 
 
@@ -774,7 +820,7 @@ h_opening_RD->Draw("E same");
 gStyle->SetOptStat(0);
 gPad->SetLogy();
 l2->Draw();
-t.SaveAs(Form("comparison_RDMC/%s_%s_tesi_comparison_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+t.SaveAs(Form("comparison_RDMC/%s_%s_tesi_comparison_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 
 TCanvas ap("ap","ap",1000,500);
 ap.Divide(2,1);
@@ -792,7 +838,7 @@ TH1D * hap = (TH1D*) h_aco_pre_RD->Clone();
 hap->GetXaxis()->SetRangeUser(-0.5,0.5);
 hap->Divide(h_aco_pre_MC);
 hap->Draw();
-ap.SaveAs(Form("comparison_RDMC/%s_%s_precuts_acoplanarity_basicAllFiducial_chi150_flatArea_the20_the05_thmu02_nstubs15_nochivrtx_zPosNoPeak_%dhit_%dhit.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
+ap.SaveAs(Form("comparison_RDMC/%s_%s_precuts_acoplanarity_basicAllFiducial_chi150_flatArea_theNA_theNA_thmu04_nstubs15_nochivrtx_zPosNoPeak_%dhit_%dhit_smearing46.pdf",rd.c_str(),mc.c_str(),nhits_rd,nhits_mc));
 
 
 }

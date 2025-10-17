@@ -1,0 +1,27 @@
+rule all:
+	input:
+		expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml',name_list=['muedaq01-1750466914','muedaq01-1750461422'],run_list=['11'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],nhit_list=['0']),
+		expand('/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit.root',name_list=['muedaq01-1750466914','muedaq01-1750461422'],run_list=['11'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],nhit_list=['0']),
+
+rule yaml_files:
+	input:
+		path='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake'
+	output:
+		outfile='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml'
+
+	wildcard_constraints:
+		name_list = r".+",
+		run_list = r"\d+",
+		#type_list = r"single_muon_interaction_\d+",
+		nhit_list = r"\d+"
+
+	shell:
+		"""bash {input.path}/dataReco.sh {output.outfile} {wildcards.name_list} {wildcards.run_list} {wildcards.type_list} {wildcards.nhit_list}"""
+
+rule reco:
+	input:
+		name='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml'
+	output:
+		out='/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit.root'
+	shell:
+		"""root -q 'runProductionJob.C("{input.name}")'"""
