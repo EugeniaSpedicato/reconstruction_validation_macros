@@ -61,7 +61,8 @@ rule validation_efficiency:
 	input:
 		reconstructed_e='/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/snakemake/range_{number_params}_{n_hits}hit_{info}.root',
 		#generated_e='/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_{number_params}mrad.root',
-		generated_e='/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_7e6f0f25_{number_params}mrad.root',
+		#generated_e='/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_7e6f0f25_{number_params}mrad.root',
+		generated_r='/mnt/raid10/DATA/espedica/fairmu/TB2025/gen_digi/commit_62871d8b_SIM-DIGI_intFirstTar_{number_params}mrad.root',
 		#generated_e='/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_d652278e_{number_params}mrad_notilt.root',
 		#generated_e='/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_d652278e_{number_params}mrad_realGeom.root',
 		path_e='/home/espedica/macros_fairmu/snakemake/snakemake_wip16/plots'
@@ -74,7 +75,8 @@ rule validation_fake:
 	input:
 		reconstructed_fk='/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/snakemake/range_{number_params}_{n_hits}hit_{info}.root',
 		#generated_fk='/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_258faf6b_{number_params}mrad.root',
-		generated_fk='/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_7e6f0f25_{number_params}mrad.root',
+		#generated_fk='/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_7e6f0f25_{number_params}mrad.root',
+		generated_r='/mnt/raid10/DATA/espedica/fairmu/TB2025/gen_digi/commit_62871d8b_SIM-DIGI_intFirstTar_{number_params}mrad.root',
 		#generated_fk='/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_d652278e_{number_params}mrad_notilt.root',
 		#generated_fk='/mnt/raid10/DATA/espedica/fairmu/gen_digi/WiP_v0140_commit_d652278e_{number_params}mrad_realGeom.root',
 

@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
     std::vector<fs::path> files;
 
     for (auto& entry : fs::directory_iterator(folder)) {
-        if (fs::is_regular_file(entry.path()) && entry.path().extension() == ".txt") {
+        if (fs::is_regular_file(entry.path()) && entry.path().extension() == ".txt" and entry.path().string().find("wip11x") != std::string::npos) {
             files.push_back(entry.path());
         }
     }
@@ -81,10 +81,10 @@ int main(int argc, char* argv[]) {
     std::vector<double> y1_vrtx; // valore Ratio any vrtx
 
     // Regex per i valori
-    std::regex pattern_preEl_tr0(R"(Ratio pre_elastic tr0 over best vrtx:\s+([0-9]*\.?[0-9]+))");
-    std::regex pattern_preEl_tr1(R"(Ratio pre_elastic tr1 over best vrtx:\s+([0-9]*\.?[0-9]+))");
-//    std::regex pattern_preEl_tr0(R"(Ratio pre_elastic tr0 over fiducial:\s+([0-9]*\.?[0-9]+))");
-//    std::regex pattern_preEl_tr1(R"(Ratio pre_elastic tr1 over fiducial:\s+([0-9]*\.?[0-9]+))");
+//    std::regex pattern_preEl_tr0(R"(Ratio pre_elastic tr0 over best vrtx:\s+([0-9]*\.?[0-9]+))");
+//    std::regex pattern_preEl_tr1(R"(Ratio pre_elastic tr1 over best vrtx:\s+([0-9]*\.?[0-9]+))");
+    std::regex pattern_preEl_tr0(R"(Ratio pre_elastic tr0 over fiducial:\s+([0-9]*\.?[0-9]+))");
+    std::regex pattern_preEl_tr1(R"(Ratio pre_elastic tr1 over fiducial:\s+([0-9]*\.?[0-9]+))");
 
     // vettori per TGraph
     std::vector<double> x0_preEl; // numero estratto dal nome
@@ -93,10 +93,10 @@ int main(int argc, char* argv[]) {
     std::vector<double> y1_preEl; // valore Ratio any vrtx
 
     // Regex per i valori
-    std::regex pattern_el_tr0(R"(Ratio elastic tr0 over pre_elastic:\s+([0-9]*\.?[0-9]+))");
-    std::regex pattern_el_tr1(R"(Ratio elastic tr1 over pre_elastic:\s+([0-9]*\.?[0-9]+))");
-//    std::regex pattern_el_tr0(R"(Ratio elastic tr0 over fiducial:\s+([0-9]*\.?[0-9]+))");
-//    std::regex pattern_el_tr1(R"(Ratio elastic tr1 over fiducial:\s+([0-9]*\.?[0-9]+))");
+//    std::regex pattern_el_tr0(R"(Ratio elastic tr0 over pre_elastic:\s+([0-9]*\.?[0-9]+))");
+//    std::regex pattern_el_tr1(R"(Ratio elastic tr1 over pre_elastic:\s+([0-9]*\.?[0-9]+))");
+    std::regex pattern_el_tr0(R"(Ratio elastic tr0 over fiducial:\s+([0-9]*\.?[0-9]+))");
+    std::regex pattern_el_tr1(R"(Ratio elastic tr1 over fiducial:\s+([0-9]*\.?[0-9]+))");
 
     // vettori per TGraph
     std::vector<double> x0_el; // numero estratto dal nome
@@ -106,10 +106,10 @@ int main(int argc, char* argv[]) {
 
 
 
-//    std::regex pattern_num_fid_tr0(R"(Events with fiducial 0\s+([0-9]*\.?[0-9]+))");
-//    std::regex pattern_num_fid_tr1(R"(Events with fiducial 1\s+([0-9]*\.?[0-9]+))");
-    std::regex pattern_num_fid_tr0(R"(Events with reco vrtx in st01\s+([0-9]*\.?[0-9]+))");
-    std::regex pattern_num_fid_tr1(R"(Events with reco vrtx in st12\s+([0-9]*\.?[0-9]+))");
+    std::regex pattern_num_fid_tr0(R"(Events with fiducial 0\s+([0-9]*\.?[0-9]+))");
+    std::regex pattern_num_fid_tr1(R"(Events with fiducial 1\s+([0-9]*\.?[0-9]+))");
+//    std::regex pattern_num_fid_tr0(R"(Events with reco vrtx in st01\s+([0-9]*\.?[0-9]+))");
+//    std::regex pattern_num_fid_tr1(R"(Events with reco vrtx in st12\s+([0-9]*\.?[0-9]+))");
 
     // vettori per TGraph
     std::vector<double> x0_num_fid; // numero estratto dal nome
@@ -303,11 +303,17 @@ for(int h=0; h<y1_num_bkg.size(); h++)tot_bkg_1+=y1_num_bkg.at(h);
 for(int h=0; h<y0_num_sig.size(); h++)tot_sig_0+=y0_num_sig.at(h);
 for(int h=0; h<y1_num_sig.size(); h++)tot_sig_1+=y1_num_sig.at(h);
 
+std::cout<<"Elastic vrtx0 " << tot_el_0 << " +- " << sqrt(tot_el_0) << std::endl;
+std::cout<<"Elastic vrtx1 " << tot_el_1 << " +- " << sqrt(tot_el_1) << std::endl;
 
-std::cout<<"Total ratio el/vrtx vrtx0 " << tot_el_0/tot_fid_0 << " +- " <<
+std::cout<<"FIducial vrtx0 " << tot_fid_0 << " +- " << sqrt(tot_fid_0) << std::endl;
+std::cout<<"FIducial vrtx1 " << tot_fid_1 << " +- " << sqrt(tot_fid_1) << std::endl;
+
+
+std::cout<<"Total ratio el/fid vrtx0 " << tot_el_0/tot_fid_0 << " +- " <<
 sqrt( ( 1./tot_fid_0 * sqrt(tot_el_0) )*(1./tot_fid_0 * sqrt(tot_el_0)) + ( tot_el_0/(tot_fid_0*tot_fid_0) * sqrt(tot_fid_0) )*( tot_el_0/(tot_fid_0*tot_fid_0) * sqrt(tot_fid_0) ) )
 << std::endl;
-std::cout<<"Total ratio el/vrtx vrtx1 " << tot_el_1/tot_fid_1 << " +- " <<
+std::cout<<"Total ratio el/fid vrtx1 " << tot_el_1/tot_fid_1 << " +- " <<
 sqrt( ( 1./tot_fid_1 * sqrt(tot_el_1) )*(1./tot_fid_1 * sqrt(tot_el_1)) + ( tot_el_1/(tot_fid_1*tot_fid_1) * sqrt(tot_fid_1) )*( tot_el_1/(tot_fid_1*tot_fid_1) * sqrt(tot_fid_1) ) )
 << std::endl;
 
@@ -485,7 +491,7 @@ mgx2->SetTitle("Rates vs time (zoom)");
     mgx2->GetXaxis()->LabelsOption("v");
 gPad->BuildLegend(0.55,0.6,0.85,0.8);
 
-        c->SaveAs(Form("ratevstime_fiducial_run%s.pdf",argv[2]));
+        c->SaveAs(Form("wip11x_ratevstime_fiducial_run%s.pdf",argv[2]));
 
 
 

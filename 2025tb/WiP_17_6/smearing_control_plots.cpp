@@ -30,7 +30,7 @@ int run = std::stoi(argv[2]);
 int hits = std::stoi(argv[3]);
 
     for (auto& entry : fs::directory_iterator(folder)) {
-        if (fs::is_regular_file(entry.path()) && entry.path().extension() == ".root" and entry.path().string().find("possible") == std::string::npos) {
+        if (fs::is_regular_file(entry.path()) && entry.path().extension() == ".root" and entry.path().string().find("smearing") != std::string::npos) {
             if(entry.path().string().find("single_muon_interaction_0") != std::string::npos){files_0.push_back(entry.path());}
 	    else if(entry.path().string().find("single_muon_interaction_1") != std::string::npos){files_1.push_back(entry.path());}
         }
@@ -52,6 +52,19 @@ std::vector<TH1D*> h_th_max_0(files_0.size(), nullptr);
 std::vector<TH1D*> h_preE_th_min_0(files_0.size(), nullptr);
 std::vector<TH1D*> h_preE_th_max_0(files_0.size(), nullptr);
 std::vector<TH1D*> h_elastic_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_el_1(files_0.size(), nullptr);
+std::vector<TH1D*> h_E_th_min_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_E_th_max_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_final_nhits_pre_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_final_nhits_post_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_final_ntracks_post_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_final_chi2_vrtx_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_final_Dz_vrtx_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_final_aco_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_final_chi2_tr0_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_final_chi2_trMax_0(files_0.size(), nullptr);
+std::vector<TH1D*> h_final_chi2_trMin_0(files_0.size(), nullptr);
+
 std::vector<TH1D*> h_x_1(files_1.size(), nullptr);
 std::vector<TH1D*> h_y_1(files_1.size(), nullptr);
 std::vector<TH1D*> h_thx_1(files_1.size(), nullptr);
@@ -67,6 +80,18 @@ std::vector<TH1D*> h_th_max_1(files_1.size(), nullptr);
 std::vector<TH1D*> h_preE_th_min_1(files_1.size(), nullptr);
 std::vector<TH1D*> h_preE_th_max_1(files_1.size(), nullptr);
 std::vector<TH1D*> h_elastic_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_el_2(files_1.size(), nullptr);
+std::vector<TH1D*> h_E_th_min_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_E_th_max_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_final_nhits_pre_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_final_nhits_post_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_final_ntracks_post_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_final_chi2_vrtx_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_final_Dz_vrtx_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_final_aco_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_final_chi2_tr0_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_final_chi2_trMax_1(files_1.size(), nullptr);
+std::vector<TH1D*> h_final_chi2_trMin_1(files_1.size(), nullptr);
 
 
 for(int f=0; f<files_0.size(); f++){
@@ -94,6 +119,18 @@ h_th_max_0.at(f)=(TH1D*)f_0->Get("h_th_max_0");
 h_preE_th_min_0.at(f)=(TH1D*)f_0->Get("h_preE_th_min_0");
 h_preE_th_max_0.at(f)=(TH1D*)f_0->Get("h_preE_th_max_0");
 h_elastic_0.at(f)=(TH1D*)f_0->Get("h_elastic_0");
+h_el_1.at(f)=(TH1D*)f_0->Get("h_el_1");
+h_E_th_min_0.at(f)=(TH1D*)f_0->Get("h_E_th_min_0");
+h_E_th_max_0.at(f)=(TH1D*)f_0->Get("h_E_th_max_0");
+h_final_nhits_pre_0.at(f)=(TH1D*)f_0->Get("h_final_nhits_pre_0");
+h_final_nhits_post_0.at(f)=(TH1D*)f_0->Get("h_final_nhits_post_0");
+h_final_ntracks_post_0.at(f)=(TH1D*)f_0->Get("h_final_ntracks_post_0");
+h_final_chi2_vrtx_0.at(f)=(TH1D*)f_0->Get("h_final_chi2_vrtx_0");
+h_final_Dz_vrtx_0.at(f)=(TH1D*)f_0->Get("h_final_Dz_vrtx_0");
+h_final_aco_0.at(f)=(TH1D*)f_0->Get("h_final_aco_0");
+h_final_chi2_tr0_0.at(f)=(TH1D*)f_0->Get("h_final_chi2_tr0_0");
+h_final_chi2_trMax_0.at(f)=(TH1D*)f_0->Get("h_final_chi2_trMax_0");
+h_final_chi2_trMin_0.at(f)=(TH1D*)f_0->Get("h_final_chi2_trMin_0");
 
         if(f>0){
 h_x_0.at(0)->Add(h_x_0.at(f));
@@ -111,6 +148,18 @@ h_th_max_0.at(0)->Add(h_th_max_0.at(f));
 h_preE_th_min_0.at(0)->Add(h_preE_th_min_0.at(f));
 h_preE_th_max_0.at(0)->Add(h_preE_th_max_0.at(f));
 h_elastic_0.at(0)->Add(h_elastic_0.at(f));
+h_el_1.at(0)->Add(h_el_1.at(f));
+h_E_th_min_0.at(0)->Add(h_E_th_min_0.at(f));
+h_E_th_max_0.at(0)->Add(h_E_th_max_0.at(f));
+h_final_nhits_pre_0.at(0)->Add(h_final_nhits_pre_0.at(f));
+h_final_nhits_post_0.at(0)->Add(h_final_nhits_post_0.at(f));
+h_final_ntracks_post_0.at(0)->Add(h_final_ntracks_post_0.at(f));
+h_final_chi2_vrtx_0.at(0)->Add(h_final_chi2_vrtx_0.at(f));
+h_final_Dz_vrtx_0.at(0)->Add(h_final_Dz_vrtx_0.at(f));
+h_final_aco_0.at(0)->Add(h_final_aco_0.at(f));
+h_final_chi2_tr0_0.at(0)->Add(h_final_chi2_tr0_0.at(f));
+h_final_chi2_trMax_0.at(0)->Add(h_final_chi2_trMax_0.at(f));
+h_final_chi2_trMin_0.at(0)->Add(h_final_chi2_trMin_0.at(f));
 	}
 
 }
@@ -142,7 +191,18 @@ h_th_max_1.at(f)=(TH1D*)f_0->Get("h_th_max_1");
 h_preE_th_min_1.at(f)=(TH1D*)f_0->Get("h_preE_th_min_1");
 h_preE_th_max_1.at(f)=(TH1D*)f_0->Get("h_preE_th_max_1");
 h_elastic_1.at(f)=(TH1D*)f_0->Get("h_elastic_1");
-
+h_el_2.at(f)=(TH1D*)f_0->Get("h_el_2");
+h_E_th_min_1.at(f)=(TH1D*)f_0->Get("h_E_th_min_1");
+h_E_th_max_1.at(f)=(TH1D*)f_0->Get("h_E_th_max_1");
+h_final_nhits_pre_1.at(f)=(TH1D*)f_0->Get("h_final_nhits_pre_1");
+h_final_nhits_post_1.at(f)=(TH1D*)f_0->Get("h_final_nhits_post_1");
+h_final_ntracks_post_1.at(f)=(TH1D*)f_0->Get("h_final_ntracks_post_1");
+h_final_chi2_vrtx_1.at(f)=(TH1D*)f_0->Get("h_final_chi2_vrtx_1");
+h_final_Dz_vrtx_1.at(f)=(TH1D*)f_0->Get("h_final_Dz_vrtx_1");
+h_final_aco_1.at(f)=(TH1D*)f_0->Get("h_final_aco_1");
+h_final_chi2_tr0_1.at(f)=(TH1D*)f_0->Get("h_final_chi2_tr0_1");
+h_final_chi2_trMax_1.at(f)=(TH1D*)f_0->Get("h_final_chi2_trMax_1");
+h_final_chi2_trMin_1.at(f)=(TH1D*)f_0->Get("h_final_chi2_trMin_1");
 
 	if(f>0){
 h_x_1.at(0)->Add(h_x_1.at(f));
@@ -160,6 +220,19 @@ h_th_max_1.at(0)->Add(h_th_max_1.at(f));
 h_preE_th_min_1.at(0)->Add(h_preE_th_min_1.at(f));
 h_preE_th_max_1.at(0)->Add(h_preE_th_max_1.at(f));
 h_elastic_1.at(0)->Add(h_elastic_1.at(f));
+h_el_2.at(0)->Add(h_el_2.at(f));
+h_E_th_min_1.at(0)->Add(h_E_th_min_1.at(f));
+h_E_th_max_1.at(0)->Add(h_E_th_max_1.at(f));
+h_final_nhits_pre_1.at(0)->Add(h_final_nhits_pre_1.at(f));
+h_final_nhits_post_1.at(0)->Add(h_final_nhits_post_1.at(f));
+h_final_ntracks_post_1.at(0)->Add(h_final_ntracks_post_1.at(f));
+h_final_chi2_vrtx_1.at(0)->Add(h_final_chi2_vrtx_1.at(f));
+h_final_Dz_vrtx_1.at(0)->Add(h_final_Dz_vrtx_1.at(f));
+h_final_aco_1.at(0)->Add(h_final_aco_1.at(f));
+h_final_chi2_tr0_1.at(0)->Add(h_final_chi2_tr0_1.at(f));
+h_final_chi2_trMax_1.at(0)->Add(h_final_chi2_trMax_1.at(f));
+h_final_chi2_trMin_1.at(0)->Add(h_final_chi2_trMin_1.at(f));
+
 		}
 }
 
@@ -180,7 +253,18 @@ h_th_max_0.at(0)->Scale(1./h_th_max_0.at(0)->Integral());
 h_preE_th_min_0.at(0)->Scale(1./h_preE_th_min_0.at(0)->Integral());
 h_preE_th_max_0.at(0)->Scale(1./h_preE_th_max_0.at(0)->Integral());
 h_elastic_0.at(0)->Scale(1./h_elastic_0.at(0)->Integral());
-
+h_el_1.at(0)->Scale(1./h_el_1.at(0)->Integral());
+h_E_th_min_0.at(0)->Scale(1./h_E_th_min_0.at(0)->Integral());
+h_E_th_max_0.at(0)->Scale(1./h_E_th_max_0.at(0)->Integral());
+h_final_nhits_pre_0.at(0)->Scale(1./h_final_nhits_pre_0.at(0)->Integral());
+h_final_nhits_post_0.at(0)->Scale(1./h_final_nhits_post_0.at(0)->Integral());
+h_final_ntracks_post_0.at(0)->Scale(1./h_final_ntracks_post_0.at(0)->Integral());
+h_final_chi2_vrtx_0.at(0)->Scale(1./h_final_chi2_vrtx_0.at(0)->Integral());
+h_final_Dz_vrtx_0.at(0)->Scale(1./h_final_Dz_vrtx_0.at(0)->Integral());
+h_final_aco_0.at(0)->Scale(1./h_final_aco_0.at(0)->Integral());
+h_final_chi2_tr0_0.at(0)->Scale(1./h_final_chi2_tr0_0.at(0)->Integral());
+h_final_chi2_trMax_0.at(0)->Scale(1./h_final_chi2_trMax_0.at(0)->Integral());
+h_final_chi2_trMin_0.at(0)->Scale(1./h_final_chi2_trMin_0.at(0)->Integral());
 
 h_x_1.at(0)->Scale(1./h_x_1.at(0)->Integral());
 h_y_1.at(0)->Scale(1./h_y_1.at(0)->Integral());
@@ -197,6 +281,18 @@ h_th_max_1.at(0)->Scale(1./h_th_max_1.at(0)->Integral());
 h_preE_th_min_1.at(0)->Scale(1./h_preE_th_min_1.at(0)->Integral());
 h_preE_th_max_1.at(0)->Scale(1./h_preE_th_max_1.at(0)->Integral());
 h_elastic_1.at(0)->Scale(1./h_elastic_1.at(0)->Integral());
+h_el_2.at(0)->Scale(1./h_el_2.at(0)->Integral());
+h_E_th_min_1.at(0)->Scale(1./h_E_th_min_1.at(0)->Integral());
+h_E_th_max_1.at(0)->Scale(1./h_E_th_max_1.at(0)->Integral());
+h_final_nhits_pre_1.at(0)->Scale(1./h_final_nhits_pre_1.at(0)->Integral());
+h_final_nhits_post_1.at(0)->Scale(1./h_final_ntracks_post_1.at(0)->Integral());
+h_final_ntracks_post_1.at(0)->Scale(1./h_final_ntracks_post_1.at(0)->Integral());
+h_final_chi2_vrtx_1.at(0)->Scale(1./h_final_chi2_vrtx_1.at(0)->Integral());
+h_final_Dz_vrtx_1.at(0)->Scale(1./h_final_Dz_vrtx_1.at(0)->Integral());
+h_final_aco_1.at(0)->Scale(1./h_final_aco_1.at(0)->Integral());
+h_final_chi2_tr0_1.at(0)->Scale(1./h_final_chi2_tr0_1.at(0)->Integral());
+h_final_chi2_trMax_1.at(0)->Scale(1./h_final_chi2_trMax_1.at(0)->Integral());
+h_final_chi2_trMin_1.at(0)->Scale(1./h_final_chi2_trMin_1.at(0)->Integral());
 
 
 TCanvas pos("pos","pos",1500,1500);
@@ -204,75 +300,75 @@ pos.Divide(2,2);
 pos.cd(1);
 h_x_0.at(0)->Draw("hist");
 h_x_1.at(0)->SetLineColor(kRed);
-h_x_1.at(0)->Draw("hist same");
+h_x_1.at(0)->Draw("hist sames");
 pos.cd(2);
 h_y_0.at(0)->Draw("hist");
 h_y_1.at(0)->SetLineColor(kRed);
-h_y_1.at(0)->Draw("hist same");
+h_y_1.at(0)->Draw("hist sames");
 pos.cd(3);
 h_thx_0.at(0)->Draw("hist");
 h_thx_1.at(0)->SetLineColor(kRed);
-h_thx_1.at(0)->Draw("hist same");
+h_thx_1.at(0)->Draw("hist sames");
 pos.cd(4);
 h_thy_0.at(0)->Draw("hist");
 h_thy_1.at(0)->SetLineColor(kRed);
-h_thy_1.at(0)->Draw("hist same");
-pos.SaveAs(Form("plots/run%i/preFid_postion_nhits%i.pdf",run,hits));
+h_thy_1.at(0)->Draw("hist sames");
+pos.SaveAs(Form("plots/run%i/smearing_preFid_postion_nhits%i.pdf",run,hits));
 
 TCanvas gen("gen","gen",1500,1500);
 gen.Divide(3,3);
 gen.cd(1);
 h_nhits_pre_0.at(0)->Draw("hist");
 h_nhits_pre_1.at(0)->SetLineColor(kRed);
-h_nhits_pre_1.at(0)->Draw("hist same");
+h_nhits_pre_1.at(0)->Draw("hist sames");
 gen.cd(2);
 h_nhits_post_0.at(0)->Draw("hist");
 h_nhits_post_1.at(0)->SetLineColor(kRed);
-h_nhits_post_1.at(0)->Draw("hist same");
+h_nhits_post_1.at(0)->Draw("hist sames");
 gen.cd(3);
 h_ntracks_post_0.at(0)->Draw("hist");
 h_ntracks_post_1.at(0)->SetLineColor(kRed);
-h_ntracks_post_1.at(0)->Draw("hist same");
+h_ntracks_post_1.at(0)->Draw("hist sames");
 gen.cd(4);
 h_chi2_vrtx_0.at(0)->Draw("hist");
 h_chi2_vrtx_1.at(0)->SetLineColor(kRed);
-h_chi2_vrtx_1.at(0)->Draw("hist same");
+h_chi2_vrtx_1.at(0)->Draw("hist sames");
 gen.cd(5);
 h_Dz_vrtx_0.at(0)->Draw("hist");
 h_Dz_vrtx_1.at(0)->SetLineColor(kRed);
-h_Dz_vrtx_1.at(0)->Draw("hist same");
+h_Dz_vrtx_1.at(0)->Draw("hist sames");
 gen.cd(6);
 h_aco_0.at(0)->Draw("hist");
 h_aco_1.at(0)->SetLineColor(kRed);
-h_aco_1.at(0)->Draw("hist same");
+h_aco_1.at(0)->Draw("hist sames");
 gen.cd(7);
 h_th_min_0.at(0)->Draw("hist");
 h_th_min_1.at(0)->SetLineColor(kRed);
-h_th_min_1.at(0)->Draw("hist same");
+h_th_min_1.at(0)->Draw("hist sames");
 gen.cd(8);
 h_th_max_0.at(0)->Draw("hist");
 h_th_max_1.at(0)->SetLineColor(kRed);
-h_th_max_1.at(0)->Draw("hist same");
-gen.SaveAs(Form("plots/run%i/postFid_nhits%i.pdf",run,hits));
+h_th_max_1.at(0)->Draw("hist sames");
+gen.SaveAs(Form("plots/run%i/smearing_postFid_nhits%i.pdf",run,hits));
 
-TCanvas pe("pe","pe",1500,1000);
-pe.Divide(3,2);
+TCanvas pe("pe","pe",1500,1500);
+pe.Divide(3,3);
 pe.cd(1);
 h_preE_th_min_0.at(0)->GetXaxis()->SetRangeUser(0.,0.002);
 h_preE_th_min_1.at(0)->GetXaxis()->SetRangeUser(0.,0.002);
 h_preE_th_min_0.at(0)->Draw("hist");
 h_preE_th_min_1.at(0)->SetLineColor(kRed);
-h_preE_th_min_1.at(0)->Draw("hist same");
+h_preE_th_min_1.at(0)->Draw("hist sames");
 pe.cd(2);
 h_preE_th_max_0.at(0)->GetXaxis()->SetRangeUser(0.005,0.02);
 h_preE_th_max_1.at(0)->GetXaxis()->SetRangeUser(0.005,0.02);
 h_preE_th_max_0.at(0)->Draw("hist");
 h_preE_th_max_1.at(0)->SetLineColor(kRed);
-h_preE_th_max_1.at(0)->Draw("hist same");
+h_preE_th_max_1.at(0)->Draw("hist sames");
 pe.cd(3);
 h_elastic_0.at(0)->Draw("hist");
 h_elastic_1.at(0)->SetLineColor(kRed);
-h_elastic_1.at(0)->Draw("hist same");
+h_elastic_1.at(0)->Draw("hist sames");
 
 
 h_preE_th_min_0.at(0)->Rebin(5);
@@ -297,7 +393,100 @@ h2->SetMaximum(2);
 h2->SetTitle("#theta_max Tar_0/Tar_1");
 h2->Draw();
 
-pe.SaveAs(Form("plots/run%i/preEl_nhits%i.pdf",run,hits));
+pe.cd(7);
+h_el_1.at(0)->Draw("COLZ");
+pe.cd(8);
+h_el_2.at(0)->Draw("COLZ");
+
+pe.SaveAs(Form("plots/run%i/smearing_preEl_nhits%i.pdf",run,hits));
+
+
+
+TCanvas fe("fe","fe",1000,1000);
+fe.Divide(2,2);
+fe.cd(1);
+h_E_th_min_0.at(0)->GetXaxis()->SetRangeUser(0.,0.002);
+h_E_th_min_1.at(0)->GetXaxis()->SetRangeUser(0.,0.002);
+h_E_th_min_0.at(0)->Draw("hist");
+h_E_th_min_1.at(0)->SetLineColor(kRed);
+h_E_th_min_1.at(0)->Draw("hist sames");
+fe.cd(2);
+h_E_th_max_0.at(0)->GetXaxis()->SetRangeUser(0.005,0.02);
+h_E_th_max_1.at(0)->GetXaxis()->SetRangeUser(0.005,0.02);
+h_E_th_max_0.at(0)->Draw("hist");
+h_E_th_max_1.at(0)->SetLineColor(kRed);
+h_E_th_max_1.at(0)->Draw("hist sames");
+
+h_E_th_min_0.at(0)->Rebin(5);
+h_E_th_min_1.at(0)->Rebin(5);
+h_E_th_max_0.at(0)->Rebin(4);
+h_E_th_max_1.at(0)->Rebin(4);
+
+fe.cd(3);
+TH1D * h1_el = (TH1D*) h_E_th_min_0.at(0)->Clone();
+h1_el->Divide(h_E_th_min_1.at(0));
+h1_el->GetXaxis()->SetRangeUser(0.,0.002);
+h1_el->SetMinimum(0.2);
+h1_el->SetMaximum(2);
+h1_el->SetTitle("#theta_min Tar_0/Tar_1");
+h1_el->Draw();
+
+fe.cd(4);
+TH1D * h2_el = (TH1D*) h_E_th_max_0.at(0)->Clone();
+h2_el->Divide(h_E_th_max_1.at(0));
+h2_el->GetXaxis()->SetRangeUser(0.005,0.02);
+h2_el->SetMinimum(0.2);
+h2_el->SetMaximum(2);
+h2_el->SetTitle("#theta_max Tar_0/Tar_1");
+h2_el->Draw();
+
+fe.SaveAs(Form("plots/run%i/smearing_finalEl_nhits%i.pdf",run,hits));
+
+
+
+TCanvas gen_fin("gen_fin","gen_fin",2000,1500);
+gen_fin.Divide(3,3);
+gen_fin.cd(1);
+h_final_nhits_pre_0.at(0)->Draw("hist");
+h_final_nhits_pre_1.at(0)->SetLineColor(kRed);
+h_final_nhits_pre_1.at(0)->Draw("hist sames");
+gen_fin.cd(2);
+h_final_nhits_post_0.at(0)->Draw("hist");
+h_final_nhits_post_1.at(0)->SetLineColor(kRed);
+h_final_nhits_post_1.at(0)->Draw("hist sames");
+gen_fin.cd(3);
+h_final_ntracks_post_0.at(0)->Draw("hist");
+h_final_ntracks_post_1.at(0)->SetLineColor(kRed);
+h_final_ntracks_post_1.at(0)->Draw("hist sames");
+gen_fin.cd(4);
+h_final_chi2_vrtx_0.at(0)->Draw("hist");
+h_final_chi2_vrtx_1.at(0)->SetLineColor(kRed);
+h_final_chi2_vrtx_1.at(0)->Draw("hist sames");
+gen_fin.cd(5);
+h_final_Dz_vrtx_0.at(0)->Draw("hist");
+h_final_Dz_vrtx_1.at(0)->SetLineColor(kRed);
+h_final_Dz_vrtx_1.at(0)->Draw("hist sames");
+gen_fin.cd(6);
+h_final_aco_0.at(0)->Draw("hist");
+h_final_aco_1.at(0)->SetLineColor(kRed);
+h_final_aco_1.at(0)->Draw("hist sames");
+gen_fin.cd(7);
+h_final_chi2_tr0_0.at(0)->Draw("hist");
+h_final_chi2_tr0_1.at(0)->SetLineColor(kRed);
+h_final_chi2_tr0_1.at(0)->Draw("hist sames");
+gen_fin.cd(8);
+h_final_chi2_trMax_0.at(0)->Draw("hist");
+h_final_chi2_trMax_1.at(0)->SetLineColor(kRed);
+h_final_chi2_trMax_1.at(0)->Draw("hist sames");
+gen_fin.cd(9);
+h_final_chi2_trMin_0.at(0)->Draw("hist");
+h_final_chi2_trMin_1.at(0)->SetLineColor(kRed);
+h_final_chi2_trMin_1.at(0)->Draw("hist sames");
+
+
+gen_fin.SaveAs(Form("plots/run%i/smearing_final_nhits%i.pdf",run,hits));
+gen_fin.SaveAs(Form("plots/run%i/smearing_final_nhits%i.root",run,hits));
+
 
 
 return 0;

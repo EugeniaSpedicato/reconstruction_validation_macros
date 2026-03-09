@@ -16,102 +16,18 @@ using namespace std;
 
                 auto pos_on_track = [](double q, double m, double z){return (q + m*z);};
 
-int TB2025_p_pre_dati_noReco(string version, int nhits,string bend,string mc, string save){
+int WiP_17_6_TB2025_p_pre_dati_noReco(string version, int nhits,string bend,string mc, string save){
 
   int nthreads = 6;
 
-if(version=="run8") nthreads = 20;
 
   ROOT::EnableImplicitMT(nthreads);
 
-
 TChain * cbmsim = new TChain("cbmsim");
 
-if(version=="tb25" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run8/single_muon_interaction_0/reco/single_muon_interaction_0.root");
-}
-else if(version=="tb25_dp" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run8/single_muon_interaction_0/reco/single_muon_interaction_0_dataProcessor.root");
-}
-else if(version=="tb25_run11_unb" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/unbiased_500files_dataProcessor.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/unbiased_500files_dataProcessor_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/unbiased_500files_dataProcessor_2.root");
-//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/unbiased_500files_dataProcessor_3.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/unbiased_500files_dataProcessor_4.root");
-}
-else if(version=="tb25_int0_run11" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/muedaq01-1750458088_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/muedaq01-1750461265_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/muedaq01-1750461334_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/muedaq01-1750461422_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/muedaq01-1750461710_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/muedaq01-1750466914_0hit.root");
-}
-else if(version=="tb25_int0_unb_run11" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/muedaq01-1750458088_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/muedaq01-1750461265_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/muedaq01-1750461334_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/muedaq01-1750461422_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/muedaq01-1750461710_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/unbiased/muedaq01-1750466914_0hit.root");
-}
-else if(version=="minbias_int0" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/dataPreprocessor_MinBias_RECO_idealScint_seed1_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/dataPreprocessor_MinBias_RECO_idealScint_seed2_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/dataPreprocessor_MinBias_RECO_idealScint_seed3_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/dataPreprocessor_MinBias_RECO_idealScint_seed4_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/dataPreprocessor_MinBias_RECO_idealScint_seed5_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/dataPreprocessor_MinBias_RECO_idealScint_seed6_0hit.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/dataPreprocessor_MinBias_RECO_idealScint_seed7_0hit.root");
-//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/reco/prova_patrick.root");
-}
-else if(version=="run20_int0" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run20/single_muon_interaction_0/2files_commit62871d8b_pt1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run20/single_muon_interaction_0/2files_commit62871d8b_pt2.root");
-}
-else if(version=="run20_int0_newAl" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run20/single_muon_interaction_0/2files_commit62871d8b_pt1_newAl.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run20/single_muon_interaction_0/2files_commit62871d8b_pt2_newAl.root");
-}
-else if(version=="run11_int0" and nhits==0){
-//cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/4files_commit62871d8b.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/allRun_0hit_noMuPid.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/allRun_0hit_noMuPid_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/allRun_0hit_noMuPid_2.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/allRun_0hit_noMuPid_3.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/allRun_0hit_noMuPid_4.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/allRun_0hit_noMuPid_5.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/allRun_0hit_noMuPid_6.root");
 
-}
-else if(version=="run20_int0_newAl2" and nhits==0 and bend=="Bend"){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run20/single_muon_interaction_0/4files_commit62871d8b_newAl2.root");
-}
-else if(version=="run21_int0" and nhits==0){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run21/single_muon_interaction_0/1files_commit62871d8b.root");
-}
-else if(version=="MC" and nhits==0){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/MC/50k_tar1_pt2.root");
-}
-else if(version=="run48_int0" and nhits==0){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run48/single_muon_interaction_0/3files_noMuPid_alignment48.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run48/single_muon_interaction_0/3files_noMuPid_alignment48_1.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run48/single_muon_interaction_0/15files_noMuPid_alignment48.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run48/single_muon_interaction_0/10files_noMuPid_alignment48.root");
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run48/single_muon_interaction_0/10files_noMuPid_alignment48_1.root");
-}
-else if(version=="run11_mark" and nhits==0){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run11/single_muon_interaction_0/2files_0hit_noMuPid.root");
-}
-else if(version=="run24_mark" and nhits==0){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run24/single_muon_interaction_0/1file_0hit_noMuPid.root");
-}
-else if(version=="run25_mark" and nhits==0){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run25/single_muon_interaction_0/1file_0hit_noMuPid.root");
-}
-else if(version=="run32" and nhits==0){
-cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run32/single_muon_interaction_0/muedaq02-1754238276_0hit.root");
+if(version=="run32" and nhits==0){
+cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/run32/single_muon_interaction_0/muedaq02-1754238276_0hit_WiP_17_6.root");
 }
 
 
@@ -169,12 +85,6 @@ TH1::SetDefaultSumw2(kTRUE);
    ROOT::TThreadedObject<TH1D> h_inc_pre("h_inc_pre","h_inc_pre", 100,0.,0.005);
    ROOT::TThreadedObject<TH1D> h_inc_post("h_inc_post","h_inc_post", 100,0.,0.005);
 
-/*   ROOT::TThreadedObject<TH1D> residualX_pre("residualX_pre","residual X_pre",400,-2.,2.);
-   ROOT::TThreadedObject<TH1D> residualY_pre("residualY_pre","residual Y_pre",200,-1.,1.);
-
-   ROOT::TThreadedObject<TH1D> residualX_post("residualX_post","residual X_post",200,-1.,1.);
-   ROOT::TThreadedObject<TH1D> residualY_post("residualY_post","residual Y_post",200,-1.,1.);
-*/
 
    ROOT::TThreadedObject<TH1D> residualU_critic("residualU_critic","residual U when track distance <0.2cm and track_e no Ustub",200,-1.,1.);
    ROOT::TThreadedObject<TH1D> residualU_no_critic("residualU_no_critic","residual U when track distance <0.2cm",400,-2.,2.);
@@ -261,7 +171,7 @@ double alpha[6]={0  *TMath::DegToRad(), 90 *TMath::DegToRad(),135*TMath::DegToRa
 
 
      TTreeReaderValue<std::vector<MUonERecoOutputTrackAnalysis>> RVtracks(myReader, "ReconstructedTracks");
-     TTreeReaderValue<MUonERecoOutputVertexAnalysis> vrtx(myReader, "BestVertex");
+     TTreeReaderValue<std::vector<MUonERecoOutputVertexAnalysis>> vrtx(myReader, "BestVertex");
      TTreeReaderValue<std::vector<MUonERecoOutputHitAnalysis>> RVstubs(myReader, "ReconstructedHits");
 //     TTreeReaderValue<std::vector<MUonETrackerStub>> tr_stubs(myReader,"TrackerStubs");
 
@@ -273,8 +183,8 @@ int yes2=0; int yes_v=0;
 int code_mu=-99; int code_e=-99; int code_mu_in=-99;
 double z_fix=912.7;
 
-
- double chi=vrtx->chi2perDegreeOfFreedom();
+ double chi=0.;
+if(vrtx->size()!=0)chi=vrtx.at(0)->chi2();
 
 if(chi!=0) count_chi->Fill(1);
 
@@ -292,12 +202,28 @@ double the_rec=-99.;
 double thmu_rec=-99.;
 TVector3 p_e,p_mu,p_muin;
 
-        std::vector<MUonERecoOutputHitAnalysis> hits_mu=vrtx->outgoingMuon().hits();
+
+        std::vector<Short_t> hits_mu=vrtx.at(0)->outgoingMuon().hitIds();
+	std::vector<MUonERecoOutputHitAnalysis> v_hits_mu;
         std::vector<double> pos_mu; pos_mu.resize(6);
-        for(int p=0;p<hits_mu.size();p++)pos_mu.push_back(hits_mu.at(p).position());
-        std::vector<MUonERecoOutputHitAnalysis> hits_e=vrtx->outgoingElectron().hits();
+        std::vector<Short_t> hits_e=vrtx.at(0)->outgoingElectron().hitIds();
+	std::vector<MUonERecoOutputHitAnalysis> v_hits_e;
         std::vector<double> pos_e; pos_e.resize(6);
-        for(int p=0;p<hits_e.size();p++)pos_e.push_back(hits_e.at(p).position());
+
+         auto stubs = *RVstubs;
+	double posxIN=99.;//pos_on_track(x0_in,th_inx,z_fix);
+	double posyIN=99.;//pos_on_track(y0_in,th_iny,z_fix);
+	int stub0 = 0;
+	int stub1 = 0;
+        std::array<int,6> module_st1_2;module_st1_2.fill({0});
+        std::array<int,6> module_st1;module_st1.fill({0});
+        std::array<std::vector<float>,6> localX{{std::vector<float>(0.0)}};
+         for (auto&& stub : stubs) {
+                if(stub.stationID()==0){stub0++; if(stub.moduleID()==4){posxIN=stub.position(); } else if(stub.moduleID()==5){posyIN=stub.position();}   }
+                if(stub.stationID()==1){stub1++; module_st1_2.at(stub.moduleID())+=1; module_st1.at(stub.moduleID())=1;int link= stub.moduleID(); localX.at(link).push_back(stub.position());}
+		for(int id=0; id<hits_mu.size();id++){if(hits_mu.at(id)==stub.index())v_hits_mu.push_back(stub);}
+		for(int id=0; id<hits_e.size();id++){if(hits_e.at(id)==stub.index())v_hits_e.push_back(stub);}
+	}
 
 
          auto tracks = *RVtracks;
@@ -306,9 +232,9 @@ TVector3 p_e,p_mu,p_muin;
         if(track.sector()==1) sec1++;
         }
 
- MUonERecoOutputTrackAnalysis mu_in_v = vrtx->incomingMuon();
- MUonERecoOutputTrackAnalysis mu_out_v = vrtx->outgoingMuon();
- MUonERecoOutputTrackAnalysis e_out_v = vrtx->outgoingElectron();
+ MUonERecoOutputTrackAnalysis mu_in_v = vrtx.at(0)->incomingMuon();
+ MUonERecoOutputTrackAnalysis mu_out_v = vrtx.at(0)->outgoingMuon();
+ MUonERecoOutputTrackAnalysis e_out_v = vrtx.at(0)->outgoingElectron();
         TVector3 p_muin_v(mu_in_v.xSlope(),mu_in_v.ySlope(),1.0);
         TVector3 p_mu_v(mu_out_v.xSlope(),mu_out_v.ySlope(),1.0);
         TVector3 p_e_v(e_out_v.xSlope(),e_out_v.ySlope(),1.0);
@@ -318,7 +244,7 @@ MUonERecoOutputTrackAnalysis t_mu;
 MUonERecoOutputTrackAnalysis t_e;
 
          for (auto&& track : tracks) {
-        std::vector<MUonERecoOutputHitAnalysis> hits_=track.hits();
+        std::vector<Short_t> hits_=track.hitIds();
 
         if(track.sector()==0 and sec0==1){
 	stubs_muin=hits_.size();
@@ -326,77 +252,44 @@ MUonERecoOutputTrackAnalysis t_e;
         th_iny=track.ySlope();
         x0_in=track.x0();
         y0_in=track.y0();
-        chi2_muin=track.chi2perDegreeOfFreedom();
+        chi2_muin=track.chi2();
         p_muin.SetXYZ(th_inx,th_iny,1.0);
         p_muin=p_muin.Unit();
         th_muin=p_muin.Theta();
 	h_chi2->Fill(chi2_muin);
 	h_xslope->Fill(th_inx);
                         }
-	if(track.sector()==1)
+	if(track.sector()==1 and chi!=0)
 	{
-	std::vector<double> pos; pos.resize(6);
 
-        for(int p=0;p<hits_.size();p++){pos.push_back(hits_.at(p).position());
-      //if(hits_.at(p).moduleID()==0 or hits_.at(p).moduleID()==4) residualX_pre->Fill(hits_.at(p).position()-trackatZ(track.x0(),track.xSlope(),hits_.at(p).z()));
-      //if(hits_.at(p).moduleID()==1 or hits_.at(p).moduleID()==5) residualY_pre->Fill(hits_.at(p).position()-trackatZ(track.y0(),track.ySlope(),hits_.at(p).z()));
-	}
-
-         if(std::equal(pos.begin(),pos.end(),pos_mu.begin())){p_mu.SetXYZ(track.xSlope(),track.ySlope(),1.0); p_mu.Unit(); thmu_rec=p_mu.Angle(p_muin);t_mu=track;}
-        else if(std::equal(pos.begin(),pos.end(),pos_e.begin())){p_e.SetXYZ(track.xSlope(),track.ySlope(),1.0); p_e.Unit(); the_rec=p_e.Angle(p_muin);t_e=track;}
+        if(std::equal(hits_.begin(),hits_.end(),hits_mu.begin())){p_mu.SetXYZ(track.xSlope(),track.ySlope(),1.0); p_mu.Unit(); thmu_rec=p_mu.Angle(p_muin);t_mu=track;}
+        else if(std::equal(hits_.begin(),hits_.end(),hits_e.begin())){p_e.SetXYZ(track.xSlope(),track.ySlope(),1.0); p_e.Unit(); the_rec=p_e.Angle(p_muin);t_e=track;}
 
 // post vrtx
-//    if(std::equal(pos.begin(),pos.end(),pos_mu.begin())){p_mu.SetXYZ(vrtx->outgoingMuon().xSlope(),vrtx->outgoingMuon().ySlope(),1.0); p_mu.Unit(); thmu_rec=vrtx->muonTheta();t_mu=track;}
-//    else if(std::equal(pos.begin(),pos.end(),pos_e.begin())){p_e.SetXYZ(vrtx->outgoingElectron().xSlope(),vrtx->outgoingElectron().ySlope(),1.0); p_e.Unit(); the_rec=vrtx->electronTheta();t_e=track;}
+//    if(std::equal(pos.begin(),pos.end(),pos_mu.begin())){p_mu.SetXYZ(vrtx.at(0)->outgoingMuon().xSlope(),vrtx.at(0)->outgoingMuon().ySlope(),1.0); p_mu.Unit(); thmu_rec=vrtx.at(0)->muonTheta();t_mu=track;}
+//    else if(std::equal(pos.begin(),pos.end(),pos_e.begin())){p_e.SetXYZ(vrtx.at(0)->outgoingElectron().xSlope(),vrtx.at(0)->outgoingElectron().ySlope(),1.0); p_e.Unit(); the_rec=vrtx.at(0)->electronTheta();t_e=track;}
 
 
 	yes2++;}
 }
 
-double posxIN=99.;//pos_on_track(x0_in,th_inx,z_fix);
-double posyIN=99.;//pos_on_track(y0_in,th_iny,z_fix);
 
-int stub0 = 0;
-int stub1 = 0;
 
-         auto stubs = *RVstubs;
-         std::array<int,6> module_st1_2;module_st1_2.fill({0});
-         std::array<int,6> module_st1;module_st1.fill({0});
-        std::array<std::vector<float>,6> localX{{std::vector<float>(0.0)}};
-         for (auto&& stub : stubs) {
-                if(stub.stationID()==0){stub0++; if(stub.moduleID()==4){posxIN=stub.position(); } else if(stub.moduleID()==5){posyIN=stub.position();}   }
-                if(stub.stationID()==1){stub1++; module_st1_2.at(stub.moduleID())+=1; module_st1.at(stub.moduleID())=1;int link= stub.moduleID(); localX.at(link).push_back(stub.position());}
-                //if(stub.stationID()==1){stub1++; module_st1_2.at(stub.moduleID())+=1;int link= stub.moduleID(); localX.at(link).push_back(stub.position());}
-        }
 
 
 if(chi!=0){
         h_e_pre->Fill(the_rec);
-        h_e_post->Fill(vrtx->electronTheta());
+        h_e_post->Fill(vrtx.at(0)->electronTheta());
         h_mu_pre->Fill(thmu_rec);
-        h_mu_post->Fill(vrtx->muonTheta());
+        h_mu_post->Fill(vrtx.at(0)->muonTheta());
         h_inc_pre->Fill(th_muin);
         h_inc_post->Fill(p_muin_v.Theta());
-/*for(int p=0;p<hits_e.size();p++){
-//	if(hits_e.at(p).moduleID()==0 or hits_e.at(p).moduleID()==4)residualX->Fill(hits_e.at(p).perpendicularResiduum());
-//	if(hits_e.at(p).moduleID()==1 or hits_e.at(p).moduleID()==5)residualY->Fill(hits_e.at(p).perpendicularResiduum());
-
-      if(hits_e.at(p).moduleID()==0 or hits_e.at(p).moduleID()==4) residualX_post->Fill(hits_e.at(p).position()-trackatZ(vrtx->outgoingElectron().x0(),vrtx->outgoingElectron().xSlope(),hits_e.at(p).z()));
-      if(hits_e.at(p).moduleID()==1 or hits_e.at(p).moduleID()==5) residualY_post->Fill(hits_e.at(p).position()-trackatZ(vrtx->outgoingElectron().y0(),vrtx->outgoingElectron().ySlope(),hits_e.at(p).z()));
-
-
- }*/
 }
 
 
-// if(sec0==1 and stubs_muin==6 and abs(posxIN)<=1.5 and abs(posyIN)<=1.5 and chi2_muin<=2 and stub0==6 and th_muin<0.004){// and stub1<=15){
-//if( abs(posxIN)<=1.476 and abs(posyIN)<=1.476 and stub0==6 ){// and stub1<=15){
 if( abs(posxIN)<=1.4985 and abs(posyIN)<=1.4985 and stub0<10 and sec0==1 and th_muin<0.004){// and stub1<=15){
-//if( abs(posxIN)<=1.4985 and abs(posyIN)<=1.4985 and stub0==6 and sec0==1 and th_muin<0.004){// and stub1<=15){
 
 fiducial->Fill(1.);
-
-//bool allmod=std::all_of(std::begin(module_st1), std::end(module_st1), [](int i){return i==1;});
 bool allmod2=std::all_of(std::begin(module_st1_2), std::end(module_st1_2), [](int i){return i==2;});
 double u=99.;
 double v=99.;
@@ -424,13 +317,13 @@ for(int m=0;m<6;m++){
 
 if(chi!=0 and the_rec!=-99 and thmu_rec!=-99){
 
-        h_z_pos_pre->Fill(vrtx->zPositionFit());
+        h_z_pos_pre->Fill(vrtx.at(0)->zPositionFit());
 
-double zpos =vrtx->zPositionFit();
+double zpos =vrtx.at(0)->zPositionFit();
 
-TVector3 p_mu_post(vrtx->outgoingMuon().xSlope(),vrtx->outgoingMuon().ySlope(),1.0); p_mu_post.Unit();
-TVector3 p_e_post(vrtx->outgoingElectron().xSlope(),vrtx->outgoingElectron().ySlope(),1.0); p_e_post.Unit();
-TVector3 p_muin_post(vrtx->incomingMuon().xSlope(),vrtx->incomingMuon().ySlope(),1.0); p_muin_post.Unit();
+TVector3 p_mu_post(vrtx.at(0)->outgoingMuon().xSlope(),vrtx.at(0)->outgoingMuon().ySlope(),1.0); p_mu_post.Unit();
+TVector3 p_e_post(vrtx.at(0)->outgoingElectron().xSlope(),vrtx.at(0)->outgoingElectron().ySlope(),1.0); p_e_post.Unit();
+TVector3 p_muin_post(vrtx.at(0)->incomingMuon().xSlope(),vrtx.at(0)->incomingMuon().ySlope(),1.0); p_muin_post.Unit();
 
                                                 double dotProduct_v = p_mu.Dot(p_e);
                                                 TVector3 crossProduct_v = p_mu.Cross(p_e);
@@ -460,142 +353,16 @@ TVector3 p_muin_post(vrtx->incomingMuon().xSlope(),vrtx->incomingMuon().ySlope()
 double Elastic=0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec)));
 double Elastic2=asin( (sin(the_rec)*sqrt(Elastic*Elastic-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic)*(160+0.5109989461*0.001-Elastic)-105.6583745 *0.001*105.6583745 *0.001 ) );
 
-//double Elastic_post=0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(vrtx->electronTheta())*cos(vrtx->electronTheta()))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(vrtx->electronTheta())*cos(vrtx->electronTheta())));
-//double Elastic2_post=asin( (sin(vrtx->electronTheta())*sqrt(Elastic_post*Elastic_post-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic_post)*(160+0.5109989461*0.001-Elastic_post)-105.6583745 *0.001*105.6583745 *0.001 ) );
-
-
 
 bool allmod=std::all_of(std::begin(module_st1), std::end(module_st1), [](int i){return i==1;});
 
 int mod2=0;
 double mod2_mu=99.;
 
-/*
-vector<double> digicorrX;
-vector<double> digicorrY;
-vector<double> digicorrX1;
-vector<double> digicorrY1;
-vector<double> digicorrU;
-vector<double> digicorrV;
-vector<double> dig1X;
-vector<double> dig1Y;
-vector<double> dig1X1;
-vector<double> dig1Y1;
-vector<double> dig1U;
-vector<double> dig1V;
-
-//auto n_tr_stubs=*tr_stubs;
-         auto n_tr_stubs = *tr_stubs;
-        for(auto&& stubs : n_tr_stubs)
-                         {
-        if(stubs.stationID()==1){ double stub=0.;
-                                stub=(stubs.seedClusterCenterStrip() + 0.5 + 0.5 * stubs.bend()) * 9.144 / 1016 - 0.5 * 9.144;
-
-                          if(stubs.moduleID()==0) {dig1X.push_back(stub);
-                                                    digicorrX.push_back(stubs.seedClusterCenterStrip() + (stubs.bend()));
-        }
-                          if(stubs.moduleID()==1) {dig1Y.push_back(stub);
-                                                    digicorrY.push_back(stubs.seedClusterCenterStrip() + (stubs.bend()));
-        }
-                          if(stubs.moduleID()==4) {dig1X1.push_back(stub);
-                                                    digicorrX1.push_back(stubs.seedClusterCenterStrip() + (stubs.bend()));
-        }
-                          if(stubs.moduleID()==5) {dig1Y1.push_back(stub);
-                                                    digicorrY1.push_back(stubs.seedClusterCenterStrip() + (stubs.bend()));
-        }
-                          if(stubs.moduleID()==2) {dig1U.push_back(stub);
-                                                    digicorrU.push_back(stubs.seedClusterCenterStrip() + (stubs.bend()));
-        }
-                          if(stubs.moduleID()==3) {dig1V.push_back(stub);
-                                                    digicorrV.push_back(stubs.seedClusterCenterStrip() + (stubs.bend()));
-        }
-                               }
-                        }
-
-
-double correX,correY,correU,correV,correX1,correY1;
-double corrmuX,corrmuY,corrmuU,corrmuV,corrmuX1,corrmuY1;
-
-for( int m=0; m<t_e.hits().size(); m++)
- {
-	cout << "t_e.hits().at(m).position() " << t_e.hits().at(m).position() << endl;
-   for(int d=0; d<dig1X.size(); d++){
-cout << "dig1X.at(d) " << dig1X.at(d) <<endl;
-   if(dig1X.at(d)==t_e.hits().at(m).position()) correX=digicorrX.at(d);
-   else if(dig1Y.at(d)==t_e.hits().at(m).position())  correY=digicorrY.at(d);
-   else if(dig1U.at(d)==t_e.hits().at(m).position()) correU=digicorrU.at(d);
-   else if(dig1V.at(d)==t_e.hits().at(m).position()) correV=digicorrV.at(d);
-   else if(dig1X1.at(d)==t_e.hits().at(m).position()) correX1=digicorrX1.at(d);
-   else if(dig1Y1.at(d)==t_e.hits().at(m).position()) correY1=digicorrY1.at(d);
-        }
- }
-
-for( int m=0; m<t_mu.hits().size(); m++)
- {
-   for(int d=0; d<dig1X.size(); d++){
-   if(dig1X.at(d)==t_mu.hits().at(m).position()) corrmuX=digicorrX.at(d);
-   else if(dig1Y.at(d)==t_mu.hits().at(m).position())  corrmuY=digicorrY.at(d);
-   else if(dig1U.at(d)==t_mu.hits().at(m).position()) corrmuU=digicorrU.at(d);
-   else if(dig1V.at(d)==t_mu.hits().at(m).position()) corrmuV=digicorrV.at(d);
-   else if(dig1X1.at(d)==t_mu.hits().at(m).position()) corrmuX1=digicorrX1.at(d);
-   else if(dig1Y1.at(d)==t_mu.hits().at(m).position()) corrmuY1=digicorrY1.at(d);
-        }
- }
-*/
-
-
-//  if(allmod and abs(acoplanarity_v)<=0.4 and chi<20 and thmu_rec>0.0002 and stub1<=20 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and the_rec<0.025 and the_rec>=0.003 and thmu_rec<=0.003){// and vrtx->zPositionFit()<917 and vrtx->zPositionFit()>907){
-
-// if(chi>0 and stub1<=15 and thmu_rec>=0.0003 and thmu_rec<=0.0011 and the_rec<0.020 and the_rec>=0.006 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos<(911.2+3) and zpos>(911.2-3)){
-// if(chi>0 and stub1<=15 and thmu_rec>0.0002 and the_rec<0.020 and the_rec>=0.005 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos<(911.2+3) and zpos>(911.2-3)){
-
-
-// if(chi>0 and stub1<=15 and thmu_rec>0.0002 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and abs(acoplanarity_v)<=0.4 and zpos>906 ){
-// if(chi>0 and stub1<=15 and thmu_rec>0.0004 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and abs(acoplanarity_v)<=0.4 and zpos>906){
-//ok lui
-// if(chi>0 and stub1<=15 and thmu_rec>0.0002 and the_rec<0.020 and the_rec>=0.005 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){// and zpos>906){
-
-//if(chi>0 and stub1<=15 thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and abs(acoplanarity_v)<=0.4 and zpos>650){// and zpos>906){
 if(chi>0 and stub1<=15 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and abs(acoplanarity_v)<=0.4 and zpos>650){// and zpos>906){
-
-// if(chi>0 and stub1<=15 and thmu_rec>0.0002 and the_rec<0.020 and the_rec>=0.005 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos>896){
-
-// if(chi>0 and stub1<=15 and thmu_rec>0.0002 and the_rec<0.032 and the_rec>0.000 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos>906){
-
-
-// if(chi>0 and stub1<=15 and thmu_rec>0.0002 and the_rec<0.020 and the_rec>=0. and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos>906){
-
-
-/*cout << "the_rec " << the_rec << ", thmu_rec " << thmu_rec << ", the E_e at the given the_rec is " << Elastic << endl;
-
-
-double p=sqrt(Elastic*Elastic - 0.000510999*0.000510999);
-double ms=sqrt( pow(0.0136/p * sqrt(3./19.32) * (1. + 0.038 * log(3./19.32)),2) + pow(0.0136/p * sqrt(0.032*12/9.37) * (1. + 0.038 * log(0.032*12/9.37)),2));
-
-cout << " momentum is " << p << ", effect of MS tar+si " << ms << endl;
-*/
-
-
-// if(chi>0 and stub1==12 and thmu_rec>0.0002 and the_rec<0.020 and the_rec>=0.005 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4 and zpos>906){
-
-
-
-
-//post vrtx
-// if(chi>0 and stub1<=15 and vrtx->muonTheta()>=0.0002 and vrtx->electronTheta()<0.020 and vrtx->electronTheta()>=0.005 and vrtx->muonTheta()<=Elastic2_post+0.0002 and vrtx->muonTheta()>=Elastic2_post-0.0002 and p_mu_post.Angle(p_e_post)>0.005 and abs(acoplanarity_v_post)<=0.4 and zpos>906){
 
 elastic->Fill(1.);
 
-
-// if(allmod and chi<150 and stub1<=20 and thmu_rec>0.0002 and thmu_rec<=0.002 and the_rec<0.030 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
-// if(allmod and t_e.chi2perDegreeOfFreedom()<30 and t_mu.chi2perDegreeOfFreedom()<10 and stub1<=20 and thmu_rec>0.0002 and thmu_rec<=0.002 and the_rec<0.030 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
-// if(allmod and chi<20 and stub1<=20 and thmu_rec>0.0002 and thmu_rec<=0.002 and the_rec<0.030 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
-//if(allmod and chi<20 and stub1<=20 and thmu_rec>0.0002 and thmu_rec<=0.002 and the_rec<0.015 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
-
-// if(abs(u)>0.17 and abs(v)>0.17 and allmod2 and stub1==12 and thmu_rec>0.0005 and thmu_rec<=0.002 and the_rec<0.010 and the_rec>=0.003){
-//if(allmod2 and stub1==12){// and thmu_rec>0.0005 and thmu_rec<=0.002 and the_rec<0.010 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005 and abs(acoplanarity_v)<=0.4){
-//if(allmod and stub1==12 and abs(u)<0.2 ){//and thmu_rec>0.0005 and thmu_rec<=0.002 and the_rec<0.010 and the_rec>=0.003 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002 and p_mu.Angle(p_e)>0.005){
-//cout <<"ciao0"<<endl;
 
 //first
  if(yes2>=2){
@@ -604,34 +371,30 @@ if(t_e.xSlope()>t_mu.xSlope()){theta_R->Fill(the_rec); theta_L->Fill(thmu_rec); 
 else{theta_R->Fill(thmu_rec); theta_L->Fill(the_rec); theta_RL->Fill(thmu_rec,the_rec);}
 
 vrtx_chi2->Fill(chi);
-track_el->Fill(t_e.chi2perDegreeOfFreedom());
-track_mu->Fill(t_mu.chi2perDegreeOfFreedom());
+track_el->Fill(t_e.chi2());
+track_mu->Fill(t_mu.chi2());
 
           double tracklocxy0 = (t_e.x0() + t_e.xSlope()*z_mod[2])*cos(alpha[2]) +
                                (t_e.y0() + t_e.ySlope()*z_mod[2])*sin(alpha[2]);
 
 
 
-        h_nstubs_track_e->Fill(t_e.hits().size());
-        h_nstubs_track_mu->Fill(t_mu.hits().size());
+        h_nstubs_track_e->Fill(t_e.hitIds().size());
+        h_nstubs_track_mu->Fill(t_mu.hitIds().size());
+
+
 
 std::array<double,6> t_e_hits;t_e_hits.fill({-99.});
- std::array<double,6> t_mu_hits;t_mu_hits.fill({-99.});
+std::array<double,6> t_mu_hits;t_mu_hits.fill({-99.});
 
- for(int h=0; h<t_mu.hits().size(); h++){
-  if(t_mu.hits().at(h).stationID()==1) {mod_mu->Fill(t_mu.hits().at(h).moduleID()); t_mu_hits.at(t_mu.hits().at(h).moduleID())=t_mu.hits().at(h).position();}
+ for(int h=0; h<v_hits_mu.size(); h++){
+  mod_mu->Fill(v_hits_mu.at(h).moduleID()); t_mu_hits.at(v_hits_mu.at(h).moduleID())=v_hits_mu.at(h).position();
  }
 
- for(int h=0; h<t_e.hits().size(); h++){
-  if(t_e.hits().at(h).stationID()==1) {mod_el->Fill(t_e.hits().at(h).moduleID()); t_e_hits.at(t_e.hits().at(h).moduleID())=t_e.hits().at(h).position();}
+ for(int h=0; h<v_hits_e.size(); h++){
+  mod_el->Fill(v_hits_e.at(h).moduleID()); t_e_hits.at(v_hits_e.at(h).moduleID())=v_hits_e.at(h).position();
  }
 
-
-//analog
-                             /*h_hist_distance0->Fill(t_e_hits.at(0)-t_mu_hits.at(0));
-                             h_hist_distance_zoom0->Fill(t_e_hits.at(0)-t_mu_hits.at(0));
-                             h_hist_distance2->Fill(t_e_hits.at(2)-t_mu_hits.at(2));
-                             h_hist_distance_zoom2->Fill(t_e_hits.at(2)-t_mu_hits.at(2));*/
 
 
  if( t_e_hits.at(0)!=-99. and t_mu_hits.at(0)!=-99.) h_dist0->Fill(t_e_hits.at(0)-t_mu_hits.at(0));
@@ -644,34 +407,8 @@ std::array<double,6> t_e_hits;t_e_hits.fill({-99.});
      if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.)h_du_aco->Fill(acoplanarity_v,t_e_hits.at(2)-t_mu_hits.at(2));
      if( t_e_hits.at(3)!=-99. and t_mu_hits.at(3)!=-99.)h_dv_aco->Fill(acoplanarity_v,t_e_hits.at(3)-t_mu_hits.at(3));
 
-/*
-if( the_rec<=0.005 ){ if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){h_dist_mod2_range0->Fill(t_e_hits.at(2)-t_mu_hits.at(2)); h_pos_range0->Fill(t_e_hits.at(2),t_mu_hits.at(2));
-                                                                         h_pos_el_range0->Fill(t_e_hits.at(2)); h_pos_mu_range0->Fill(t_mu_hits.at(2));}
-                      if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){h_dist_mod0_range0->Fill(t_e_hits.at(0)-t_mu_hits.at(0));}}
 
-if( the_rec>0.005 and the_rec<=0.0075 ){ if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){ h_dist_mod2_range1->Fill(t_e_hits.at(2)-t_mu_hits.at(2));h_pos_range1->Fill(t_e_hits.at(2),t_mu_hits.at(2));
-                                                                         h_pos_el_range1->Fill(t_e_hits.at(2)); h_pos_mu_range1->Fill(t_mu_hits.at(2));}
-                      if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){h_dist_mod0_range1->Fill(t_e_hits.at(0)-t_mu_hits.at(0));}}
-
-if( the_rec>0.0075 and the_rec<=0.01 ){ if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){ h_dist_mod2_range2->Fill(t_e_hits.at(2)-t_mu_hits.at(2));h_pos_range2->Fill(t_e_hits.at(2),t_mu_hits.at(2));
-                                                                         h_pos_el_range2->Fill(t_e_hits.at(2)); h_pos_mu_range2->Fill(t_mu_hits.at(2));}
-                      if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){h_dist_mod0_range2->Fill(t_e_hits.at(0)-t_mu_hits.at(0));}}
-
-if( the_rec>0.010 and the_rec<=0.015 ){ if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){ h_dist_mod2_range3->Fill(t_e_hits.at(2)-t_mu_hits.at(2));h_pos_range3->Fill(t_e_hits.at(2),t_mu_hits.at(2));
-                                                                         h_pos_el_range3->Fill(t_e_hits.at(2)); h_pos_mu_range3->Fill(t_mu_hits.at(2));}
-                      if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){h_dist_mod0_range3->Fill(t_e_hits.at(0)-t_mu_hits.at(0));}}
-
-if( the_rec>0.015 and the_rec<=0.025 ){ if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){ h_dist_mod2_range4->Fill(t_e_hits.at(2)-t_mu_hits.at(2));h_pos_range4->Fill(t_e_hits.at(2),t_mu_hits.at(2));
-                                                                         h_pos_el_range4->Fill(t_e_hits.at(2)); h_pos_mu_range4->Fill(t_mu_hits.at(2));}
-                      if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){h_dist_mod0_range4->Fill(t_e_hits.at(0)-t_mu_hits.at(0));}}
-
-if( the_rec>0.025 and the_rec<=0.035 ){ if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){ h_dist_mod2_range5->Fill(t_e_hits.at(2)-t_mu_hits.at(2));h_pos_range5->Fill(t_e_hits.at(2),t_mu_hits.at(2));
-                                                                         h_pos_el_range5->Fill(t_e_hits.at(2)); h_pos_mu_range5->Fill(t_mu_hits.at(2));}
-                      if( t_e_hits.at(2)!=-99. and t_mu_hits.at(2)!=-99.){h_dist_mod0_range5->Fill(t_e_hits.at(0)-t_mu_hits.at(0));}}
-*/
-
-
- h_z_pos->Fill(vrtx->zPositionFit());
+ h_z_pos->Fill(vrtx.at(0)->zPositionFit());
  d_aco->Fill(acoplanarity_v);
  h_2d->Fill(the_rec,thmu_rec);
  theta_mu->Fill(thmu_rec);
@@ -679,8 +416,8 @@ if( the_rec>0.025 and the_rec<=0.035 ){ if( t_e_hits.at(2)!=-99. and t_mu_hits.a
  h_opening->Fill(p_mu.Angle(p_e));
  h_nstubs_s1->Fill(stub1);
 
- theta_mu_post->Fill(vrtx->muonTheta());
- theta_e_post->Fill(vrtx->electronTheta());
+ theta_mu_post->Fill(vrtx.at(0)->muonTheta());
+ theta_e_post->Fill(vrtx.at(0)->electronTheta());
 
 if(thmu_rec>=the_rec-0.00005 and thmu_rec<=the_rec+0.00005)theq->Fill(thmu_rec);
 				}//yes2>=2

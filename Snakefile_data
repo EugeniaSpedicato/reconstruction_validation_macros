@@ -1,7 +1,7 @@
 rule all:
 	input:
-		expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml',name_list=['muedaq01-1750466914','muedaq01-1750461422','muedaq01-1750458088','muedaq01-1750461265','muedaq01-1750461334','muedaq01-1750461710'],run_list=['11'],type_list=['unbiased'],nhit_list=['0']),
-		expand('/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit.root',name_list=['muedaq01-1750466914','muedaq01-1750461422','muedaq01-1750458088','muedaq01-1750461265','muedaq01-1750461334','muedaq01-1750461710'],run_list=['11'],type_list=['unbiased'],nhit_list=['0']),
+		expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml',name_list=['muedaq01-1750466914','muedaq01-1750461422'],run_list=['11'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],nhit_list=['0']),
+		expand('/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit.root',name_list=['muedaq01-1750466914','muedaq01-1750461422'],run_list=['11'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],nhit_list=['0']),
 
 rule yaml_files:
 	input:
