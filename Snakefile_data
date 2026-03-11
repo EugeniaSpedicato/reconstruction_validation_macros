@@ -1,27 +1,33 @@
+#snakemake --cores 4 --config name_list='["muedaq03-1753164618","muedaq02-1753161145"]' run_list='["21"]' type_list='["single_muon_interaction_0"]' nhit_list='[0]'
+name_list = config["name_list"]
+run_list  = config["run_list"]
+type_list = config["type_list"]
+nhit_list = config["nhit_list"]
+
 rule all:
 	input:
-		expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml',name_list=['muedaq01-1750466914','muedaq01-1750461422'],run_list=['11'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],nhit_list=['0']),
-		expand('/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit.root',name_list=['muedaq01-1750466914','muedaq01-1750461422'],run_list=['11'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],nhit_list=['0']),
+		expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{run_list}_{type_list}_{name_list}_{nhit_list}hit.yaml',run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list),
+		expand('/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit_WiP11x.root',run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list)
 
 rule yaml_files:
-	input:
-		path='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake'
-	output:
-		outfile='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml'
+    input:
+        path="/home/espedica/validation_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake"
 
-	wildcard_constraints:
-		name_list = r".+",
-		run_list = r"\d+",
-		#type_list = r"single_muon_interaction_\d+",
-		nhit_list = r"\d+"
+    output:
+        outfile="/home/espedica/validation_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{run_list}_{type_list}_{name_list}_{nhit_list}hit.yaml"
 
-	shell:
-		"""bash {input.path}/dataReco.sh {output.outfile} {wildcards.name_list} {wildcards.run_list} {wildcards.type_list} {wildcards.nhit_list}"""
+    wildcard_constraints:
+        name_list=".+",
+        run_list="\d+",
+        nhit_list="\d+"
+
+    shell:
+        """bash {input.path}/dataReco.sh {output.outfile} {wildcards.run_list} {wildcards.type_list} {wildcards.name_list} {wildcards.nhit_list}"""
 
 rule reco:
 	input:
-		name='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml'
+		name='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{run_list}_{type_list}_{name_list}_{nhit_list}hit.yaml'
 	output:
-		out='/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit.root'
+		out='/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit_WiP11x.root'
 	shell:
 		"""root -q 'runProductionJob.C("{input.name}")'"""

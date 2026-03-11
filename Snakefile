@@ -6,14 +6,14 @@ nhit_list = config["nhit_list"]
 
 rule all:
 	input:
-                expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt', run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list),
-                expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/root_{type_list}_{name_list}_nhits{nhit_list}.root',run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list)
-#                expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/ratevstime.pdf')
+                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/wip11x_report_{type_list}_{name_list}_nhits{nhit_list}.txt', run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list),
+                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/wip11x_root_{type_list}_{name_list}_nhits{nhit_list}.root',run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list)
+#                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/ratevstime.pdf')
 
 rule rated:
         output:
-                out1='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt',
-                out2='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/root_{type_list}_{name_list}_nhits{nhit_list}.root'
+                out1='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/wip11x_report_{type_list}_{name_list}_nhits{nhit_list}.txt',
+                out2='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/wip11x_root_{type_list}_{name_list}_nhits{nhit_list}.root'
         wildcard_constraints:
                 name_list = r".+",
                 run_list = r"\d+",
@@ -21,18 +21,18 @@ rule rated:
                 nhit_list = r"\d+"
         shell:
                 """
-                mkdir -p /home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{wildcards.run_list} && \
-                root -q '/home/espedica/2025tb/report_count_snakemake.cpp({wildcards.run_list},"{wildcards.type_list}","{wildcards.name_list}",{wildcards.nhit_list})'
+                mkdir -p /home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{wildcards.run_list} && \
+                root -q '/home/espedica/2025tb/WiP_v_1_1_x/report_count_snakemake.cpp({wildcards.run_list},"{wildcards.type_list}","{wildcards.name_list}",{wildcards.nhit_list})'
                 """
 
 rule graph:
         input:
-                name='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt'
+                name='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/wip11x_report_{type_list}_{name_list}_nhits{nhit_list}.txt'
         wildcard_constraints:
                 run_list = r"\d+",
         shell:
                 """
-                 g++ -std=c++17 /home/espedica/2025tb/2_stability_plot.cpp -o stab $(root-config --cflags --libs) -lstdc++fs
+                 g++ -std=c++17 /home/espedica/2025tb/WiP_v_1_1_x/2_stability_plot.cpp -o stab $(root-config --cflags --libs) -lstdc++fs
                 ./stab txt/run{run_list}
                 """
 

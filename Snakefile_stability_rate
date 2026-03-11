@@ -7,29 +7,29 @@ nhit_list = config["nhit_list"]
 
 #rule all:
 #	input:
-#                expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml',name_list=['muedaq03-1753164618','muedaq02-1753161145','muedaq03-1753157963','muedaq02-1753154852','muedaq01-1753151730','muedaq03-1753148588','muedaq03-1753140823','muedaq04-1753132824','muedaq04-1753124169','muedaq04-1753115578','muedaq04-1753107497','muedaq01-1753101820','muedaq04-1753097351','muedaq03-1753092570'],run_list=['21'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],nhit_list=['0']),
-#                expand('/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit.root',name_list=['muedaq03-1753164618','muedaq02-1753161145','muedaq03-1753157963','muedaq02-1753154852','muedaq01-1753151730','muedaq03-1753148588','muedaq03-1753140823','muedaq04-1753132824','muedaq04-1753124169','muedaq04-1753115578','muedaq04-1753107497','muedaq01-1753101820','muedaq04-1753097351','muedaq03-1753092570'],run_list=['21'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],nhit_list=['0']),
-##                expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}',run_list=['21']),
-#                expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt',run_list=['21'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],name_list=['muedaq03-1753164618','muedaq02-1753161145','muedaq03-1753157963','muedaq02-1753154852','muedaq01-1753151730','muedaq03-1753148588','muedaq03-1753140823','muedaq04-1753132824','muedaq04-1753124169','muedaq04-1753115578','muedaq04-1753107497','muedaq01-1753101820','muedaq04-1753097351','muedaq03-1753092570'],nhit_list=['0'])
+#                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml',name_list=['muedaq03-1753164618','muedaq02-1753161145','muedaq03-1753157963','muedaq02-1753154852','muedaq01-1753151730','muedaq03-1753148588','muedaq03-1753140823','muedaq04-1753132824','muedaq04-1753124169','muedaq04-1753115578','muedaq04-1753107497','muedaq01-1753101820','muedaq04-1753097351','muedaq03-1753092570'],run_list=['21'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],nhit_list=['0']),
+#                expand('/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit_WiP_17_6.root',name_list=['muedaq03-1753164618','muedaq02-1753161145','muedaq03-1753157963','muedaq02-1753154852','muedaq01-1753151730','muedaq03-1753148588','muedaq03-1753140823','muedaq04-1753132824','muedaq04-1753124169','muedaq04-1753115578','muedaq04-1753107497','muedaq01-1753101820','muedaq04-1753097351','muedaq03-1753092570'],run_list=['21'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],nhit_list=['0']),
+##                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}',run_list=['21']),
+#                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt',run_list=['21'],type_list=['single_muon_interaction_0','single_muon_interaction_1'],name_list=['muedaq03-1753164618','muedaq02-1753161145','muedaq03-1753157963','muedaq02-1753154852','muedaq01-1753151730','muedaq03-1753148588','muedaq03-1753140823','muedaq04-1753132824','muedaq04-1753124169','muedaq04-1753115578','muedaq04-1753107497','muedaq01-1753101820','muedaq04-1753097351','muedaq03-1753092570'],nhit_list=['0'])
 
 rule all:
     input:
         expand(
-            '/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml',
+            '/home/espedica/validation_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml',
             name_list=name_list,
             run_list=run_list,
             type_list=type_list,
             nhit_list=nhit_list
         ),
         expand(
-            '/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit.root',
+            '/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit_WiP_17_6.root',
             name_list=name_list,
             run_list=run_list,
             type_list=type_list,
             nhit_list=nhit_list
         ),
         expand(
-            '/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt',
+            '/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt',
             name_list=name_list,
             run_list=run_list,
             type_list=type_list,
@@ -38,9 +38,9 @@ rule all:
 
 rule yaml_files:
         input:
-                path='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake'
+                path='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake'
         output:
-                outfile='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml'
+                outfile='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml'
 
         wildcard_constraints:
                 name_list = r".+",
@@ -53,9 +53,9 @@ rule yaml_files:
 
 rule reco:
         input:
-                name='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml'
+                name='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/common/jobs/snakemake/dataReco_{name_list}_{run_list}_{type_list}_{nhit_list}hit.yaml'
         output:
-                out='/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit.root'
+                out='/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit_WiP_17_6.root'
         shell:
                 """root -q 'runProductionJob.C("{input.name}")'"""
 
@@ -63,16 +63,16 @@ rule reco:
 #        wildcard_constraints:
 #                run_list = r"\d+"
 #        output:
-#                directory('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}')
+#                directory('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}')
 #        shell:
-#                """mkdir /home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{wildcards.run_list}"""
+#                """mkdir /home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{wildcards.run_list}"""
 
 rule rated:
         input:
-                name='/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit.root',
-#                indir='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}'
+                name='/mnt/raid10/DATA/espedica/fairmu/TB2025/run{run_list}/{type_list}/{name_list}_{nhit_list}hit_WiP_17_6.root',
+#                indir='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}'
         output:
-                out='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt'
+                out='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt'
         wildcard_constraints:
                 name_list = r".+",
                 run_list = r"\d+",
@@ -80,18 +80,18 @@ rule rated:
                 nhit_list = r"\d+"
         shell:
                 """
-                mkdir -p /home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{wildcards.run_list} && \
-                root -q '/home/espedica/2025tb/report_count_snakemake.cpp({wildcards.run_list},"{wildcards.type_list}","{wildcards.name_list}",{wildcards.nhit_list})'
+                mkdir -p /home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{wildcards.run_list} && \
+                root -q '/home/espedica/2025tb/WiP_v_1_1_x/report_count_snakemake.cpp({wildcards.run_list},"{wildcards.type_list}","{wildcards.name_list}",{wildcards.nhit_list})'
                 """
 
 rule graph:
         input:
-                name='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt'
+                name='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/report_{type_list}_{name_list}_nhits{nhit_list}.txt'
         wildcard_constraints:
                 run_list = r"\d+",
         shell:
                 """
-                 g++ -std=c++17 /home/espedica/2025tb/2_stability_plot.cpp -o stab $(root-config --cflags --libs) -lstdc++fs
+                 g++ -std=c++17 /home/espedica/2025tb/WiP_v_1_1_x/2_stability_plot.cpp -o stab $(root-config --cflags --libs) -lstdc++fs
                 ./stab txt/run{run_list} {run_list}
                 """
 

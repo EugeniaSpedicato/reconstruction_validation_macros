@@ -1,0 +1,26 @@
+#snakemake --cores 4 --config name_list='["muedaq03-1753164618","muedaq02-1753161145"]' run_list='["21"]' type_list='["single_muon_interaction_0"]' nhit_list='[0]'
+name_list = config["name_list"]
+run_list  = config["run_list"]
+type_list = config["type_list"]
+nhit_list = config["nhit_list"]
+
+rule all:
+	input:
+                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/smearing_report_{type_list}_{name_list}_nhits{nhit_list}.txt', run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list),
+                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/smearing_root_{type_list}_{name_list}_nhits{nhit_list}.root',run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list)
+#                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/ratevstime.pdf')
+
+rule rated:
+        output:
+                out1='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/smearing_report_{type_list}_{name_list}_nhits{nhit_list}.txt',
+                out2='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/smearing_root_{type_list}_{name_list}_nhits{nhit_list}.root'
+        wildcard_constraints:
+                name_list = r".+",
+                run_list = r"\d+",
+                type_list = r"single_muon_interaction_\d+",
+                nhit_list = r"\d+"
+        shell:
+                """
+                mkdir -p /home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{wildcards.run_list} && \
+                root -q '/home/espedica/2025tb/WiP_v_1_1_x/smearing_report_count_snakemake.cpp({wildcards.run_list},"{wildcards.type_list}","{wildcards.name_list}",{wildcards.nhit_list})'
+                """

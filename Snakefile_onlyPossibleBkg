@@ -6,13 +6,13 @@ nhit_list = config["nhit_list"]
 
 rule all:
 	input:
-                expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/possible_bkg_report_{type_list}_{name_list}_nhits{nhit_list}.txt', run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list),
-                expand('/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/possible_bkg_root_{type_list}_{name_list}_nhits{nhit_list}.root',run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list)
+                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/possible_bkg_report_{type_list}_{name_list}_nhits{nhit_list}.txt', run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list),
+                expand('/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/possible_bkg_root_{type_list}_{name_list}_nhits{nhit_list}.root',run_list=run_list,type_list=type_list,name_list=name_list,nhit_list=nhit_list)
 
 rule rated2:
         output:
-                out1='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/possible_bkg_report_{type_list}_{name_list}_nhits{nhit_list}.txt',
-                out2='/home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/possible_bkg_root_{type_list}_{name_list}_nhits{nhit_list}.root'
+                out1='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/possible_bkg_report_{type_list}_{name_list}_nhits{nhit_list}.txt',
+                out2='/home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{run_list}/possible_bkg_root_{type_list}_{name_list}_nhits{nhit_list}.root'
         wildcard_constraints:
                 name_list = r".+",
                 run_list = r"\d+",
@@ -20,6 +20,6 @@ rule rated2:
                 nhit_list = r"\d+"
         shell:
                 """
-                mkdir -p /home/espedica/clement_fair_install/instFairRoot/share/MUonE/macros/txt/run{wildcards.run_list} && \
-                root -q '/home/espedica/2025tb/possible_bkg.cpp({wildcards.run_list},"{wildcards.type_list}","{wildcards.name_list}",{wildcards.nhit_list})'
+                mkdir -p /home/espedica/validation_fair_install/instFairRoot/share/MUonE/macros/txt/run{wildcards.run_list} && \
+                root -q '/home/espedica/2025tb/WiP_v_1_1_x/possible_bkg.cpp({wildcards.run_list},"{wildcards.type_list}","{wildcards.name_list}",{wildcards.nhit_list})'
                 """
