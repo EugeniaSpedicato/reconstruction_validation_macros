@@ -30,14 +30,14 @@ TChain * cbmsim_g = new TChain("cbmsim");
 
 
 
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/TB2025/run%i/%s/%s_%ihit_WiP11x.root",run,type.c_str(),filen.c_str(),nhits));
-cout << Form("/mnt/raid10/DATA/espedica/fairmu/TB2025/run%i/%s/%s_%ihit_WiP11x.root",run,type.c_str(),filen.c_str(),nhits) << endl;
+//cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/TB2025/run%i/%s/%s_%ihit_WiP11x.root",run,type.c_str(),filen.c_str(),nhits));
+//cout << Form("/mnt/raid10/DATA/espedica/fairmu/TB2025/run%i/%s/%s_%ihit_WiP11x.root",run,type.c_str(),filen.c_str(),nhits) << endl;
 
 
-/*
+
 cbmsim->Add(Form("/eos/experiment/mu-e/reco/2025/%i/%s/%s.root",run,type.c_str(),filen.c_str()));
 cout << Form("/eos/experiment/mu-e/reco/2025/%i/%s/%s.root",run,type.c_str(),filen.c_str())<< endl;;
-*/
+
 
 cout << "cbmsim->GetEntries() " << cbmsim->GetEntries() <<endl;
 
@@ -142,6 +142,7 @@ ROOT::TTreeProcessorMT tp1(*cbmsim,nthreads);
      TTreeReaderValue<MUonEEventHeader> RVeventHeader(myReader, "EventHeader");
      TTreeReaderValue<std::vector<MUonERecoOutputTrackAnalysis>> RVtracks(myReader, "ReconstructedTracks");
      TTreeReaderValue<std::vector<MUonERecoOutputVertexAnalysis>> RVvrtx(myReader, "BestVertex");
+     TTreeReaderValue<MUonERecoOutputAnalysis> RVout(myReader, "ReconstructionOutput");
      TTreeReaderValue<std::vector<MUonERecoOutputHitAnalysis>> RVstubs(myReader, "ReconstructedHits");
 //     TTreeReaderValue<std::vector<MUonETrackerStub>> tr_stubs(myReader,"TrackerStubs");
      TTreeReaderValue<bool> isReconstructed(myReader, "IsReconstructed");
@@ -165,6 +166,8 @@ h_el_2->Fill(-99,-99);
      while (myReader.Next()) {
 
 Long64_t entry = myReader.GetCurrentEntry();
+
+ auto out=*RVout;
 
  auto vrtx = *RVvrtx;
  double chi=0.;
@@ -311,6 +314,7 @@ auto& isReco = *isReconstructed;
 		 h_th_max_0->Fill(the_rec);
 
 		 if(chi<20 and stub1<=15 and abs(acoplanarity_v)<=0.3 and abs(zpos-(667.3-2.7))<3. and the_rec<0.02 and the_rec>0.005 and thmu_rec>0.0002){
+//		 if(stub1<=15 and abs(acoplanarity_v)<=0.3 and abs(zpos-(667.3-2.7))<3. and the_rec<0.02 and the_rec>0.005 and thmu_rec>0.0002){
 	          pre_elastic_1->Fill(1);
 		  double Elastic=0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec)));
 		  double Elastic2=asin( (sin(the_rec)*sqrt(Elastic*Elastic-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic)*(160+0.5109989461*0.001-Elastic)-105.6583745 *0.001*105.6583745 *0.001 ) );
@@ -396,6 +400,7 @@ auto& isReco = *isReconstructed;
 		 h_th_max_1->Fill(the_rec);
 
 		 if(chi<20 and stub2<=15 and abs(acoplanarity_v)<=0.3 and abs(zpos-(784.6-3.9))<3. and the_rec<0.02 and the_rec>0.005 and thmu_rec>0.0002){
+//		 if(stub2<=15 and abs(acoplanarity_v)<=0.3 and abs(zpos-(784.6-3.9))<3. and the_rec<0.02 and the_rec>0.005 and thmu_rec>0.0002){
 		  pre_elastic_2->Fill(1);
 		  double Elastic=0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec)));
 		  double Elastic2=asin( (sin(the_rec)*sqrt(Elastic*Elastic-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic)*(160+0.5109989461*0.001-Elastic)-105.6583745 *0.001*105.6583745 *0.001 ) );

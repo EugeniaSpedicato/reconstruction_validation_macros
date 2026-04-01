@@ -17,26 +17,32 @@ using namespace std;
 auto pos_on_track = [](double q, double m, double z){return (q + m*z);};
 
 
-int report_count_snakemake(int run, string type, string filen, int nhits){
+int MC_report_count_snakemake(string run, string type){
 
-  int nthreads = 6;
+  int nthreads = 1;//6;
 
 
   ROOT::EnableImplicitMT(nthreads);
 
 
-TChain * cbmsim = new TChain("cbmsim");
-TChain * cbmsim_g = new TChain("cbmsim");
+   TFile *f1 = new TFile("/mnt/raid10/DATA/espedica/fairmu/reco/dev_v1_1_x_Ideal_tar0_0hit.root");
+   TFile *f2 = new TFile("/mnt/raid10/DATA/espedica/fairmu/gen_digi/dev_v1_1_x_Ideal_tar0.root");
+   TTree *cbmsim = (TTree*)f1->Get("cbmsim");
+   TTree *t2 = (TTree*)f2->Get("cbmsim");
+
+        t2->SetEntries(cbmsim->GetEntries());
+
+cout << "entries cbmsim " << cbmsim->GetEntries() << endl;
+cout << "entries t2 " << t2->GetEntries() << endl;
 
 
-/*
-cbmsim->Add(Form("/mnt/raid10/DATA/espedica/fairmu/TB2025/run%i/%s/%s_%ihit_WiP_17_6.root",run,type.c_str(),filen.c_str(),nhits));
-cout << Form("/mnt/raid10/DATA/espedica/fairmu/TB2025/run%i/%s/%s_%ihit_WiP_17_6.root",run,type.c_str(),filen.c_str(),nhits) << endl;
-*/
+   cbmsim->AddFriend(t2);
+   cout << t2->GetEntries() << endl;
+   cout << cbmsim->GetEntries() << endl;
 
 
-cbmsim->Add(Form("/eos/experiment/mu-e/reco/2025/%i/%s/%s.root",run,type.c_str(),filen.c_str()));
-cout << Form("/eos/experiment/mu-e/reco/2025/%i/%s/%s.root",run,type.c_str(),filen.c_str())<< endl;;
+//if(type=="single_muon_interaction_0"){cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/MC/ideal_single_int_0_WiP_v1_1_x.root");}
+//else if(type=="single_muon_interaction_1"){cbmsim->Add("/mnt/raid10/DATA/espedica/fairmu/TB2025/MC/ideal_single_int_1_WiP_v1_1_x.root");}
 
 
 cout << "cbmsim->GetEntries() " << cbmsim->GetEntries() <<endl;
@@ -99,7 +105,9 @@ ROOT::TTreeProcessorMT tp1(*cbmsim,nthreads);
    ROOT::TThreadedObject<TH1D> h_final_chi2_tr0_0("h_final_chi2_tr0_0","chi2 track0 tar 0 final",200,0.,20.);
    ROOT::TThreadedObject<TH1D> h_final_chi2_trMax_0("h_final_chi2_trMax_0","chi2 track Max tar 0 final",200,0.,20.);
    ROOT::TThreadedObject<TH1D> h_final_chi2_trMin_0("h_final_chi2_trMin_0","chi2 track Min tar 0 final",200,0.,20.);
-
+   ROOT::TThreadedObject<TH2D> h_final_rndm_0("h_final_rndm_0","h_final_rndm_0",200.,-0.01,0.01,100,0.002,0.012);
+   ROOT::TThreadedObject<TH1D> h_final_rndm_th1_0("h_final_rndm_th1_0","h_final_rndm_th1_0",160,0.,0.032);
+   ROOT::TThreadedObject<TH1D> h_final_rndm_th2_0("h_final_rndm_th2_0","h_final_rndm_th2_0",160,0.,0.032);
 
    ROOT::TThreadedObject<TH1D> h_x_1("h_x_1","X1 fiducial tar 1",400,-2.,2.);
    ROOT::TThreadedObject<TH1D> h_y_1("h_y_1","Y1 fiducial tar 1",400,-2.,2.);
@@ -134,16 +142,21 @@ ROOT::TTreeProcessorMT tp1(*cbmsim,nthreads);
    ROOT::TThreadedObject<TH1D> h_final_chi2_tr0_1("h_final_chi2_tr0_1","chi2 track0 tar 1 final",200,0.,20.);
    ROOT::TThreadedObject<TH1D> h_final_chi2_trMax_1("h_final_chi2_trMax_1","chi2 track Max tar 1 final",200,0.,20.);
    ROOT::TThreadedObject<TH1D> h_final_chi2_trMin_1("h_final_chi2_trMin_1","chi2 track Min tar 1 final",200,0.,20.);
+   ROOT::TThreadedObject<TH2D> h_final_rndm_1("h_final_rndm_1","h_final_rndm_1",200.,-0.01,0.01,100,0.002,0.012);
+   ROOT::TThreadedObject<TH1D> h_final_rndm_th1_1("h_final_rndm_th1_1","h_final_rndm_th1_1",160,0.,0.032);
+   ROOT::TThreadedObject<TH1D> h_final_rndm_th2_1("h_final_rndm_th2_1","h_final_rndm_th2_1",160,0.,0.032);
 
  auto myFunction = [&](TTreeReader &myReader) {
 
      TTreeReaderValue<MUonEEventHeader> RVeventHeader(myReader, "EventHeader");
      TTreeReaderValue<std::vector<MUonERecoOutputTrackAnalysis>> RVtracks(myReader, "ReconstructedTracks");
-//     TTreeReaderValue<MUonERecoOutputVertexAnalysis> vrtx(myReader, "BestVertex");
      TTreeReaderValue<MUonERecoOutputAnalysis> RVout(myReader, "ReconstructionOutput");
      TTreeReaderValue<std::vector<MUonERecoOutputHitAnalysis>> RVstubs(myReader, "ReconstructedHits");
 //     TTreeReaderValue<std::vector<MUonETrackerStub>> tr_stubs(myReader,"TrackerStubs");
      TTreeReaderValue<bool> isReconstructed(myReader, "IsReconstructed");
+
+	const char* wf="wgt_full";
+	TTreeReaderValue<Double_t> wgt_f(myReader,wf);
 
 //     TTreeReaderValue<Bool_t> trig_smi0(myReader, "trigger_single_muon_interaction_0");
 //   TTreeReaderValue<Bool_t> trig_smi1(myReader, "trigger_single_muon_interaction_1");
@@ -164,21 +177,20 @@ h_el_2->Fill(-99,-99);
      while (myReader.Next()) {
 
 Long64_t entry = myReader.GetCurrentEntry();
+auto wgt = *wgt_f;
 
  auto out=*RVout;
  auto vrtx = out.bestVertex();
+//MUonERecoOutputVertexAnalysis vrtx = ReconstructionOutput->bestVertex();
  double chi=vrtx.chi2();
 
 
-auto& trig_bits = *RVeventHeader;
-
-if(trig_bits.onlineTriggerSingleMuonInteraction0()==1)count_tr_1->Fill(1);
-if(trig_bits.onlineTriggerSingleMuonInteraction1()==1)count_tr_2->Fill(1);
+if(type=="single_muon_interaction_0")count_tr_1->Fill(1);
+if(type=="single_muon_interaction_1")count_tr_2->Fill(1);
 
 
 // if(chi!=0 and vrtx.stationIndex()==1 and *trig_smi0==1){ h_nvrtx_1->Fill(1); if(chi<20) {good_vrtx_1->Fill(1);} }
 // if(chi!=0 and vrtx.stationIndex()==2 and *trig_smi1==1){ h_nvrtx_2->Fill(1); if(chi<20) {good_vrtx_2->Fill(1);} }
-
 
 //if(*trig_smi0==1){count_tr_1->Fill(1);}
 //else if(*trig_smi1==1){count_tr_2->Fill(1);}
@@ -187,9 +199,6 @@ double posxIN=99.;//pos_on_track(x0_in,th_inx,z_fix);
 double posyIN=99.;//pos_on_track(y0_in,th_iny,z_fix);
 
 
- MUonERecoOutputTrackAnalysis mu_in_v = vrtx.incomingMuon();
- MUonERecoOutputTrackAnalysis mu_out_v = vrtx.outgoingMuon();
- MUonERecoOutputTrackAnalysis e_out_v = vrtx.outgoingElectron();
 
 
 std::array<int,3> nTr{0};
@@ -208,7 +217,6 @@ std::vector<MUonERecoOutputTrackAnalysis> track_vrtx2;
 				   if(track.index()==mu_out_v.index() or track.index()==e_out_v.index())track_vrtx2.push_back(track);}
         }
 */
-
          auto tracks = *RVtracks;
          for (auto&& track : tracks) {
         if(track.sector()==0){nTr.at(0)++; track_0.push_back(track);}
@@ -223,7 +231,7 @@ MUonERecoOutputHitAnalysis muin_5;
 
          auto hits = *RVstubs;
 
-if(trig_bits.onlineTriggerSingleMuonInteraction0()==1 and nTr.at(0)==1){
+if(type=="single_muon_interaction_0" and nTr.at(0)==1){
  std::vector<Short_t> ids_=track_0.at(0).hitIds();
  for (auto&& stub : hits) {
         for(auto&& h : ids_){
@@ -234,7 +242,7 @@ if(trig_bits.onlineTriggerSingleMuonInteraction0()==1 and nTr.at(0)==1){
          }
         }
 }
-else if(trig_bits.onlineTriggerSingleMuonInteraction1()==1 and nTr.at(1)==1){
+else if(type=="single_muon_interaction_1" and nTr.at(1)==1){
  std::vector<Short_t> ids_=track_1.at(0).hitIds();
  for (auto&& stub : hits) {
         for(auto&& h : ids_){
@@ -254,84 +262,87 @@ int stub0=0;int stub1=0;int stub2=0;
         else if(hit.stationID()==2){stub2++;}
         }
 
-
-if(trig_bits.onlineTriggerSingleMuonInteraction0()==1 and nTr.at(0)==1 and abs(muin_4.position())<=1.4985 and abs(muin_5.position())<=1.4985 and stub0<10){
-
-
-	fiducial_1->Fill(1.);
-	h_x_0->Fill(muin_4.position());
-	h_y_0->Fill(muin_5.position());
-	h_thx_0->Fill(track_0.at(0).xSlope());
-	h_thy_0->Fill(track_0.at(0).ySlope());
+if(type=="single_muon_interaction_0" and nTr.at(0)==1 and abs(muin_4.position())<=1.4985 and abs(muin_5.position())<=1.4985 and stub0<10){
+	fiducial_1->Fill(1.,wgt);
+	h_x_0->Fill(muin_4.position(),wgt);
+	h_y_0->Fill(muin_5.position(),wgt);
+	h_thx_0->Fill(track_0.at(0).xSlope(),wgt);
+	h_thy_0->Fill(track_0.at(0).ySlope(),wgt);
 
 auto& isReco = *isReconstructed;
 
-//std::cout<<"isR entry --? " << entry << " ?--" << std::endl;
+//	if(isReco==0)std::cout<<"isR entry --? " << entry << " ?--" << std::endl;
 
 
 	if(chi!=0 and vrtx.stationIndex()==1){
-//	if(chi!=0 and nTr.at(1)>1){
 	//h_nvrtx_1->Fill(1);
+ MUonERecoOutputTrackAnalysis mu_in_v = vrtx.incomingMuon();
+ MUonERecoOutputTrackAnalysis mu_out_v = vrtx.outgoingMuon();
+ MUonERecoOutputTrackAnalysis e_out_v = vrtx.outgoingElectron();
 
-
-	if(chi<20) {good_vrtx_1->Fill(1);}
+	if(chi<20) {good_vrtx_1->Fill(1,wgt);}
 
 	double the_rec=vrtx.electronTheta();
 	double thmu_rec=vrtx.muonTheta();
         double acoplanarity_v=vrtx.modifiedAcoplanarity();
         double zpos =vrtx.zPositionFit();
 
-	        double IP_out=vrtx.distanceBetweenOutgoingTracksAtTargetZ();
-//		double IPx=pos_on_track(track_vrtx1.at(1).x0(),track_vrtx1.at(1).xSlope(),(667.3-2.7)) - pos_on_track(track_vrtx1.at(0).x0(),track_vrtx1.at(0).xSlope(),(667.3-2.7));
-//              double IPy=pos_on_track(track_vrtx1.at(1).y0(),track_vrtx1.at(1).ySlope(),(667.3-2.7)) - pos_on_track(track_vrtx1.at(0).y0(),track_vrtx1.at(0).ySlope(),(667.3-2.7));
-//              IP_out=sqrt(IPx*IPx + IPy*IPy);
+        double th1=0.;
+        double th2=0.;
+        if(entry%2==0){th1=the_rec;th2=thmu_rec;}
+        else{th2=the_rec;th1=thmu_rec;}
 
-                h_IP_0->Fill(IP_out);
+                double IP_out=vrtx.distanceBetweenOutgoingTracksAtTargetZ();
+                h_IP_0->Fill(IP_out,wgt);
 
 		TVector3 p_e(vrtx.outgoingElectron().xSlope(),vrtx.outgoingElectron().ySlope(),1.0); p_e.Unit();
 		TVector3 p_mu(vrtx.outgoingMuon().xSlope(),vrtx.outgoingMuon().ySlope(),1.0); p_mu.Unit();
 
-		h_IPop_0->Fill(IP_out,p_mu.Angle(p_e));
+		h_IPop_0->Fill(IP_out,p_mu.Angle(p_e),wgt);
 
 		if(IP_out<0.2){
 
+		 h_nvrtx_1->Fill(1,wgt);
 
-		 h_nvrtx_1->Fill(1);
+		 h_nhits_pre_0->Fill(stub0,wgt);
+		 h_nhits_post_0->Fill(stub1,wgt);
+		 h_ntracks_post_0->Fill(nTr.at(1),wgt);
+		 h_chi2_vrtx_0->Fill(chi,wgt);
+		 h_Dz_vrtx_0->Fill(zpos-(667.3-2.7),wgt);
+		 h_aco_0->Fill(acoplanarity_v,wgt);
+		 h_th_min_0->Fill(thmu_rec,wgt);
+		 h_th_max_0->Fill(the_rec,wgt);
 
-		 h_nhits_pre_0->Fill(stub0);
-		 h_nhits_post_0->Fill(stub1);
-		 h_ntracks_post_0->Fill(nTr.at(1));
-		 h_chi2_vrtx_0->Fill(chi);
-		 h_Dz_vrtx_0->Fill(zpos-(667.3-2.7));
-		 h_aco_0->Fill(acoplanarity_v);
-		 h_th_min_0->Fill(thmu_rec);
-		 h_th_max_0->Fill(the_rec);
-
+                 if(chi<20 and stub2<=15 and abs(acoplanarity_v)<=0.3 and abs(zpos-(667.3-2.7))<3. and th1>0.0002 and th2>0.0002){
+                                h_final_rndm_th1_0->Fill(th1,wgt);
+                                h_final_rndm_th2_0->Fill(th2,wgt);
+                }
 
 		 if(chi<20 and stub1<=15 and abs(acoplanarity_v)<=0.3 and abs(zpos-(667.3-2.7))<3. and the_rec<0.02 and the_rec>0.005 and thmu_rec>0.0002){
-//		 if(stub1<=15 and abs(acoplanarity_v)<=0.3 and abs(zpos-(667.3-2.7))<3. and the_rec<0.02 and the_rec>0.005 and thmu_rec>0.0002){
-	          pre_elastic_1->Fill(1);
+	          pre_elastic_1->Fill(1,wgt);
 		  double Elastic=0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec)));
 		  double Elastic2=asin( (sin(the_rec)*sqrt(Elastic*Elastic-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic)*(160+0.5109989461*0.001-Elastic)-105.6583745 *0.001*105.6583745 *0.001 ) );
 
-		  h_preE_th_min_0->Fill(thmu_rec);
-		  h_preE_th_max_0->Fill(the_rec);
-		  h_elastic_0->Fill(Elastic2-thmu_rec);
-		  h_el_1->Fill(the_rec,thmu_rec);
+		  h_preE_th_min_0->Fill(thmu_rec,wgt);
+		  h_preE_th_max_0->Fill(the_rec,wgt);
+		  h_elastic_0->Fill(Elastic2-thmu_rec,wgt);
+		  h_el_1->Fill(the_rec,thmu_rec,wgt);
+
 
 			if(thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002){ //if(thmu_rec>0.0002 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002){
-			        elastic_1->Fill(1);
-	        	        h_E_th_min_0->Fill(thmu_rec);
-		                h_E_th_max_0->Fill(the_rec);
-                                h_final_nhits_pre_0->Fill(stub0);
-                                h_final_nhits_post_0->Fill(stub1);
-                                h_final_ntracks_post_0->Fill(nTr.at(1));
-                                h_final_chi2_vrtx_0->Fill(chi);
-                                h_final_Dz_vrtx_0->Fill(zpos-(667.3-2.7));
-				h_final_aco_0->Fill(acoplanarity_v);
-                                h_final_chi2_tr0_0->Fill(mu_in_v.chi2());
-                                h_final_chi2_trMax_0->Fill(e_out_v.chi2());
-				h_final_chi2_trMin_0->Fill(mu_out_v.chi2());
+			        elastic_1->Fill(1,wgt);
+	        	        h_E_th_min_0->Fill(thmu_rec,wgt);
+		                h_E_th_max_0->Fill(the_rec,wgt);
+                                h_final_nhits_pre_0->Fill(stub0,wgt);
+                                h_final_nhits_post_0->Fill(stub1,wgt);
+                                h_final_ntracks_post_0->Fill(nTr.at(1),wgt);
+                                h_final_chi2_vrtx_0->Fill(chi,wgt);
+                                h_final_Dz_vrtx_0->Fill(zpos-(667.3-2.7),wgt);
+				h_final_aco_0->Fill(acoplanarity_v,wgt);
+                                h_final_chi2_tr0_0->Fill(mu_in_v.chi2(),wgt);
+                                h_final_chi2_trMax_0->Fill(e_out_v.chi2(),wgt);
+				h_final_chi2_trMin_0->Fill(mu_out_v.chi2(),wgt);
+                                h_final_rndm_0->Fill(th1-th2,th1+th2,wgt);
 				//h_el_1->Fill(the_rec,thmu_rec);
 				}
 
@@ -339,78 +350,82 @@ auto& isReco = *isReconstructed;
 		}
 	}
 }
-else if(trig_bits.onlineTriggerSingleMuonInteraction1()==1 and nTr.at(1)==1 and abs(muin_4.position())<=1.4985 and abs(muin_5.position())<=1.4985 and stub1<10){
-
-
-	fiducial_2->Fill(1.);
-        h_x_1->Fill(muin_4.position());
-        h_y_1->Fill(muin_5.position());
-        h_thx_1->Fill(track_1.at(0).xSlope());
-        h_thy_1->Fill(track_1.at(0).ySlope());
+else if(type=="single_muon_interaction_1" and nTr.at(1)==1 and abs(muin_4.position())<=1.4985 and abs(muin_5.position())<=1.4985 and stub1<10){
+	fiducial_2->Fill(1.,wgt);
+        h_x_1->Fill(muin_4.position(),wgt);
+        h_y_1->Fill(muin_5.position(),wgt);
+        h_thx_1->Fill(track_1.at(0).xSlope(),wgt);
+        h_thy_1->Fill(track_1.at(0).ySlope(),wgt);
 
 auto& isReco = *isReconstructed;
 
 
 	if(chi!=0 and vrtx.stationIndex()==2){
-//	if(chi!=0 and nTr.at(2)>1){
 //h_nvrtx_2->Fill(1);
+ MUonERecoOutputTrackAnalysis mu_in_v = vrtx.incomingMuon();
+ MUonERecoOutputTrackAnalysis mu_out_v = vrtx.outgoingMuon();
+ MUonERecoOutputTrackAnalysis e_out_v = vrtx.outgoingElectron();
 
-	if(chi<20) {good_vrtx_2->Fill(1); }
+	if(chi<20) {good_vrtx_2->Fill(1,wgt);}//if(chi>2)std::cout<<"entry " << entry << " chi " << chi << std::endl;}
 	double the_rec=vrtx.electronTheta();
 	double thmu_rec=vrtx.muonTheta();
 	double acoplanarity_v=vrtx.modifiedAcoplanarity();
 	double zpos =vrtx.zPositionFit();
 
-        double IP_out=vrtx.distanceBetweenOutgoingTracksAtTargetZ();
-//		double IPx=pos_on_track(track_vrtx2.at(1).x0(),track_vrtx2.at(1).xSlope(),(784.6-3.9)) - pos_on_track(track_vrtx2.at(0).x0(),track_vrtx2.at(0).xSlope(),(784.6-3.9));
-//              double IPy=pos_on_track(track_vrtx2.at(1).y0(),track_vrtx2.at(1).ySlope(),(784.6-3.9)) - pos_on_track(track_vrtx2.at(0).y0(),track_vrtx2.at(0).ySlope(),(784.6-3.9));
-//              IP_out=sqrt(IPx*IPx + IPy*IPy);
+        double th1=0.;
+        double th2=0.;
+        if(entry%2==0){th1=the_rec;th2=thmu_rec;}
+        else{th2=the_rec;th1=thmu_rec;}
 
-                h_IP_1->Fill(IP_out);
+        double IP_out=vrtx.distanceBetweenOutgoingTracksAtTargetZ();
+
+                h_IP_1->Fill(IP_out,wgt);
 
                 TVector3 p_e(vrtx.outgoingElectron().xSlope(),vrtx.outgoingElectron().ySlope(),1.0); p_e.Unit();
                 TVector3 p_mu(vrtx.outgoingMuon().xSlope(),vrtx.outgoingMuon().ySlope(),1.0); p_mu.Unit();
 
-                h_IPop_1->Fill(IP_out,p_mu.Angle(p_e));
+                h_IPop_1->Fill(IP_out,p_mu.Angle(p_e),wgt);
 
                 if(IP_out<0.2){
-		 h_nvrtx_2->Fill(1);
-		 h_nhits_pre_1->Fill(stub1);
-		 h_nhits_post_1->Fill(stub2);
-		 h_ntracks_post_1->Fill(nTr.at(2));
-		 h_chi2_vrtx_1->Fill(chi);
-		 h_Dz_vrtx_1->Fill(zpos-(784.6-3.9));
-		 h_aco_1->Fill(acoplanarity_v);
-		 h_th_min_1->Fill(thmu_rec);
-		 h_th_max_1->Fill(the_rec);
+		 h_nvrtx_2->Fill(1,wgt);
+		 h_nhits_pre_1->Fill(stub1,wgt);
+		 h_nhits_post_1->Fill(stub2,wgt);
+		 h_ntracks_post_1->Fill(nTr.at(2),wgt);
+		 h_chi2_vrtx_1->Fill(chi,wgt);
+		 h_Dz_vrtx_1->Fill(zpos-(784.6-3.9),wgt);
+		 h_aco_1->Fill(acoplanarity_v,wgt);
+		 h_th_min_1->Fill(thmu_rec,wgt);
+		 h_th_max_1->Fill(the_rec,wgt);
 
+                 if(chi<20 and stub2<=15 and abs(acoplanarity_v)<=0.3 and abs(zpos-(784.6-3.9))<3. and th1>0.0002 and th2>0.0002){
+                                h_final_rndm_th1_1->Fill(th1,wgt);
+                                h_final_rndm_th2_1->Fill(th2,wgt);
+                }
 
 		 if(chi<20 and stub2<=15 and abs(acoplanarity_v)<=0.3 and abs(zpos-(784.6-3.9))<3. and the_rec<0.02 and the_rec>0.005 and thmu_rec>0.0002){
-//		 if(stub2<=15 and abs(acoplanarity_v)<=0.3 and abs(zpos-(784.6-3.9))<3. and the_rec<0.02 and the_rec>0.005 and thmu_rec>0.0002){
-		  pre_elastic_2->Fill(1);
+		  pre_elastic_2->Fill(1,wgt);
 		  double Elastic=0.5109989461*0.001*((1+(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec))/(1-(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*(sqrt(160*160-(105.6583745 *0.001*105.6583745 *0.001))/(160+0.5109989461*0.001))*cos(the_rec)*cos(the_rec)));
 		  double Elastic2=asin( (sin(the_rec)*sqrt(Elastic*Elastic-0.5109989461*0.001*0.5109989461*0.001))/sqrt( (160+0.5109989461*0.001-Elastic)*(160+0.5109989461*0.001-Elastic)-105.6583745 *0.001*105.6583745 *0.001 ) );
 
-		  h_preEl_th_min_1->Fill(thmu_rec);
-		  h_preE_th_max_1->Fill(the_rec);
-		  h_elastic_1->Fill(Elastic2-thmu_rec);
-				h_el_2->Fill(the_rec,thmu_rec);
+		  h_preEl_th_min_1->Fill(thmu_rec,wgt);
+		  h_preE_th_max_1->Fill(the_rec,wgt);
+		  h_elastic_1->Fill(Elastic2-thmu_rec,wgt);
+				h_el_2->Fill(the_rec,thmu_rec,wgt);
 
                         if(thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002){ //if(thmu_rec>0.0002 and thmu_rec<=Elastic2+0.0002 and thmu_rec>=Elastic2-0.0002){
-                                elastic_2->Fill(1);
-                                h_E_th_min_1->Fill(thmu_rec);
-                                h_E_th_max_1->Fill(the_rec);
-                                h_E_th_min_0->Fill(thmu_rec);
-                                h_E_th_max_0->Fill(the_rec);
-                                h_final_nhits_pre_1->Fill(stub1);
-                                h_final_nhits_post_1->Fill(stub2);
-                                h_final_ntracks_post_1->Fill(nTr.at(2));
-                                h_final_chi2_vrtx_1->Fill(chi);
-                                h_final_Dz_vrtx_1->Fill(zpos-(784.6-3.9));
-                                h_final_aco_1->Fill(acoplanarity_v);
-                                h_final_chi2_tr0_1->Fill(mu_in_v.chi2());
-                                h_final_chi2_trMax_1->Fill(e_out_v.chi2());
-                                h_final_chi2_trMin_1->Fill(mu_out_v.chi2());
+                                elastic_2->Fill(1,wgt);
+                                h_E_th_min_1->Fill(thmu_rec,wgt);
+                                h_E_th_max_1->Fill(the_rec,wgt);
+                                h_final_nhits_pre_1->Fill(stub1,wgt);
+                                h_final_nhits_post_1->Fill(stub2,wgt);
+                                h_final_ntracks_post_1->Fill(nTr.at(2),wgt);
+                                h_final_chi2_vrtx_1->Fill(chi,wgt);
+                                h_final_Dz_vrtx_1->Fill(zpos-(784.6-3.9),wgt);
+                                h_final_aco_1->Fill(acoplanarity_v,wgt);
+                                h_final_chi2_tr0_1->Fill(mu_in_v.chi2(),wgt);
+                                h_final_chi2_trMax_1->Fill(e_out_v.chi2(),wgt);
+                                h_final_chi2_trMin_1->Fill(mu_out_v.chi2(),wgt);
+                                h_final_rndm_1->Fill(th1-th2,th1+th2,wgt);
 				//h_el_2->Fill(the_rec,thmu_rec);
 				}
                         }
@@ -471,6 +486,9 @@ auto& isReco = *isReconstructed;
   auto h_final_chi2_tr0_0M=h_final_chi2_tr0_0.Merge();
   auto h_final_chi2_trMax_0M=h_final_chi2_trMax_0.Merge();
   auto h_final_chi2_trMin_0M=h_final_chi2_trMin_0.Merge();
+  auto h_final_rndm_0M=h_final_rndm_0.Merge();
+  auto h_final_rndm_th1_0M=h_final_rndm_th1_0.Merge();
+  auto h_final_rndm_th2_0M=h_final_rndm_th2_0.Merge();
 
 
   auto h_x_1M=h_x_1.Merge();
@@ -501,11 +519,14 @@ auto& isReco = *isReconstructed;
   auto h_final_chi2_tr0_1M=h_final_chi2_tr0_1.Merge();
   auto h_final_chi2_trMax_1M=h_final_chi2_trMax_1.Merge();
   auto h_final_chi2_trMin_1M=h_final_chi2_trMin_1.Merge();
+  auto h_final_rndm_1M=h_final_rndm_1.Merge();
+  auto h_final_rndm_th1_1M=h_final_rndm_th1_1.Merge();
+  auto h_final_rndm_th2_1M=h_final_rndm_th2_1.Merge();
 
 //cout << "good_vrtx_1->Integral() " << good_vrtx_1->Integral() << endl;
 //cout << "fiducial_1->Integral() " << fiducial_1->Integral() << endl;
 
-    std::ofstream out(Form("txt/run%i/oldVersion_report_%s_%s_nhits%i.txt",run,type.c_str(),filen.c_str(),nhits)); // apre (o crea) il file in scrittura
+    std::ofstream out(Form("txt/run%s/devv11x_report_%s.txt",run.c_str(),type.c_str())); // apre (o crea) il file in scrittura
     if (!out) {
         std::cerr << "Errore nell'aprire il file!" << std::endl;
         return 1;
@@ -545,7 +566,7 @@ auto& isReco = *isReconstructed;
     out.close();
 
 
-    TFile out_root(Form("txt/run%i/oldVersion_root_%s_%s_nhits%i.root",run,type.c_str(),filen.c_str(),nhits),"recreate");
+    TFile out_root(Form("txt/run%s/devv11x_root_%s.root",run.c_str(),type.c_str()),"recreate");
       if(type=="single_muon_interaction_0"){
 	h_x_0M->Write();
 	h_y_0M->Write();
@@ -576,6 +597,9 @@ auto& isReco = *isReconstructed;
 	h_final_chi2_tr0_0M->Write();
 	h_final_chi2_trMax_0M->Write();
 	h_final_chi2_trMin_0M->Write();
+        h_final_rndm_0M->Write();
+        h_final_rndm_th1_0M->Write();
+        h_final_rndm_th2_0M->Write();
       }
       else if(type=="single_muon_interaction_1"){
         h_x_1M->Write();
@@ -607,6 +631,9 @@ auto& isReco = *isReconstructed;
         h_final_chi2_tr0_1M->Write();
         h_final_chi2_trMax_1M->Write();
         h_final_chi2_trMin_1M->Write();
+        h_final_rndm_1M->Write();
+        h_final_rndm_th1_1M->Write();
+        h_final_rndm_th2_1M->Write();
       }
 out_root.Write();
 out_root.Close();
